@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Atividade Prática [v2.0] — CloudFormation & Infrastructure Composer (2026)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header>
+    <div>
+      <div class="brand">&#x2601; Atividade Prática [2026] &mdash; CloudFormation & Composer</div>
+      <div class="sub">AWS Learner Lab &middot; Infrastructure Composer &middot; us-east-1</div>
+    </div>
+    <div class="badge">~90 min</div>
+  </header>
+
+  <main class="container">
+    <div class="progress">
+      <div class="prog-bar">
+        <div class="prog-fill" id="pf" style="width:0%"></div>
+      </div>
+      <div class="prog-label"><span id="pl">0% concluído</span></div>
+    </div>
+
+    <section class="intro">
+      <h2>O que você vai fazer em 2026</h2>
+      <p>Dominar o CloudFormation usando o <strong>AWS Infrastructure Composer</strong>. Você vai trabalhar com padrões
+        modernos: instâncias de performance (t3/t4g), Amazon Linux 2025, auditoria visual de ChangeSets e suporte de IA
+        generativa (Amazon Q) para troubleshooting de rollbacks.</p>
+      <div class="obj">
+        <div class="obj-item">&#x1F5BC; Design Visual no Infrastructure Composer</div>
+        <div class="obj-item">&#x1F680; Padrões 2026 (AL2025, t3.micro)</div>
+        <div class="obj-item">&#x1F916; Troubleshooting Assistido por IA (Amazon Q)</div>
+      </div>
+    </section>
+
+    <!-- Tarefa 1 -->
+    <details class="task" id="t1" open>
+      <summary class="task-hdr">
+        <div class="task-num">1</div>
+        <div class="task-title">Primeira Stack — O Fluxo de Criação</div>
+        <span class="task-tag" style="background:#FFF3E0;color:#B45309">Console</span>
+      </summary>
+      <div class="task-body">
+        <div class="info">ℹ️ Em 2026, o Composer está integrado diretamente no fluxo de preparação do modelo do
+          CloudFormation.</div>
+        <article class="concept">
+          <div class="concept-title">💡 O que é uma Stack?</div>
+          <div class="concept-body">Uma stack é um conjunto de recursos AWS gerenciados como uma unidade. Ao deletar a
+            stack, o CloudFormation garante que tudo seja limpo na ordem correta.</div>
+        </article>
+        <section class="step-box">
+          <h4>Passo 1 — Inicie a criação no Console</h4>
+          <ol class="console-steps">
+            <li><span class="nav-path">AWS Console → CloudFormation</span> → Clique em <strong>Criar pilha</strong> →
+              <strong>Com novos recursos (padrão)</strong></li>
+            <li>Em "Pré-requisito", escolha <strong>Construir a partir do Infrastructure Composer</strong></li>
+            <li>Clique em <strong>Abrir no Infrastructure Composer</strong> e cole o YAML na aba
+              <strong>Template</strong>:</li>
+          </ol>
+        </section>
+        <div style="position:relative">
+          <pre id="c1">AWSTemplateFormatVersion: '2010-09-09'
+Description: Lab 2026 - EC2 moderna (Amazon Linux 2025)
+
+Parameters:
+  InstanceType:
+    Type: String
+    Default: t3.micro
+    AllowedValues: [t3.micro, t3.small]
+    Description: Tipo da instancia
+
+Resources:
+  LabEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c101f26f147fa7fd 
+      InstanceType: !Ref InstanceType
+      IamInstanceProfile: LabInstanceProfile
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-modern-ec2"
+
+Outputs:
+  InstanceId:
+    Value: !Ref LabEC2
+  PrivateIP:
+    Value: !GetAtt LabEC2.PrivateIp</pre>
+          <button class="copy-btn" onclick="cp('c1', this)">Copiar</button>
+        </div>
+        <p class="screenshot-hint">📸 Clique em Salvar e depois em Continuar no CloudFormation.</p>
+        <section class="step-box">
+          <h4>Passo 2 — Finalizar a Pilha</h4>
+          <ol class="console-steps">
+            <li>Nome da pilha: <code>techstock-lab-cf</code></li>
+            <li>Use o <strong>Quick Create</strong> (Enviar) e aguarde <code>CREATE_COMPLETE</code>.</li>
+          </ol>
+        </section>
+        <div class="checks">
+          <div class="checks-label">Checklist</div>
+          <label class="check-item"><input type="checkbox" onchange="updateProg()"> <span>Usou o botão "Criar pilha"
+              corretamente</span></label>
+          <label class="check-item"><input type="checkbox" onchange="updateProg()"> <span>Template colado no
+              Composer</span></label>
+          <label class="check-item"><input type="checkbox" onchange="updateProg()"> <span>Stack criada com
+              sucesso</span></label>
+        </div>
+      </div>
+    </details>
+
+    <!-- Tarefa 2 -->
+    <details class="task" id="t2">
+      <summary class="task-hdr">
+        <div class="task-num">2</div>
+        <div class="task-title">Parameters & Mappings — Infra Parametrizada</div>
+        <span class="task-tag" style="background:#FFF3E0;color:#92400E">Dynamic</span>
+      </summary>
+      <div class="task-body">
+        <div class="info">ℹ️ Mappings permitem que o mesmo template funcione em qualquer região sem alterações manuais.
+        </div>
+        <div style="position:relative">
+          <pre id="c2">AWSTemplateFormatVersion: '2010-09-09'
+Description: Template Parametrizado - Padrões 2026
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, prod]
+
+Mappings:
+  RegionalSettings:
+    us-east-1: 
+      AMI: ami-0c101f26f147fa7fd
+      Size: t3.micro
+    us-west-2: 
+      AMI: ami-07355fe79b493752d
+      Size: t3.micro
+
+Resources:
+  AppServer:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: !FindInMap [RegionalSettings, !Ref "AWS::Region", Size]
+      ImageId: !FindInMap [RegionalSettings, !Ref "AWS::Region", AMI]
+      IamInstanceProfile: LabInstanceProfile
+      Tags:
+        - Key: Env
+          Value: !Ref Environment</pre>
+          <button class="copy-btn" onclick="cp('c2', this)">Copiar</button>
+        </div>
+        <section class="step-box">
+          <h4>Prática</h4>
+          <p>Crie uma stack chamada <code>techstock-parametrizado</code>. Experimente mudar o parâmetro para ver os
+            Mappings em ação.</p>
+        </section>
+        <div class="checks">
+          <div class="checks-label">Checklist</div>
+          <label class="check-item"><input type="checkbox" onchange="updateProg()"> <span>Criou stack
+              techstock-parametrizado</span></label>
+          <label class="check-item"><input type="checkbox" onchange="updateProg()"> <span>Entende o uso de
+              !FindInMap</span></label>
+        </div>
+      </div>
+    </details>
+
+    <!-- Tarefa 3 -->
+    <details class="task" id="t3">
+      <summary class="task-hdr">
+        <div class="task-num">3</div>
+        <div class="task-title">ChangeSets com Visual Diff</div>
+        <span class="task-tag" style="background:#F0FDF4;color:#14532D">Segurança</span>
+      </summary>
+      <div class="task-body">
+        <div class="info">ℹ️ Em 2026, o ChangeSet mostra um "Visual Diff" da arquitetura antes de aplicar as mudanças.
+        </div>
+        <section class="step-box">
+          <h4>Prática</h4>
+          <ol class="console-steps">
+            <li>Atualize a stack <code>techstock-parametrizado</code> com <code>t3.small</code>.</li>
+            <li>Crie o <strong>ChangeSet</strong> e verifique se haverá <strong>Substituição</strong> da instância.</li>
+          </ol>
+        </section>
+        <div class="checks">
+          <div class="checks-label">Checklist</div>
+          <label class="check-item"><input type="checkbox" onchange="updateProg()"> <span>Analisou o impacto no
+              ChangeSet</span></label>
+          <label class="check-item"><input type="checkbox" onchange="updateProg()"> <span>Identificou se haveria
+              substituição</span></label>
+        </div>
+      </div>
+    </details>
+
+    <!-- Tarefa 4 -->
+    <details class="task" id="t4">
+      <summary class="task-hdr">
+        <div class="task-num">4</div>
+        <div class="task-title">Drift Detection & IA Insights</div>
+        <span class="task-tag" style="background:#EFF6FF;color:#1E40AF">Integridade</span>
+      </summary>
+      <div class="task-body">
+        <div class="info">ℹ️ O Drift Detection avisa quando alguém mexeu manualmente nos recursos fora do código.</div>
+        <section class="step-box">
+          <h4>Prática</h4>
+          <ol class="console-steps">
+            <li>Mude manualmente uma Tag da instância no console EC2.</li>
+            <li>No CloudFormation, clique em <strong>Detectar desvio</strong>.</li>
+            <li>Use o <strong>Amazon Q</strong> para entender como remediar o desvio via IaC.</li>
+          </ol>
+        </section>
+        <div class="checks">
+          <div class="checks-label">Checklist</div>
+          <label class="check-item"><input type="checkbox" onchange="updateProg()"> <span>Provocou drift
+              manual</span></label>
+          <label class="check-item"><input type="checkbox" onchange="updateProg()"> <span>Visualizou detalhes do
+              desvio</span></label>
+        </div>
+      </div>
+    </details>
+
+    <!-- Tarefa 5 -->
+    <details class="task" id="t5">
+      <summary class="task-hdr">
+        <div class="task-num">5</div>
+        <div class="task-title">Outputs Cross-Stack e Dependências</div>
+        <span class="task-tag" style="background:#ECFEFF;color:#0E7490">Modulação</span>
+      </summary>
+      <div class="task-body">
+        <div class="info">ℹ️ Use `Export` e `!ImportValue` para compartilhar recursos entre diferentes stacks.</div>
+        <section class="step-box">
+          <h4>Parte A — Infra (Export)</h4>
+          <pre id="c3">AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  SGApp2026:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: SG Modular
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+Outputs:
+  SharedSGId:
+    Value: !Ref SGApp2026
+    Export:
+      Name: !Sub "${AWS::StackName}-SharedSG"</pre>
+          <button class="copy-btn" onclick="cp('c3', this)">Copiar</button>
+          <p>Nome: <code>techstock-infra-lab</code></p>
+        </section>
+        <section class="step-box">
+          <h4>Parte B — App (Import)</h4>
+          <pre id="c4">AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  AppInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c101f26f147fa7fd
+      InstanceType: t3.micro
+      SecurityGroupIds:
+        - !ImportValue "techstock-infra-lab-SharedSG"</pre>
+          <button class="copy-btn" onclick="cp('c4', this)">Copiar</button>
+          <p>Nome: <code>techstock-app-lab</code></p>
+        </section>
+        <div class="checks">
+          <div class="checks-label">Checklist</div>
+          <label class="check-item"><input type="checkbox" onchange="updateProg()"> <span>Criou stack de infra com
+              Export</span></label>
+          <label class="check-item"><input type="checkbox" onchange="updateProg()"> <span>Criou stack de app com
+              !ImportValue</span></label>
+        </div>
+      </div>
+    </details>
+
+    <!-- Tarefa 6 -->
+    <details class="task" id="t6">
+      <summary class="task-hdr">
+        <div class="task-num">6</div>
+        <div class="task-title">Rollback & Amazon Q Troubleshooting</div>
+        <span class="task-tag" style="background:#FEF2F2;color:#991B1B">IA & Erros</span>
+      </summary>
+      <div class="task-body">
+        <div class="warn">⚠️ Vamos simular um erro crítico para ver o Rollback automático.</div>
+        <div style="position:relative">
+          <pre id="c5">AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  SGFalho:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: "Erro ⚡"
+      VpcId: vpc-invalid-id-00000</pre>
+          <button class="copy-btn" onclick="cp('c5', this)">Copiar</button>
+        </div>
+        <section class="step-box">
+          <h4>Diagnóstico</h4>
+          <ol class="console-steps">
+            <li>Tente criar a stack <code>techstock-erro-demo</code>.</li>
+            <li>Quando falhar, use o painel <strong>Amazon Q</strong> para perguntar o porquê da falha.</li>
+          </ol>
+        </section>
+        <div class="checks">
+          <div class="checks-label">Checklist</div>
+          <label class="check-item"><input type="checkbox" onchange="updateProg()"> <span>Stack entrou em
+              ROLLBACK_COMPLETE</span></label>
+          <label class="check-item"><input type="checkbox" onchange="updateProg()"> <span>Interagiu com Amazon
+              Q</span></label>
+        </div>
+      </div>
+    </details>
+
+    <!-- Tarefa 7 -->
+    <details class="task" id="t7">
+      <summary class="task-hdr">
+        <div class="task-num">7</div>
+        <div class="task-title">Limpeza e Conclusão</div>
+        <span class="task-tag" style="background:#F1F5F9;color:#374151">Cleanup</span>
+      </summary>
+      <div class="task-body">
+        <div class="info">ℹ️ Lembre-se: stacks deletadas removem todos os recursos, garantindo que seu ambiente fique
+          limpo.</div>
+        <div class="checks">
+          <div class="checks-label">Checklist</div>
+          <label class="check-item"><input type="checkbox" onchange="updateProg()"> <span>Todas as stacks
+              deletadas</span></label>
+          <label class="check-item"><input type="checkbox" onchange="updateProg()"> <span>Recursos confirmados como
+              encerrados</span></label>
+        </div>
+      </div>
+    </details>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+
+</html>

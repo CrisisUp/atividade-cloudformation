@@ -1,0 +1,1 @@
+Siga o passo a passo da atividade descrita. Cole o print dos recursos criados dentro da AWS em arquivo unico pdf e envie.

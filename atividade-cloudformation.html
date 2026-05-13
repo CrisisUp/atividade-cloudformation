@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Atividade Pratica — CloudFormation no AWS Learner Lab</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0A0E1A;
+      color: #E2E8F0;
+      font-size: 13px;
+      line-height: 1.6
+    }
+
+    header {
+      background: #FF9900;
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: 800;
+      color: #000
+    }
+
+    .sub {
+      font-size: 12px;
+      color: #1a1a00;
+      margin-top: 2px
+    }
+
+    .badge {
+      background: #000;
+      color: #FF9900;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-left: auto
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px
+    }
+
+    .intro {
+      background: #111827;
+      border: 1px solid #2D3748;
+      border-left: 4px solid #FF9900;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 28px
+    }
+
+    .intro h2 {
+      color: #FF9900;
+      margin-bottom: 8px;
+      font-size: 16px
+    }
+
+    .intro p {
+      color: #94A3B8;
+      font-size: 12px;
+      line-height: 1.7
+    }
+
+    .obj {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 14px
+    }
+
+    .obj-item {
+      background: #1C2333;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 11px;
+      color: #CBD5E1;
+      border-left: 3px solid #FF9900
+    }
+
+    .task {
+      background: #111827;
+      border: 1px solid #2D3748;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      overflow: hidden
+    }
+
+    .task-hdr {
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none
+    }
+
+    .task-num {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      flex-shrink: 0
+    }
+
+    .task-title {
+      font-weight: 700;
+      font-size: 13px;
+      flex: 1
+    }
+
+    .task-tag {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700
+    }
+
+    .task-body {
+      display: none;
+      padding: 16px 18px;
+      border-top: 1px solid #2D3748
+    }
+
+    .task.open .task-body {
+      display: block
+    }
+
+    .step-box {
+      background: #0D1117;
+      border-radius: 8px;
+      padding: 14px;
+      margin: 10px 0
+    }
+
+    .step-box h4 {
+      color: #FF9900;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 10px
+    }
+
+    .console-steps {
+      list-style: none;
+      counter-reset: cs;
+      padding: 0
+    }
+
+    .console-steps li {
+      counter-increment: cs;
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      align-items: flex-start;
+      font-size: 12px;
+      line-height: 1.7
+    }
+
+    .console-steps li::before {
+      content: counter(cs);
+      min-width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #1A3660;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px
+    }
+
+    .nav-path {
+      font-size: 11.5px;
+      font-family: 'Consolas', monospace;
+      color: #60A5FA;
+      background: #1E3A5F;
+      padding: 2px 7px;
+      border-radius: 4px;
+      white-space: nowrap
+    }
+
+    code {
+      font-family: 'Consolas', monospace;
+      font-size: 11.5px;
+      background: #1C2333;
+      color: #F9A8D4;
+      padding: 1px 5px;
+      border-radius: 3px
+    }
+
+    pre {
+      background: #060A10;
+      border: 1px solid #2D3748;
+      border-radius: 6px;
+      padding: 12px;
+      overflow-x: auto;
+      font-size: 11px;
+      line-height: 1.7;
+      color: #E2E8F0;
+      font-family: 'Consolas', 'Monaco', monospace;
+      margin: 8px 0;
+      position: relative
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: #2D3748;
+      border: none;
+      color: #94A3B8;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 10px;
+      cursor: pointer
+    }
+
+    .copy-btn:hover {
+      background: #374151;
+      color: #E2E8F0
+    }
+
+    .exp {
+      background: #1a2d1a;
+      border: 1px solid #1F5C2E;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 11.5px;
+      color: #86EFAC;
+      margin: 8px 0;
+      line-height: 1.6
+    }
+
+    .warn {
+      background: #2d1a1a;
+      border: 1px solid #6B2020;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 11.5px;
+      color: #FCA5A5;
+      margin: 8px 0;
+      line-height: 1.6
+    }
+
+    .info {
+      background: #1a2233;
+      border: 1px solid #1E3A5F;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 11.5px;
+      color: #93C5FD;
+      margin: 8px 0;
+      line-height: 1.6
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 5px 0;
+      font-size: 12px;
+      cursor: pointer;
+      line-height: 1.5
+    }
+
+    .check-item input {
+      width: 16px;
+      height: 16px;
+      accent-color: #FF9900;
+      flex-shrink: 0;
+      margin-top: 1px
+    }
+
+    .check-item.checked {
+      color: #6B7280;
+      text-decoration: line-through
+    }
+
+    .checks {
+      margin-top: 14px;
+      border-top: 1px solid #2D3748;
+      padding-top: 12px
+    }
+
+    .checks-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #546E7A;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 6px
+    }
+
+    .progress {
+      background: #1C2333;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px
+    }
+
+    .prog-bar {
+      flex: 1;
+      height: 8px;
+      background: #2D3748;
+      border-radius: 4px;
+      overflow: hidden
+    }
+
+    .prog-fill {
+      height: 100%;
+      background: #FF9900;
+      border-radius: 4px;
+      transition: width .3s
+    }
+
+    .prog-label {
+      font-size: 11px;
+      color: #94A3B8;
+      white-space: nowrap
+    }
+
+    .screenshot-hint {
+      background: #1C2333;
+      border: 1px dashed #374151;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 11px;
+      color: #6B7280;
+      margin: 8px 0;
+      font-style: italic
+    }
+
+    .concept {
+      background: #1a1a2e;
+      border: 1px solid #2D2D6E;
+      border-left: 4px solid #6366F1;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin: 8px 0
+    }
+
+    .concept-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #A5B4FC;
+      margin-bottom: 4px
+    }
+
+    .concept-body {
+      font-size: 11.5px;
+      color: #C4B5FD;
+      line-height: 1.6
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div>
+      <div class="brand">&#x2601; Atividade Pratica &mdash; CloudFormation</div>
+      <div class="sub">Modo Console AWS &middot; AWS Learner Lab &middot; us-east-1</div>
+    </div>
+    <div class="badge">~90 min</div>
+  </header>
+  <div class="container">
+
+    <div class="progress">
+      <div class="prog-bar">
+        <div class="prog-fill" id="pf" style="width:0%"></div>
+      </div>
+      <div class="prog-label"><span id="pl">0% concluido</span></div>
+    </div>
+
+    <div class="intro">
+      <h2>O que voce vai fazer</h2>
+      <p>Criar e gerenciar stacks CloudFormation inteiramente pelo Console AWS &mdash; sem CLI local. Voce vai escrever
+        templates YAML no Designer, usar Parameters e Mappings, inspecionar ChangeSets, detectar drift e provocar erros
+        para aprender rollback na pratica.</p>
+      <div class="obj">
+        <div class="obj-item">&#x1F4C4; Templates YAML com Parameters e Mappings</div>
+        <div class="obj-item">&#x1F50D; ChangeSets e Drift Detection</div>
+        <div class="obj-item">&#x1F504; Rollback automatico e troubleshooting</div>
+      </div>
+    </div>
+
+    <div class="task" id="t1">
+      <div class="task-hdr" onclick="toggle('t1')">
+        <div class="task-num" style="background:#FF9900;color:#000">1</div>
+        <div class="task-title">Primeira Stack — EC2 pelo Console</div>
+        <span class="task-tag" style="background:#FFF3E0;color:#B45309">Console</span>
+        <span style="font-size:11px;color:#6B7280;margin-left:8px">~15 min</span>
+      </div>
+      <div class="task-body">
+        <div class="info">ℹ️ Voce vai criar uma stack CloudFormation diretamente pelo Console AWS. Sem CLI, sem arquivo
+          local — o template YAML e colado direto no editor do Console.</div>
+        <div class="concept">
+          <div class="concept-title">💡 O que e uma Stack?</div>
+          <div class="concept-body">Uma stack e um conjunto de recursos AWS gerenciados como uma unidade pelo
+            CloudFormation. Ao criar a stack, o CF cria todos os recursos na ordem certa. Ao deletar a stack, ele apaga
+            tudo junto.</div>
+        </div>
+        <div class="step-box">
+          <h4>Passo 1 — Acesse o CloudFormation e inicie a criacao</h4>
+          <ol class="console-steps">
+            <li><span class="nav-path">AWS Console → CloudFormation</span> → <strong>Create stack</strong> →
+              <strong>With new resources (standard)</strong>
+            </li>
+            <li>Prerequisite: <strong>Template is ready</strong></li>
+            <li>Template source: <strong>Enter template in Designer</strong> → clique em <strong>Create template in
+                Designer</strong></li>
+            <li>No Designer, clique no botao <strong>Template</strong> (aba inferior) → apague o conteudo e cole o YAML
+              abaixo</li>
+          </ol>
+        </div>
+        <div style="position:relative">
+          <pre id="c1">AWSTemplateFormatVersion: '2010-09-09'
+Description: TechStock Lab - EC2 simples via Console
+
+Parameters:
+  InstanceType:
+    Type: String
+    Default: t2.micro
+    AllowedValues: [t2.micro, t2.small]
+    Description: Tipo da instancia EC2
+
+Resources:
+  LabEC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c02fb55956c7d316
+      InstanceType: !Ref InstanceType
+      IamInstanceProfile: LabInstanceProfile
+      Tags:
+        - Key: Name
+          Value: !Sub "${AWS::StackName}-ec2"
+        - Key: ManagedBy
+          Value: CloudFormation
+
+Outputs:
+  InstanceId:
+    Value: !Ref LabEC2
+    Description: ID da instancia criada
+  PrivateIP:
+    Value: !GetAtt LabEC2.PrivateIp
+    Description: IP privado da instancia</pre><button class="copy-btn" onclick="cp('c1')">Copiar</button>
+        </div>
+        <div class="screenshot-hint">📸 O Designer deve mostrar o recurso LabEC2 (icone de EC2) no canvas. Se aparecer
+          erro de sintaxe, revise a indentacao do YAML.</div>
+        <div class="step-box">
+          <h4>Passo 2 — Revisar e criar</h4>
+          <ol class="console-steps">
+            <li>No Designer, clique no botao <strong>☁️ Create stack</strong> (icone de nuvem com seta) no topo →
+              <strong>Next</strong>
+            </li>
+            <li>Stack name: <code>techstock-lab-cf</code> → <strong>Next</strong></li>
+            <li>Parameters: <code>InstanceType</code> → mantenha <code>t2.micro</code> → <strong>Next</strong></li>
+            <li>Configure stack options: nao altere nada → <strong>Next</strong></li>
+            <li>Review: role ate o final → <strong>Create stack</strong></li>
+            <li><span class="nav-path">CloudFormation → Stacks → techstock-lab-cf → Events</span> · Acompanhe os eventos
+              em tempo real. Aguarde <code>CREATE_COMPLETE</code></li>
+          </ol>
+        </div>
+        <div class="exp">✅ <strong>Esperado:</strong> Status da stack: CREATE_COMPLETE. Aba Outputs mostra InstanceId e
+          PrivateIP preenchidos automaticamente.</div>
+        <div class="checks">
+          <div class="checks-label">Checklist</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Stack criada com status CREATE_COMPLETE
+          </div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Aba Events mostra a criacao do recurso
+            LabEC2</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Aba Outputs exibe InstanceId (i-xxxx) e
+            PrivateIP</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> EC2 visivel em EC2 → Instances com tag
+            ManagedBy: CloudFormation</div>
+        </div>
+      </div>
+    </div>
+    <div class="task" id="t2">
+      <div class="task-hdr" onclick="toggle('t2')">
+        <div class="task-num" style="background:#E07B00;color:#fff">2</div>
+        <div class="task-title">Parameters e Mappings — Infra Parametrizada</div>
+        <span class="task-tag" style="background:#FFF3E0;color:#92400E">Parameters</span>
+        <span style="font-size:11px;color:#6B7280;margin-left:8px">~20 min</span>
+      </div>
+      <div class="task-body">
+        <div class="info">ℹ️ Agora voce vai criar um template mais completo com <strong>Parameters</strong> (entradas
+          dinamicas) e <strong>Mappings</strong> (dicionario de valores por ambiente). Isso permite reutilizar o mesmo
+          template para dev, staging e prod mudando apenas os parametros.</div>
+        <div class="concept">
+          <div class="concept-title">💡 Por que Parameters e Mappings?</div>
+          <div class="concept-body"><strong>Parameters</strong> sao entradas que o usuario fornece ao criar a stack (ex:
+            senha do banco, tipo de instancia). <strong>Mappings</strong> sao dicionarios fixos no template — usados
+            para variar valores por regiao ou ambiente sem precisar de parametros.</div>
+        </div>
+        <div class="step-box">
+          <h4>Passo 1 — Crie a nova stack com template parametrizado</h4>
+          <ol class="console-steps">
+            <li><span class="nav-path">CloudFormation → Stacks → Create stack → With new resources</span></li>
+            <li>Template source: <strong>Enter template in Designer</strong> → clique em <strong>Create template in
+                Designer</strong></li>
+            <li>Cole o template abaixo na aba Template do Designer:</li>
+          </ol>
+        </div>
+        <div style="position:relative">
+          <pre id="c2">AWSTemplateFormatVersion: '2010-09-09'
+Description: TechStock - Template com Parameters e Mappings
+
+Parameters:
+  Environment:
+    Type: String
+    Default: lab
+    AllowedValues: [lab, dev, prod]
+    Description: Ambiente de implantacao
+
+  AppName:
+    Type: String
+    Default: techstock
+    Description: Nome base da aplicacao
+
+Mappings:
+  InstanceSize:
+    lab:  { EC2: t2.micro  }
+    dev:  { EC2: t2.small  }
+    prod: { EC2: t2.medium }
+
+  AMIByRegion:
+    us-east-1: { AL2023: ami-0c02fb55956c7d316 }
+
+Conditions:
+  IsProd: !Equals [!Ref Environment, prod]
+
+Resources:
+  AppInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      # !FindInMap busca o tipo correto para o ambiente escolhido
+      InstanceType: !FindInMap [InstanceSize, !Ref Environment, EC2]
+      # !FindInMap busca a AMI correta para a regiao atual
+      ImageId: !FindInMap [AMIByRegion, !Ref AWS::Region, AL2023]
+      IamInstanceProfile: LabInstanceProfile
+      Tags:
+        - Key: Name
+          # !Sub substitui variaveis na string
+          Value: !Sub "${AppName}-${Environment}-app"
+        - Key: Environment
+          Value: !Ref Environment
+        - Key: ManagedBy
+          Value: CloudFormation
+        - Key: Producao
+          # !If retorna o primeiro valor se IsProd=true, segundo se false
+          Value: !If [IsProd, "sim", "nao"]
+
+Outputs:
+  InstanceType:
+    Description: Tipo de instancia escolhido pelo Mapping
+    Value: !FindInMap [InstanceSize, !Ref Environment, EC2]
+  NomeCompleto:
+    Description: Nome gerado pelo Sub
+    Value: !Sub "${AppName}-${Environment}-app"
+  AmbienteProducao:
+    Value: !If [IsProd, "SIM - ambiente de producao", "NAO - ambiente nao-prod"]</pre><button class="copy-btn"
+            onclick="cp('c2')">Copiar</button>
+        </div>
+        <div class="step-box">
+          <h4>Passo 2 — Criar e observar os Outputs</h4>
+          <ol class="console-steps">
+            <li>No Designer: clique em <strong>Create stack</strong> → <strong>Next</strong></li>
+            <li>Stack name: <code>techstock-parametrizado</code> → <strong>Next</strong></li>
+            <li>Parameters: <code>Environment</code> → selecione <code>lab</code> · <code>AppName</code> →
+              <code>techstock</code> → <strong>Next</strong> → <strong>Next</strong> → <strong>Create stack</strong>
+            </li>
+            <li>Aguarde <code>CREATE_COMPLETE</code> → aba <code>Outputs</code>: observe o tipo de instancia e o nome
+              gerado</li>
+            <li><span class="nav-path">CloudFormation → Stacks → techstock-parametrizado → Update</span> → <strong>Use
+                current template</strong> → <strong>Next</strong></li>
+            <li>Mude <code>Environment</code> para <code>prod</code> → <strong>Next</strong> → <strong>Next</strong> →
+              <strong>Update stack</strong>
+            </li>
+            <li>Na aba Outputs apos o update: <code>AmbienteProducao</code> deve mostrar <strong>SIM - ambiente de
+                producao</strong></li>
+          </ol>
+        </div>
+        <div class="exp">✅ <strong>Esperado:</strong> Outputs mudam conforme o Environment: lab usa t2.micro, prod usa
+          t2.medium. O Mapping escolhe automaticamente.</div>
+        <div class="checks">
+          <div class="checks-label">Checklist</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Stack techstock-parametrizado criada com
+            Environment=lab</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Output InstanceType mostra t2.micro
+            (valor do Mapping para lab)</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Apos update para prod: Output
+            AmbienteProducao mostra SIM</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Entende a diferenca entre Parameter
+            (entrada do usuario) e Mapping (dicionario interno)</div>
+        </div>
+      </div>
+    </div>
+    <div class="task" id="t3">
+      <div class="task-hdr" onclick="toggle('t3')">
+        <div class="task-num" style="background:#16A34A;color:#fff">3</div>
+        <div class="task-title">ChangeSet — Veja Antes de Aplicar</div>
+        <span class="task-tag" style="background:#F0FDF4;color:#14532D">ChangeSet</span>
+        <span style="font-size:11px;color:#6B7280;margin-left:8px">~15 min</span>
+      </div>
+      <div class="task-body">
+        <div class="info">ℹ️ ChangeSets sao a feature mais importante para uso seguro do CloudFormation. Eles mostram
+          EXATAMENTE o que vai mudar antes de qualquer recurso ser criado, modificado ou deletado.</div>
+        <div class="concept">
+          <div class="concept-title">💡 Por que ChangeSets existem?</div>
+          <div class="concept-body">Em producao, executar um update sem saber o impacto e perigoso. Um ChangeSet e o
+            equivalente a um git diff antes do merge — voce ve o que vai mudar e decide se quer prosseguir. Recursos com
+            Replacement=True serao deletados e recriados (downtime!).</div>
+        </div>
+        <div class="step-box">
+          <h4>Passo 1 — Crie um ChangeSet para a stack existente</h4>
+          <ol class="console-steps">
+            <li><span class="nav-path">CloudFormation → Stacks → techstock-parametrizado</span> → botao
+              <strong>Update</strong>
+            </li>
+            <li><strong>Use current template</strong> → <strong>Next</strong></li>
+            <li>Mude <code>Environment</code> para <code>dev</code> → <strong>Next</strong> → <strong>Next</strong></li>
+            <li>Na tela de Review: em vez de <strong>Update stack</strong>, clique em <strong>Create change set for this
+                update</strong></li>
+            <li>Change set name: <code>update-env-dev</code> → Change set description:
+              <code>Mudando ambiente para dev</code> → <strong>Create change set</strong>
+            </li>
+          </ol>
+        </div>
+        <div class="step-box">
+          <h4>Passo 2 — Analise o ChangeSet</h4>
+          <ol class="console-steps">
+            <li><span class="nav-path">CloudFormation → Stacks → techstock-parametrizado → Change sets →
+                update-env-dev</span></li>
+            <li>Observe a coluna <strong>Action</strong>: <code>Modify</code> significa modificacao. <code>Add</code> =
+              criar. <code>Remove</code> = deletar.</li>
+            <li>Observe a coluna <strong>Replacement</strong>: <code>True</code> = recurso sera DELETADO e RECRIADO
+              (possivel downtime). <code>False</code> = modificacao in-place (sem downtime).</li>
+            <li>Coluna <strong>Logical ID</strong>: qual recurso do template sera afetado.</li>
+            <li>Coluna <strong>Physical ID</strong>: o ID real do recurso na AWS (ex: i-0abc123).</li>
+          </ol>
+        </div>
+        <div class="screenshot-hint">📸 A tabela do ChangeSet e a informacao mais valiosa do CF. Em prod, nunca execute
+          um update sem revisar o ChangeSet primeiro — especialmente a coluna Replacement.</div>
+        <div class="step-box">
+          <h4>Passo 3 — Executar ou cancelar</h4>
+          <ol class="console-steps">
+            <li>Para <strong>aplicar</strong>: botao <strong>Execute change set</strong> → confirme → aguarde
+              <code>UPDATE_COMPLETE</code>
+            </li>
+            <li>Para <strong>cancelar</strong>: botao <strong>Delete</strong> → a stack continua no estado anterior sem
+              nenhuma alteracao</li>
+            <li>Execute o ChangeSet e aguarde o update completar</li>
+            <li><span class="nav-path">Outputs → InstanceType</span> deve mostrar agora <code>t2.small</code> (valor do
+              Mapping para dev)</li>
+          </ol>
+        </div>
+        <div class="exp">✅ <strong>Esperado:</strong> ChangeSet executado com sucesso. Output InstanceType agora mostra
+          t2.small.</div>
+        <div class="checks">
+          <div class="checks-label">Checklist</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> ChangeSet criado (nao aplicado
+            automaticamente)</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Coluna Action e Replacement analisadas
+            antes de executar</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> ChangeSet executado: UPDATE_COMPLETE
+          </div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Output InstanceType mudou para t2.small
+            (Mapping de dev)</div>
+        </div>
+      </div>
+    </div>
+    <div class="task" id="t4">
+      <div class="task-hdr" onclick="toggle('t4')">
+        <div class="task-num" style="background:#1E5BA8;color:#fff">4</div>
+        <div class="task-title">Drift Detection — Detectando Mudancas Manuais</div>
+        <span class="task-tag" style="background:#EFF6FF;color:#1E40AF">Drift</span>
+        <span style="font-size:11px;color:#6B7280;margin-left:8px">~15 min</span>
+      </div>
+      <div class="task-body">
+        <div class="info">ℹ️ Drift acontece quando alguem modifica um recurso diretamente no Console AWS sem passar pelo
+          CloudFormation. O CF perde o controle do recurso. Drift Detection identifica essas discrepancias.</div>
+        <div class="concept">
+          <div class="concept-title">💡 O problema do drift</div>
+          <div class="concept-body">Se voce cria uma EC2 via CloudFormation e depois alguem vai no Console e muda o
+            Instance Type manualmente, o CF nao sabe disso. O codigo diz t2.micro mas a realidade e t2.small. Isso e
+            drift — codigo e realidade divergindo. Em microsservicos e IaC, drift e um problema serio de governanca.
+          </div>
+        </div>
+        <div class="step-box">
+          <h4>Passo 1 — Introduza um drift manualmente</h4>
+          <ol class="console-steps">
+            <li><span class="nav-path">EC2 → Instances</span> · Localize a instancia <code>techstock-dev-app</code>
+              (criada pela stack)</li>
+            <li>Selecione a instancia → <strong>Actions → Instance settings → Edit tags</strong></li>
+            <li>Adicione uma tag nova: Key <code>ManualTag</code> Value <code>adicionada-no-console</code> →
+              <strong>Save</strong>
+            </li>
+            <li>Agora voce criou um drift: o template CF nao tem essa tag, mas a instancia sim.</li>
+          </ol>
+        </div>
+        <div class="step-box">
+          <h4>Passo 2 — Execute o Drift Detection</h4>
+          <ol class="console-steps">
+            <li><span class="nav-path">CloudFormation → Stacks → techstock-parametrizado</span> → menu <strong>Stack
+                actions</strong> → <strong>Detect stack drift</strong></li>
+            <li>Aguarde o status mudar de <code>DETECTION_IN_PROGRESS</code> para <code>DRIFTED</code> (pode levar 1-2
+              min)</li>
+            <li>Clique em <strong>View drift results</strong></li>
+            <li>O recurso <code>AppInstance</code> aparecera com status <code>MODIFIED</code> (ou <code>DRIFTED</code>)
+            </li>
+            <li>Clique no recurso → <strong>View drift details</strong> · Observe: campo esperado vs campo atual para
+              cada propriedade que diverge</li>
+          </ol>
+        </div>
+        <div class="step-box">
+          <h4>Passo 3 — Interpretando os resultados</h4>
+          <ol class="console-steps">
+            <li>Property path: caminho da propriedade que divergiu (ex: <code>Tags/2/Value</code>)</li>
+            <li>Expected value: o que o template CF diz que deveria ser</li>
+            <li>Actual value: o que realmente existe na AWS</li>
+            <li>Para resolver: ou atualize o template para incluir a mudanca, ou remova a mudanca manual da AWS</li>
+          </ol>
+        </div>
+        <div class="exp">✅ <strong>Esperado:</strong> Stack mostra status DRIFTED. Drift details exibe a tag ManualTag
+          como propriedade adicionada fora do CF.</div>
+        <div class="warn">⚠️ Em producao, configure um AWS Config Rule para alertar quando drift for detectado. Drift
+          nao resolvido acumula — com o tempo o estado real e o template ficam tao diferentes que o CF nao consegue mais
+          gerenciar a stack.</div>
+        <div class="checks">
+          <div class="checks-label">Checklist</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Tag manual adicionada diretamente na EC2
+            (fora do CF)</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Drift Detection executado com sucesso
+          </div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Stack mostra status DRIFTED</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Drift details mostra a tag extra como
+            propriedade nao esperada</div>
+        </div>
+      </div>
+    </div>
+    <div class="task" id="t5">
+      <div class="task-hdr" onclick="toggle('t5')">
+        <div class="task-num" style="background:#7C3AED;color:#fff">5</div>
+        <div class="task-title">Nested Stacks e Outputs Cross-Stack</div>
+        <span class="task-tag" style="background:#F5F3FF;color:#5B21B6">Nested Stacks</span>
+        <span style="font-size:11px;color:#6B7280;margin-left:8px">~20 min</span>
+      </div>
+      <div class="task-body">
+        <div class="info">ℹ️ Nested Stacks permitem criar modularidade no CloudFormation: uma stack mae que chama stacks
+          filhas. Outputs Cross-Stack permitem que uma stack exporte valores para outra usar — sem hardcode de IDs.
+        </div>
+        <div class="concept">
+          <div class="concept-title">💡 Outputs e !ImportValue</div>
+          <div class="concept-body">Uma stack pode exportar um valor (Ex: VPC ID) com um nome unico. Outra stack pode
+            importar esse valor com <code>!ImportValue nome-do-export</code>. Isso cria dependencias declaradas entre
+            stacks — e impede deletar uma stack que esta sendo usada por outra.</div>
+        </div>
+        <div class="step-box">
+          <h4>Passo 1 — Stack de infraestrutura (exporta o SG ID)</h4>
+          <ol class="console-steps">
+            <li><span class="nav-path">CloudFormation → Create stack → With new resources</span></li>
+            <li>Template source: <strong>Enter template in Designer</strong> → Cole o template abaixo</li>
+          </ol>
+        </div>
+        <div style="position:relative">
+          <pre id="c3">AWSTemplateFormatVersion: '2010-09-09'
+Description: TechStock - Stack de Infra (exporta Security Group)
+
+Parameters:
+  AppName:
+    Type: String
+    Default: techstock
+
+Resources:
+  SGApp:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: !Sub "${AppName}-sg-lab"
+      GroupDescription: SG para o app TechStock Lab
+      # Usa a VPC default da conta (disponivel no Learner Lab)
+      VpcId: !ImportValue techstock-vpc-id
+      # Se nao tiver a VPC stack: use a VPC default
+      # VpcId: !Ref "AWS::AccountId"  (nao funciona - apenas exemplo)
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3000
+          ToPort: 3000
+          CidrIp: 0.0.0.0/0
+          Description: App porta 3000
+
+Outputs:
+  SGId:
+    Description: ID do Security Group exportado para outras stacks
+    Value: !Ref SGApp
+    Export:
+      # Nome do export deve ser UNICO na regiao/conta
+      Name: !Sub "${AppName}-lab-sg-id"
+
+  SGName:
+    Description: Nome do Security Group
+    Value: !GetAtt SGApp.GroupId
+    Export:
+      Name: !Sub "${AppName}-lab-sg-name" </pre><button class="copy-btn" onclick="cp('c3')">Copiar</button>
+        </div>
+        <div class="info">ℹ️ Se o <code>!ImportValue techstock-vpc-id</code> falhar (a stack de VPC nao existe no Lab),
+          substitua <code>VpcId</code> pelo ID da VPC default: <span class="nav-path">VPC → Your VPCs → VPC ID da
+            default VPC</span> e use <code>VpcId: vpc-XXXXXXXX</code> como valor fixo para fins de aprendizado.</div>
+        <div class="step-box">
+          <h4>Passo 2 — Lance a stack de infra-lab</h4>
+          <ol class="console-steps">
+            <li>Stack name: <code>techstock-infra-lab</code> → <strong>Next</strong> → <strong>Next</strong> →
+              <strong>Create stack</strong>
+            </li>
+            <li>Aguarde <code>CREATE_COMPLETE</code> → aba Outputs: copie o valor do <code>SGId</code></li>
+          </ol>
+        </div>
+        <div class="step-box">
+          <h4>Passo 2 — Stack de aplicacao (importa o SG ID)</h4>
+          <ol class="console-steps">
+            <li><span class="nav-path">CloudFormation → Create stack → With new resources</span> → Designer → cole o
+              template abaixo</li>
+          </ol>
+        </div>
+        <div style="position:relative">
+          <pre id="c4">AWSTemplateFormatVersion: '2010-09-09'
+Description: TechStock - Stack de App (importa SG da stack de infra)
+
+Resources:
+  AppInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: ami-0c02fb55956c7d316
+      InstanceType: t2.micro
+      IamInstanceProfile: LabInstanceProfile
+      # !ImportValue busca o Export da outra stack
+      # Se techstock-infra-lab for deletada enquanto esta stack existir: ERRO
+      SecurityGroupIds:
+        - !ImportValue techstock-lab-sg-id
+      Tags:
+        - Key: Name
+          Value: techstock-app-imported-sg
+
+Outputs:
+  InstanceWithImportedSG:
+    Description: EC2 usando SG importado de outra stack
+    Value: !Ref AppInstance</pre><button class="copy-btn" onclick="cp('c4')">Copiar</button>
+        </div>
+        <ol class="console-steps">
+          <li>Stack name: <code>techstock-app-lab</code> → <strong>Create stack</strong></li>
+          <li>Aguarde <code>CREATE_COMPLETE</code></li>
+          <li>Tente deletar <code>techstock-infra-lab</code>: <span class="nav-path">Stacks → techstock-infra-lab →
+              Delete</span> → observe o erro <strong>Export is in use</strong> — o CF protege automaticamente!</li>
+        </ol>
+        <div class="exp">✅ <strong>Esperado:</strong> Stack techstock-app-lab usa o SG importado. Tentativa de deletar
+          techstock-infra-lab falha com 'Export is in use' — dependencia declarada e protegida automaticamente.</div>
+        <div class="checks">
+          <div class="checks-label">Checklist</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Stack techstock-infra-lab criada com
+            Export do SGId</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Stack techstock-app-lab criada usando
+            !ImportValue</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Tentativa de deletar infra-lab falhou
+            com Export in use</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Entende que !ImportValue cria
+            dependencia protegida entre stacks</div>
+        </div>
+      </div>
+    </div>
+    <div class="task" id="t6">
+      <div class="task-hdr" onclick="toggle('t6')">
+        <div class="task-num" style="background:#C0392B;color:#fff">6</div>
+        <div class="task-title">Rollback e Troubleshooting</div>
+        <span class="task-tag" style="background:#FEF2F2;color:#991B1B">Rollback</span>
+        <span style="font-size:11px;color:#6B7280;margin-left:8px">~15 min</span>
+      </div>
+      <div class="task-body">
+        <div class="info">ℹ️ Nesta tarefa voce vai intencionalmente criar uma stack com erro para ver o rollback
+          automatico e aprender a diagnosticar falhas pelos eventos.</div>
+        <div class="concept">
+          <div class="concept-title">💡 Rollback automatico</div>
+          <div class="concept-body">Quando qualquer recurso falha durante CREATE, o CloudFormation automaticamente
+            deleta tudo que criou antes de falhar. A stack volta para o estado anterior. Voce NUNCA fica com metade dos
+            recursos criados — ou cria tudo ou reverte tudo.</div>
+        </div>
+        <div class="step-box">
+          <h4>Passo 1 — Crie uma stack com erro proposital</h4>
+          <ol class="console-steps">
+            <li><span class="nav-path">CloudFormation → Create stack → With new resources</span> → Designer</li>
+            <li>Cole o template abaixo (tem um erro intencional: SG com descricao com caracteres invalidos):</li>
+          </ol>
+        </div>
+        <div style="position:relative">
+          <pre id="c5">AWSTemplateFormatVersion: '2010-09-09'
+Description: Template com erro intencional para demonstrar rollback
+
+Resources:
+  SGComErro:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: techstock-sg-erro
+      GroupDescription: "SG com caractere inválido — acento e travessão"
+      # ERRO INTENCIONAL: a descricao tem acentos e travessao (—)
+      # AWS SG so aceita: a-zA-Z0-9. _-:/()#,@[]+=&;{}!$*
+      VpcId: vpc-00000000000000000
+
+  EC2Normal:
+    Type: AWS::EC2::Instance
+    DependsOn: SGComErro
+    Properties:
+      ImageId: ami-0c02fb55956c7d316
+      InstanceType: t2.micro
+      IamInstanceProfile: LabInstanceProfile</pre><button class="copy-btn" onclick="cp('c5')">Copiar</button>
+        </div>
+        <ol class="console-steps">
+          <li>Stack name: <code>techstock-erro-demo</code> → <strong>Next</strong> → <strong>Next</strong> →
+            <strong>Create stack</strong>
+          </li>
+          <li>Aguarde — a stack vai falhar em <code>SGComErro</code></li>
+        </ol>
+        <div class="step-box">
+          <h4>Passo 2 — Diagnostique o erro pelos Eventos</h4>
+          <ol class="console-steps">
+            <li><span class="nav-path">CloudFormation → Stacks → techstock-erro-demo → Events</span></li>
+            <li>Filtre por <code>CREATE_FAILED</code> ou role ate encontrar o evento de falha</li>
+            <li>Observe a coluna <strong>Status reason</strong>: ela mostra o motivo exato do erro</li>
+            <li>A stack deve mostrar status <code>ROLLBACK_COMPLETE</code> — significa que falhou E o rollback ocorreu
+            </li>
+            <li>Note que <code>EC2Normal</code> nao foi criada — o rollback garantiu que nenhum recurso ficou pendente
+            </li>
+          </ol>
+        </div>
+        <div class="step-box">
+          <h4>Passo 3 — Corrija e recrie</h4>
+          <ol class="console-steps">
+            <li><span class="nav-path">CloudFormation → Stacks → techstock-erro-demo → Delete</span> · Uma stack em
+              ROLLBACK_COMPLETE deve ser deletada antes de recriar</li>
+            <li>Volte ao Designer, corrija a descricao do SG: remova acentos e o travessao (—) → use apenas ASCII basico
+            </li>
+            <li>Tambem corrija o VpcId: use a VPC ID real da sua conta → <span class="nav-path">VPC → Your VPCs → copie
+                o VPC ID</span></li>
+            <li>Recrie a stack com o template corrigido e aguarde <code>CREATE_COMPLETE</code></li>
+          </ol>
+        </div>
+        <div class="exp">✅ <strong>Esperado:</strong> Stack em ROLLBACK_COMPLETE apos a falha. Apos deletar e recriar
+          com o template corrigido: CREATE_COMPLETE sem erros.</div>
+        <div class="warn">⚠️ Uma stack em ROLLBACK_COMPLETE nao pode ser atualizada — apenas deletada. Isso e diferente
+          de ROLLBACK_FAILED (onde o proprio rollback falhou e requer intervencao manual com continue-update-rollback).
+        </div>
+        <div class="checks">
+          <div class="checks-label">Checklist</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Stack techstock-erro-demo falhou com
+            CREATE_FAILED no SGComErro</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Events mostra o Status reason com o
+            motivo exato</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Stack esta em ROLLBACK_COMPLETE (nao
+            CREATE_FAILED — o rollback ocorreu)</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Nenhum recurso ficou criado na AWS
+            (rollback deletou tudo)</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Stack deletada e recriada com template
+            corrigido: CREATE_COMPLETE</div>
+        </div>
+      </div>
+    </div>
+    <div class="task" id="t7">
+      <div class="task-hdr" onclick="toggle('t7')">
+        <div class="task-num" style="background:#546E7A;color:#fff">7</div>
+        <div class="task-title">Limpeza — Deletando Todas as Stacks</div>
+        <span class="task-tag" style="background:#F1F5F9;color:#374151">Cleanup</span>
+        <span style="font-size:11px;color:#6B7280;margin-left:8px">~10 min</span>
+      </div>
+      <div class="task-body">
+        <div class="warn">⚠️ IMPORTANTE: sempre delete as stacks criadas durante atividades de lab. Stacks deletadas
+          removem TODOS os recursos criados — EC2, SGs, etc. Sem custo adicional apos a remocao.</div>
+        <div class="step-box">
+          <h4>Ordem correta para deletar (dependencias entre stacks)</h4>
+          <ol class="console-steps">
+            <li><span class="nav-path">CloudFormation → Stacks → techstock-app-lab → Delete</span> → <strong>Delete
+                stack</strong> · Esta usa o SG da infra-lab, entao deve ser deletada PRIMEIRO</li>
+            <li>Aguarde <code>DELETE_COMPLETE</code></li>
+            <li><span class="nav-path">CloudFormation → Stacks → techstock-infra-lab → Delete</span> → <strong>Delete
+                stack</strong></li>
+            <li><span class="nav-path">CloudFormation → Stacks → techstock-parametrizado → Delete</span> →
+              <strong>Delete stack</strong>
+            </li>
+            <li><span class="nav-path">CloudFormation → Stacks → techstock-lab-cf → Delete</span> → <strong>Delete
+                stack</strong></li>
+            <li><span class="nav-path">CloudFormation → Stacks → techstock-erro-demo → Delete</span> → <strong>Delete
+                stack</strong> (se ainda existir)</li>
+            <li><span class="nav-path">EC2 → Instances</span> · Confirme que nenhuma instancia das stacks ainda existe
+              (deve estar Terminated)</li>
+          </ol>
+        </div>
+        <div class="exp">✅ <strong>Esperado:</strong> Todas as stacks com status DELETE_COMPLETE. Nenhuma instancia EC2
+          ou SG das stacks ainda visivel na conta.</div>
+        <div class="checks">
+          <div class="checks-label">Checklist</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> techstock-app-lab deletada primeiro
+            (dependencia resolvida)</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> techstock-infra-lab deletada</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> techstock-parametrizado deletada</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> techstock-lab-cf deletada</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Nenhum recurso das stacks visivel no EC2
+            ou VPC</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script>
+    function toggle(id) { const t = document.getElementById(id); t.classList.toggle('open'); }
+    function check(el) { el.classList.toggle('checked'); el.querySelector('input').checked = el.classList.contains('checked'); updateProg(); }
+    function updateProg() {
+      const checks = document.querySelectorAll('.check-item.checked').length;
+      const total = document.querySelectorAll('.check-item').length;
+      const pct = total ? Math.round(checks / total * 100) : 0;
+      document.getElementById('pf').style.width = pct + '%';
+      document.getElementById('pl').textContent = pct + '% concluido (' + checks + '/' + total + ')';
+      localStorage.setItem('cf-ativ-prog', JSON.stringify([...document.querySelectorAll('.check-item.checked')].map((_, i) => i)));
+    }
+    function cp(id) {
+      const el = document.getElementById(id);
+      navigator.clipboard.writeText(el.textContent).then(() => {
+        const btn = el.nextElementSibling; btn.textContent = 'OK!';
+        setTimeout(() => btn.textContent = 'Copiar', 1500);
+      });
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('t1').classList.add('open');
+    });
+  </script>
+</body>
+
+</html>
