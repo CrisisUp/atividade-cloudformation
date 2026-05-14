@@ -1,0 +1,19 @@
+/**
+ * style-terraform.css
+ * 
+ * Arquivo principal de orquestração de estilos.
+ * Este arquivo utiliza o padrão de Modularização para carregar as diferentes
+ * camadas da interface, facilitando a manutenção e reduzindo a complexidade.
+ */
+
+/* 1. Design Tokens (Variáveis Globais) */
+@import url('css/tokens.css');
+
+/* 2. Reset & Estilos Base */
+@import url('css/base.css');
+
+/* 3. Layout Macro (Header, Grid, Intro) */
+@import url('css/layout.css');
+
+/* 4. Componentes Interativos e Elementos da UI */
+@import url('css/components.css');

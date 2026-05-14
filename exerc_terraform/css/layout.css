@@ -1,0 +1,81 @@
+/**
+ * layout.css
+ * 3. Layout Components - Header, Container, Intro
+ */
+
+/* Cabeçalho principal com a marca e badge de tempo */
+header {
+  background: var(--brand-primary);
+  padding: var(--space-lg) var(--space-2xl);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.brand {
+  font-size: var(--font-2xl);
+  font-weight: 800;
+  color: var(--text-white);
+}
+
+.sub {
+  font-size: var(--font-base);
+  color: var(--brand-muted);
+  margin-top: 2px;
+}
+
+.badge {
+  background: var(--text-black);
+  color: var(--brand-secondary);
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: var(--font-sm);
+  font-weight: 700;
+  margin-left: auto;
+}
+
+/* Container centralizado para conteúdo */
+.container {
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: var(--space-2xl);
+}
+
+/* Seção introdutória do laboratório */
+.intro {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-main);
+  border-left: 4px solid var(--brand-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-2xl);
+}
+
+.intro h2 {
+  color: var(--brand-secondary);
+  margin-bottom: var(--space-sm);
+  font-size: var(--font-xl);
+}
+
+.intro p {
+  color: var(--text-muted);
+  font-size: var(--font-base);
+  line-height: 1.7;
+}
+
+/* Grid de objetivos/ícones na intro */
+.obj {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-sm);
+  margin-top: 14px;
+}
+
+.obj-item {
+  background: var(--bg-elevated);
+  border-radius: var(--space-sm);
+  padding: 10px var(--space-md);
+  font-size: var(--font-sm);
+  color: var(--text-obj);
+  border-left: 3px solid var(--brand-primary);
+}

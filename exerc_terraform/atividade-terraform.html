@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Atividade Pratica — Terraform no AWS Learner Lab</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#7B42BC;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#D8B4FE;margin-top:2px}
+.badge{background:#000;color:#A855F7;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-left:auto}
+.container{max-width:900px;margin:0 auto;padding:28px}
+.intro{background:#111827;border:1px solid #2D3748;border-left:4px solid #7B42BC;border-radius:10px;padding:20px;margin-bottom:28px}
+.intro h2{color:#A855F7;margin-bottom:8px;font-size:16px}
+.intro p{color:#94A3B8;font-size:12px;line-height:1.7}
+.obj{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.obj-item{background:#1C2333;border-radius:8px;padding:10px 12px;font-size:11px;color:#CBD5E1;border-left:3px solid #7B42BC}
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-hdr{padding:14px 18px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none}
+.task-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0}
+.task-title{font-weight:700;font-size:13px;flex:1}
+.task-tag{font-size:10px;padding:2px 8px;border-radius:4px;font-weight:700}
+.task-body{display:none;padding:16px 18px;border-top:1px solid #2D3748}
+.task.open .task-body{display:block}
+.step-box{background:#0D1117;border-radius:8px;padding:14px;margin:10px 0}
+.step-box h4{color:#A855F7;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.console-steps{list-style:none;counter-reset:cs;padding:0}
+.console-steps li{counter-increment:cs;display:flex;gap:12px;margin-bottom:10px;align-items:flex-start;font-size:12px;line-height:1.7}
+.console-steps li::before{content:counter(cs);min-width:22px;height:22px;border-radius:50%;background:#4C1D95;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.nav-path{font-size:11.5px;font-family:'Consolas',monospace;color:#C084FC;background:#2E1065;padding:2px 7px;border-radius:4px}
+.shell-path{font-size:11.5px;font-family:'Consolas',monospace;color:#6EE7B7;background:#064E3B;padding:2px 7px;border-radius:4px}
+code{font-family:'Consolas',monospace;font-size:11.5px;background:#1C2333;color:#F9A8D4;padding:1px 5px;border-radius:3px}
+pre{background:#060A10;border:1px solid #2D3748;border-radius:6px;padding:12px;overflow-x:auto;font-size:11px;line-height:1.7;color:#E2E8F0;font-family:'Consolas','Monaco',monospace;margin:8px 0;position:relative}
+.copy-btn{position:absolute;top:6px;right:6px;background:#2D3748;border:none;color:#94A3B8;padding:3px 8px;border-radius:4px;font-size:10px;cursor:pointer}
+.copy-btn:hover{background:#374151;color:#E2E8F0}
+.exp{background:#1a2d1a;border:1px solid #1F5C2E;border-radius:6px;padding:10px 12px;font-size:11.5px;color:#86EFAC;margin:8px 0;line-height:1.6}
+.warn{background:#2d1a1a;border:1px solid #6B2020;border-radius:6px;padding:10px 12px;font-size:11.5px;color:#FCA5A5;margin:8px 0;line-height:1.6}
+.info{background:#1a2233;border:1px solid #1E3A5F;border-radius:6px;padding:10px 12px;font-size:11.5px;color:#93C5FD;margin:8px 0;line-height:1.6}
+.concept{background:#1a0e2e;border:1px solid #4C1D95;border-left:4px solid #7B42BC;border-radius:6px;padding:10px 14px;margin:8px 0}
+.concept-title{font-size:11px;font-weight:700;color:#A855F7;margin-bottom:4px}
+.concept-body{font-size:11.5px;color:#C4B5FD;line-height:1.6}
+.tf-plan{background:#060A10;border:1px solid #4C1D95;border-radius:6px;padding:12px;font-family:'Consolas',monospace;font-size:11px;margin:8px 0;line-height:1.8}
+.tf-add{color:#86EFAC}.tf-change{color:#FCD34D}.tf-destroy{color:#FCA5A5}.tf-neutral{color:#94A3B8}
+.check-item{display:flex;align-items:flex-start;gap:8px;padding:5px 0;font-size:12px;cursor:pointer;line-height:1.5}
+.check-item input{width:16px;height:16px;accent-color:#7B42BC;flex-shrink:0;margin-top:1px}
+.check-item.checked{color:#6B7280;text-decoration:line-through}
+.checks{margin-top:14px;border-top:1px solid #2D3748;padding-top:12px}
+.checks-label{font-size:10px;font-weight:700;color:#546E7A;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.progress{background:#1C2333;border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:16px}
+.prog-bar{flex:1;height:8px;background:#2D3748;border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;background:#7B42BC;border-radius:4px;transition:width .3s}
+.prog-label{font-size:11px;color:#94A3B8;white-space:nowrap}
+.cloudshell-box{background:#0A1628;border:2px solid #1D4ED8;border-radius:8px;padding:14px;margin:10px 0}
+.cloudshell-label{font-size:10px;font-weight:700;color:#60A5FA;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.cloudshell-label::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#60A5FA}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">🟣 Atividade Pratica &mdash; Terraform</div>
+    <div class="sub">Via AWS CloudShell &middot; AWS Learner Lab &middot; us-east-1</div>
+  </div>
+  <div class="badge">~90 min</div>
+</header>
+<div class="container">
+
+<div class="progress">
+  <div class="prog-bar"><div class="prog-fill" id="pf" style="width:0%"></div></div>
+  <div class="prog-label"><span id="pl">0% concluido</span></div>
+</div>
+
+<div class="intro">
+  <h2>O que voce vai fazer</h2>
+  <p>Usar o Terraform inteiramente pelo <strong>AWS CloudShell</strong> &mdash; o terminal integrado ao Console AWS, acessivel pelo browser sem instalar nada localmente. Voce vai escrever HCL, executar plan/apply, gerenciar o state, usar variaveis e entender o ciclo de vida do Terraform na pratica.</p>
+  <div class="obj">
+    <div class="obj-item">&#x1F7E3; HCL: provider, resource, variable, output</div>
+    <div class="obj-item">&#x1F4CB; terraform plan: ver antes de aplicar</div>
+    <div class="obj-item">&#x1F4E6; State: o que o Terraform rastreia</div>
+  </div>
+  <div style="background:#1a0e2e;border:1px solid #4C1D95;border-radius:8px;padding:12px;margin-top:14px;font-size:11.5px;color:#C4B5FD;line-height:1.7">
+    <strong style="color:#A855F7">&#x2601; Por que AWS CloudShell?</strong><br>
+    O Terraform e uma ferramenta de linha de comando. O CloudShell e um terminal Linux completo dentro do browser &mdash; sem instalar nada na sua maquina. Credenciais AWS ja estao configuradas automaticamente. Arquivos persistem entre sessoes (ate 1GB). Tudo que voce faz aqui e equivalente ao terminal local.
+  </div>
+</div>
+
+<!-- TAREFA 1 -->
+<div class="task open" id="t1">
+  <div class="task-hdr" onclick="toggle('t1')">
+    <div class="task-num" style="background:#7B42BC;color:#fff">1</div>
+    <div class="task-title">Configurar o Ambiente &mdash; CloudShell + Terraform</div>
+    <span class="task-tag" style="background:#EDE9FE;color:#5B21B6">Setup</span>
+    <span style="font-size:11px;color:#6B7280;margin-left:8px">~10 min</span>
+  </div>
+  <div class="task-body">
+    <div class="info">ℹ️ O AWS CloudShell ja tem o AWS CLI configurado com as credenciais da sua sessao. Voce so precisa instalar o Terraform uma vez por sessao do CloudShell.</div>
+
+    <div class="step-box">
+      <h4>Passo 1 &mdash; Abrir o CloudShell</h4>
+      <ol class="console-steps">
+        <li><span class="nav-path">AWS Console</span> &middot; Clique no icone de terminal <strong>&#x1F4BB;</strong> na barra superior (ao lado do sino de notificacoes) <strong>OU</strong> acesse diretamente: <span class="nav-path">AWS Console → CloudShell</span></li>
+        <li>Aguarde o CloudShell inicializar (pode levar 20-30 segundos na primeira vez)</li>
+        <li>Confirme que as credenciais estao funcionando: digite <code>aws sts get-caller-identity</code> → deve retornar seu Account ID e o role <code>LabRole</code></li>
+      </ol>
+    </div>
+
+    <div class="step-box">
+      <h4>Passo 2 &mdash; Instalar o Terraform no CloudShell</h4>
+      <div class="cloudshell-box">
+        <div class="cloudshell-label">CloudShell &mdash; execute estes comandos</div>
+        <div style="position:relative"><pre id="c1">sudo yum install -y yum-utils
+sudo yum-config-manager --add-repo \
+  https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+sudo yum install -y terraform
+terraform version</pre><button class="copy-btn" onclick="cp('c1')">Copiar</button></div>
+      </div>
+      <div class="exp">✅ <strong>Esperado:</strong> <code>Terraform v1.x.x</code> impresso no terminal. O Terraform esta pronto para uso.</div>
+    </div>
+
+    <div class="step-box">
+      <h4>Passo 3 &mdash; Criar o diretorio de trabalho</h4>
+      <div class="cloudshell-box">
+        <div class="cloudshell-label">CloudShell</div>
+        <div style="position:relative"><pre id="c2">mkdir -p ~/techstock-tf-lab && cd ~/techstock-tf-lab
+ls -la</pre><button class="copy-btn" onclick="cp('c2')">Copiar</button></div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-title">Estrutura de arquivos do Terraform</div>
+      <div class="concept-body">
+        <code>main.tf</code> &mdash; recursos principais<br>
+        <code>variables.tf</code> &mdash; declaracao das variaveis de entrada<br>
+        <code>outputs.tf</code> &mdash; valores exportados apos o apply<br>
+        <code>terraform.tfstate</code> &mdash; gerado automaticamente, rastreia o que foi criado
+      </div>
+    </div>
+
+    <div class="checks">
+      <div class="checks-label">Checklist</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> CloudShell aberto e respondendo</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> <code>aws sts get-caller-identity</code> retornou o Account ID e LabRole</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> <code>terraform version</code> imprime a versao sem erro</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> Diretorio <code>~/techstock-tf-lab</code> criado</div>
+    </div>
+  </div>
+</div>
+
+<!-- TAREFA 2 -->
+<div class="task" id="t2">
+  <div class="task-hdr" onclick="toggle('t2')">
+    <div class="task-num" style="background:#1D4ED8;color:#fff">2</div>
+    <div class="task-title">Primeiro Resource &mdash; EC2 com HCL</div>
+    <span class="task-tag" style="background:#EFF6FF;color:#1E40AF">HCL Basico</span>
+    <span style="font-size:11px;color:#6B7280;margin-left:8px">~20 min</span>
+  </div>
+  <div class="task-body">
+    <div class="info">ℹ️ Voce vai escrever seu primeiro arquivo HCL, executar o ciclo completo <strong>init → validate → plan → apply</strong> e entender o que o Terraform faz em cada etapa.</div>
+
+    <div class="concept">
+      <div class="concept-title">HCL vs YAML (CloudFormation)</div>
+      <div class="concept-body">
+        CloudFormation usa YAML/JSON com funcoes como <code>!Ref</code> e <code>!Sub</code>.<br>
+        Terraform usa HCL (HashiCorp Configuration Language) com referencias diretas: <code>var.nome</code>, <code>resource.tipo.nome.atributo</code>.<br>
+        HCL suporta logica real: loops (<code>for_each</code>), condicionais (<code>count</code>), funcoes embutidas.
+      </div>
+    </div>
+
+    <div class="step-box">
+      <h4>Passo 1 &mdash; Escreva o provider.tf</h4>
+      <p style="font-size:11.5px;color:#94A3B8;margin-bottom:8px">No CloudShell, use o editor nano para criar os arquivos:</p>
+      <div class="cloudshell-box">
+        <div class="cloudshell-label">CloudShell</div>
+        <div style="position:relative"><pre id="c3">cd ~/techstock-tf-lab
+
+# Cria o provider.tf
+cat > provider.tf << 'EOF'
+terraform {
+  required_version = ">= 1.6.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
+provider "aws" {
+  region = "us-east-1"
+  # Credenciais vem automaticamente do CloudShell (LabRole)
+  # NUNCA coloque access_key e secret_key no codigo!
+}
+EOF
+
+cat provider.tf</pre><button class="copy-btn" onclick="cp('c3')">Copiar</button></div>
+      </div>
+    </div>
+
+    <div class="step-box">
+      <h4>Passo 2 &mdash; Escreva o main.tf com um Security Group e EC2</h4>
+      <div class="cloudshell-box">
+        <div class="cloudshell-label">CloudShell</div>
+        <div style="position:relative"><pre id="c4">cat > main.tf << 'EOF'
+# Data source: busca a AMI mais recente do Amazon Linux 2023
+# "data" nao cria recurso -- apenas busca informacao existente na AWS
+data "aws_ami" "al2023" {
+  most_recent = true
+  owners      = ["amazon"]
+  filter {
+    name   = "name"
+    values = ["al2023-ami-2023*-x86_64"]
+  }
+}
+
+# Security Group: aceita porta 80 de qualquer lugar
+resource "aws_security_group" "lab" {
+  name        = "techstock-tf-lab-sg"
+  description = "SG para o lab de Terraform TechStock"
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "HTTP publico"
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"    # -1 = todos os protocolos
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name      = "techstock-tf-lab-sg"
+    ManagedBy = "Terraform"
+  }
+}
+
+# EC2: usa a AMI do data source e o SG criado acima
+resource "aws_instance" "lab" {
+  # Referencia ao data source -- nao e hardcode!
+  ami           = data.aws_ami.al2023.id
+  instance_type = var.instance_type  # vem de variables.tf
+
+  # Referencia ao recurso acima -- cria dependencia automatica
+  # Terraform garante que o SG e criado ANTES da EC2
+  vpc_security_group_ids = [aws_security_group.lab.id]
+
+  iam_instance_profile = "LabInstanceProfile"
+
+  tags = {
+    Name        = "techstock-tf-lab-ec2"
+    ManagedBy   = "Terraform"
+    Environment = var.environment
+  }
+}
+EOF
+
+cat main.tf</pre><button class="copy-btn" onclick="cp('c4')">Copiar</button></div>
+      </div>
+    </div>
+
+    <div class="step-box">
+      <h4>Passo 3 &mdash; Crie variables.tf e outputs.tf</h4>
+      <div class="cloudshell-box">
+        <div class="cloudshell-label">CloudShell</div>
+        <div style="position:relative"><pre id="c5">cat > variables.tf << 'EOF'
+variable "instance_type" {
+  type        = string
+  default     = "t2.micro"
+  description = "Tipo da instancia EC2"
+  validation {
+    condition     = contains(["t2.micro", "t2.small"], var.instance_type)
+    error_message = "Use t2.micro ou t2.small no Learner Lab."
+  }
+}
+
+variable "environment" {
+  type        = string
+  default     = "lab"
+  description = "Nome do ambiente"
+}
+EOF
+
+cat > outputs.tf << 'EOF'
+output "instance_id" {
+  description = "ID da instancia EC2 criada"
+  value       = aws_instance.lab.id
+}
+
+output "instance_type_usado" {
+  description = "Tipo de instancia que foi criado"
+  value       = aws_instance.lab.instance_type
+}
+
+output "sg_id" {
+  description = "ID do Security Group"
+  value       = aws_security_group.lab.id
+}
+
+output "ami_id_selecionada" {
+  description = "AMI selecionada automaticamente pelo data source"
+  value       = data.aws_ami.al2023.id
+}
+EOF
+
+echo "Arquivos criados:"
+ls -la</pre><button class="copy-btn" onclick="cp('c5')">Copiar</button></div>
+      </div>
+    </div>
+
+    <div class="step-box">
+      <h4>Passo 4 &mdash; Init, Validate, Plan e Apply</h4>
+      <div class="cloudshell-box">
+        <div class="cloudshell-label">CloudShell &mdash; execute um por vez e observe a saida</div>
+        <div style="position:relative"><pre id="c6"># 1. INIT: baixa o provider AWS (~30s)
+terraform init
+
+# 2. VALIDATE: verifica a sintaxe do HCL
+terraform validate
+
+# 3. FORMAT: padroniza a indentacao (boa pratica)
+terraform fmt
+
+# 4. PLAN: mostra o que sera criado (ainda nao cria nada!)
+terraform plan
+
+# Leia a saida do plan com atencao:
+# + = sera CRIADO
+# ~ = sera MODIFICADO
+# - = sera DELETADO
+# (conhecido apos apply) = so existe apos criar
+
+# 5. APPLY: cria os recursos
+terraform apply
+# Digite "yes" quando aparecer "Do you want to perform these actions?"</pre><button class="copy-btn" onclick="cp('c6')">Copiar</button></div>
+      </div>
+      <div class="exp">✅ <strong>Esperado apos o apply:</strong> mensagem <code>Apply complete! Resources: 2 added, 0 changed, 0 destroyed.</code> seguida dos Outputs com instance_id e sg_id preenchidos.</div>
+    </div>
+
+    <div class="step-box">
+      <h4>Passo 5 &mdash; Verifique na AWS Console</h4>
+      <ol class="console-steps">
+        <li><span class="nav-path">EC2 → Instances</span> &middot; Confirme que <code>techstock-tf-lab-ec2</code> esta Running com tag <code>ManagedBy: Terraform</code></li>
+        <li><span class="nav-path">EC2 → Security Groups</span> &middot; Confirme que <code>techstock-tf-lab-sg</code> existe com a regra de entrada na porta 80</li>
+        <li>De volta ao CloudShell: <code>terraform state list</code> &middot; Deve listar os 3 recursos gerenciados (data source, sg e ec2)</li>
+        <li><code>terraform show</code> &middot; Mostra o estado completo de todos os recursos com todos os atributos</li>
+      </ol>
+    </div>
+
+    <div class="checks">
+      <div class="checks-label">Checklist</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> <code>terraform init</code> baixou o provider hashicorp/aws</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> <code>terraform plan</code> mostrou 2 recursos para criar (SG e EC2) com sinal +</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> <code>terraform apply</code> criou os recursos com sucesso</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> Outputs mostram instance_id e ami_id_selecionada</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> EC2 visivel no Console com tag ManagedBy: Terraform</div>
+    </div>
+  </div>
+</div>
+
+<!-- TAREFA 3 -->
+<div class="task" id="t3">
+  <div class="task-hdr" onclick="toggle('t3')">
+    <div class="task-num" style="background:#16A34A;color:#fff">3</div>
+    <div class="task-title">O Plan como Ferramenta de Revisao &mdash; Diff antes de Aplicar</div>
+    <span class="task-tag" style="background:#F0FDF4;color:#14532D">terraform plan</span>
+    <span style="font-size:11px;color:#6B7280;margin-left:8px">~15 min</span>
+  </div>
+  <div class="task-body">
+    <div class="info">ℹ️ O <code>terraform plan</code> e o diferencial do Terraform em relacao ao CloudFormation. Ele mostra exatamente o que vai mudar antes de qualquer acao. Nesta tarefa voce vai fazer mudancas e interpretar o plano antes de aplicar.</div>
+
+    <div class="concept">
+      <div class="concept-title">Interpretar o terraform plan</div>
+      <div class="concept-body">
+        <span style="color:#86EFAC">+ create</span> &mdash; recurso sera criado (nao existia)<br>
+        <span style="color:#FCD34D">~ update in-place</span> &mdash; recurso sera modificado sem recriar (sem downtime)<br>
+        <span style="color:#FCA5A5">- destroy</span> &mdash; recurso sera deletado<br>
+        <span style="color:#F97316">-/+ replace</span> &mdash; recurso sera DELETADO e RECRIADO (possivel downtime &mdash; cuidado!)
+      </div>
+    </div>
+
+    <div class="step-box">
+      <h4>Passo 1 &mdash; Mudanca de tag (update in-place)</h4>
+      <p style="font-size:11.5px;color:#94A3B8;margin-bottom:8px">Adicione uma tag nova na EC2 e veja que o plan mostra update sem recriar:</p>
+      <div class="cloudshell-box">
+        <div class="cloudshell-label">CloudShell &mdash; edite o main.tf</div>
+        <div style="position:relative"><pre id="c7">cd ~/techstock-tf-lab
+
+# Edite o main.tf com nano
+nano main.tf
+
+# No bloco tags do aws_instance.lab, adicione:
+#   Owner = "aluno-lab"
+# O bloco tags deve ficar assim:
+#   tags = {
+#     Name        = "techstock-tf-lab-ec2"
+#     ManagedBy   = "Terraform"
+#     Environment = var.environment
+#     Owner       = "aluno-lab"     # LINHA NOVA
+#   }
+# Salve: Ctrl+X → Y → Enter
+
+# Agora execute o plan e leia a saida
+terraform plan</pre><button class="copy-btn" onclick="cp('c7')">Copiar</button></div>
+      </div>
+      <div class="tf-plan">
+        <div class="tf-neutral"># aws_instance.lab will be <span class="tf-change">updated in-place</span></div>
+        <div class="tf-change">  ~ resource "aws_instance" "lab" {</div>
+        <div class="tf-change">      ~ tags = {</div>
+        <div class="tf-add">          + "Owner" = "aluno-lab"</div>
+        <div class="tf-neutral">            # (3 unchanged attributes hidden)</div>
+        <div class="tf-change">        }</div>
+        <div class="tf-neutral">      # (15 unchanged attributes hidden)</div>
+        <div class="tf-change">    }</div>
+        <div class="tf-neutral">Plan: 0 to add, <span class="tf-change">1 to change</span>, 0 to destroy.</div>
+      </div>
+      <p style="font-size:11px;color:#94A3B8;margin-top:6px">O simbolo <code>~</code> significa update in-place. A EC2 nao sera recriada &mdash; apenas a tag sera adicionada. Execute <code>terraform apply</code> para aplicar.</p>
+    </div>
+
+    <div class="step-box">
+      <h4>Passo 2 &mdash; Mudanca que causa replace (cuidado!)</h4>
+      <p style="font-size:11.5px;color:#94A3B8;margin-bottom:8px">Mude o nome do Security Group e veja o que acontece no plan:</p>
+      <div class="cloudshell-box">
+        <div class="cloudshell-label">CloudShell</div>
+        <div style="position:relative"><pre id="c8">nano main.tf
+
+# Mude o name do aws_security_group.lab:
+#   name = "techstock-tf-lab-sg-v2"    # era "techstock-tf-lab-sg"
+# Salve: Ctrl+X → Y → Enter
+
+terraform plan</pre><button class="copy-btn" onclick="cp('c8')">Copiar</button></div>
+      </div>
+      <div class="tf-plan">
+        <div class="tf-neutral"># aws_security_group.lab must be <span class="tf-destroy">replaced</span></div>
+        <div class="tf-destroy">  -/+ resource "aws_security_group" "lab" {</div>
+        <div class="tf-change">      ~ name = "techstock-tf-lab-sg" <span class="tf-neutral">→</span> "techstock-tf-lab-sg-v2" <span class="tf-destroy"># forces replacement</span></div>
+        <div class="tf-neutral">    }</div>
+        <div class="tf-neutral">  # aws_instance.lab must be <span class="tf-destroy">replaced</span></div>
+        <div class="tf-neutral">Plan: 2 to add, 0 to change, <span class="tf-destroy">2 to destroy.</span></div>
+      </div>
+      <div class="warn">⚠️ <code>forces replacement</code> significa que o SG sera DELETADO e RECRIADO. Como a EC2 depende do SG, ela tambem sera recriada. Em producao isso causaria downtime! Reverta a mudanca no nome antes de continuar.</div>
+      <div class="cloudshell-box">
+        <div class="cloudshell-label">CloudShell &mdash; reverta o nome do SG</div>
+        <div style="position:relative"><pre id="c9">nano main.tf
+# Volte o name para "techstock-tf-lab-sg"
+# Ctrl+X → Y → Enter
+
+terraform plan
+# Agora deve mostrar: No changes. Infrastructure is up-to-date.</pre><button class="copy-btn" onclick="cp('c9')">Copiar</button></div>
+      </div>
+    </div>
+
+    <div class="checks">
+      <div class="checks-label">Checklist</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> Plan de tag nova mostrou <code>~ 1 to change</code> sem destroy</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> Plan de nome do SG mostrou <code>-/+ replace</code> e <code>forces replacement</code></div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> Entende a diferenca entre update in-place e replace</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> Nome do SG revertido: plan mostra <code>No changes</code></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAREFA 4 -->
+<div class="task" id="t4">
+  <div class="task-hdr" onclick="toggle('t4')">
+    <div class="task-num" style="background:#0369A1;color:#fff">4</div>
+    <div class="task-title">State &mdash; O Que o Terraform Rastreia</div>
+    <span class="task-tag" style="background:#E0F2FE;color:#0C4A6E">terraform state</span>
+    <span style="font-size:11px;color:#6B7280;margin-left:8px">~15 min</span>
+  </div>
+  <div class="task-body">
+    <div class="info">ℹ️ O state file e o mapa entre seu codigo HCL e os recursos reais na AWS. Sem ele, o Terraform nao saberia o que ja criou. Nesta tarefa voce vai inspecionar, importar e manipular o state.</div>
+
+    <div class="concept">
+      <div class="concept-title">Por que o state existe?</div>
+      <div class="concept-body">
+        Diferente do CloudFormation (que guarda o estado na AWS), o Terraform guarda localmente em <code>terraform.tfstate</code>.<br>
+        O state mapeia: "o recurso <code>aws_instance.lab</code> no meu codigo corresponde ao recurso <code>i-0abc123456</code> na AWS".<br>
+        Sem o state: terraform apply criaria tudo do zero toda vez, causando duplicatas.
+      </div>
+    </div>
+
+    <div class="step-box">
+      <h4>Passo 1 &mdash; Inspecione o state</h4>
+      <div class="cloudshell-box">
+        <div class="cloudshell-label">CloudShell</div>
+        <div style="position:relative"><pre id="c10">cd ~/techstock-tf-lab
+
+# Lista todos os recursos no state
+terraform state list
+
+# Detalha um recurso especifico (substitua pelo nome que apareceu)
+terraform state show aws_instance.lab
+
+# O output mostra TODOS os atributos: id, ami, instance_type,
+# public_ip, private_ip, tags, vpc_security_group_ids, etc.
+
+# Ve o arquivo de state diretamente (JSON legivel)
+cat terraform.tfstate | python3 -m json.tool | head -60</pre><button class="copy-btn" onclick="cp('c10')">Copiar</button></div>
+      </div>
+    </div>
+
+    <div class="step-box">
+      <h4>Passo 2 &mdash; Simule drift e veja o plan detectar</h4>
+      <ol class="console-steps">
+        <li><span class="nav-path">EC2 → Instances → techstock-tf-lab-ec2 → Actions → Instance settings → Edit tags</span> &middot; Adicione tag: Key <code>DriftTag</code> Value <code>adicionada-fora-do-tf</code> → <strong>Save</strong></li>
+        <li>De volta ao CloudShell: <code>terraform plan</code></li>
+        <li>O plan deve mostrar que a tag <code>DriftTag</code> sera <strong>removida</strong> ao aplicar (o TF quer que o estado real fique igual ao codigo)</li>
+        <li>Execute <code>terraform apply -auto-approve</code> &middot; O Terraform remove a tag que voce adicionou manualmente</li>
+      </ol>
+      <div class="exp">✅ O Terraform detecta que a realidade divergiu do codigo e corrige na proxima aplicacao. Isso e o comportamento esperado &mdash; o codigo e a fonte da verdade.</div>
+    </div>
+
+    <div class="step-box">
+      <h4>Passo 3 &mdash; Remover do state sem deletar o recurso</h4>
+      <div class="cloudshell-box">
+        <div class="cloudshell-label">CloudShell</div>
+        <div style="position:relative"><pre id="c11"># Remove o SG do state (o SG continua existindo na AWS!)
+terraform state rm aws_security_group.lab
+
+# Verifica: o SG sumiu do state
+terraform state list
+
+# Agora execute o plan: Terraform quer CRIAR o SG de novo
+# (ele nao sabe que o SG ja existe)
+terraform plan
+
+# Para re-adicionar ao state sem recriar, use o import
+# O argumento e o ID fisico do recurso na AWS
+SG_ID=$(aws ec2 describe-security-groups \
+  --filters Name=group-name,Values=techstock-tf-lab-sg \
+  --query 'SecurityGroups[0].GroupId' \
+  --output text)
+echo "SG ID: $SG_ID"
+
+terraform import aws_security_group.lab $SG_ID
+
+# Agora o plan deve voltar a mostrar No changes
+terraform plan</pre><button class="copy-btn" onclick="cp('c11')">Copiar</button></div>
+      </div>
+    </div>
+
+    <div class="checks">
+      <div class="checks-label">Checklist</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> <code>terraform state list</code> mostra os 3 recursos gerenciados</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> Tag adicionada manualmente foi detectada no plan como mudanca a remover</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> <code>terraform state rm</code> removeu o SG do state sem deletar da AWS</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> <code>terraform import</code> re-adicionou o SG ao state</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> Plan voltou a mostrar <code>No changes</code></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAREFA 5 -->
+<div class="task" id="t5">
+  <div class="task-hdr" onclick="toggle('t5')">
+    <div class="task-num" style="background:#B45309;color:#fff">5</div>
+    <div class="task-title">Variaveis e terraform.tfvars &mdash; Infra Parametrizada</div>
+    <span class="task-tag" style="background:#FEF3C7;color:#92400E">Variables</span>
+    <span style="font-size:11px;color:#6B7280;margin-left:8px">~15 min</span>
+  </div>
+  <div class="task-body">
+    <div class="info">ℹ️ Variables no Terraform sao equivalentes aos Parameters do CloudFormation. Voce pode passa-las via arquivo <code>.tfvars</code>, variaveis de ambiente (<code>TF_VAR_nome</code>) ou via linha de comando. Variaveis sensiveis nunca devem ir ao Git.</div>
+
+    <div class="step-box">
+      <h4>Passo 1 &mdash; Crie um arquivo de variaveis por ambiente</h4>
+      <div class="cloudshell-box">
+        <div class="cloudshell-label">CloudShell</div>
+        <div style="position:relative"><pre id="c12">cd ~/techstock-tf-lab
+
+# Arquivo de variaveis para o ambiente lab
+cat > lab.tfvars << 'EOF'
+instance_type = "t2.micro"
+environment   = "lab"
+EOF
+
+# Arquivo de variaveis para dev (hipotetico)
+cat > dev.tfvars << 'EOF'
+instance_type = "t2.small"
+environment   = "dev"
+EOF
+
+# Aplica com o arquivo de variaveis especifico
+# O -var-file substitui os defaults do variables.tf
+terraform plan -var-file="lab.tfvars"
+
+# Para usar o de dev (nao execute agora -- so para ver o plan)
+terraform plan -var-file="dev.tfvars"</pre><button class="copy-btn" onclick="cp('c12')">Copiar</button></div>
+      </div>
+    </div>
+
+    <div class="step-box">
+      <h4>Passo 2 &mdash; Variaveis sensiveis com TF_VAR</h4>
+      <div class="cloudshell-box">
+        <div class="cloudshell-label">CloudShell</div>
+        <div style="position:relative"><pre id="c13"># Variaveis sensiveis NUNCA devem ir ao codigo ou ao .tfvars
+# Use variaveis de ambiente com prefixo TF_VAR_
+
+# Adicione uma variavel sensivel ao variables.tf
+cat >> variables.tf << 'EOF'
+
+variable "db_password" {
+  type        = string
+  sensitive   = true   # Nao aparece em logs, plan ou outputs!
+  description = "Senha do banco de dados. Use TF_VAR_db_password."
+}
+EOF
+
+# Passa a variavel sensivel via ambiente (nao via arquivo!)
+export TF_VAR_db_password="SenhaForte@2024!"
+
+# Adicione o output da variavel ao outputs.tf para testar
+cat >> outputs.tf << 'EOF'
+
+output "db_password_revelado" {
+  value     = var.db_password
+  sensitive = true   # Mesmo marcando no output, nao aparece no plan
+}
+EOF
+
+terraform plan -var-file="lab.tfvars"
+# Observe: db_password_revelado aparece como (sensitive value) no plan</pre><button class="copy-btn" onclick="cp('c13')">Copiar</button></div>
+      </div>
+    </div>
+
+    <div class="step-box">
+      <h4>Passo 3 &mdash; locals: valores calculados reutilizaveis</h4>
+      <div class="cloudshell-box">
+        <div class="cloudshell-label">CloudShell</div>
+        <div style="position:relative"><pre id="c14">cat >> main.tf << 'EOF'
+
+# locals: calculos ou combinacoes usados em multiplos lugares
+# Diferente de variables: nao sao entradas, sao computados internamente
+locals {
+  app_name  = "techstock"
+  full_name = "${local.app_name}-${var.environment}"
+  common_tags = {
+    ManagedBy   = "Terraform"
+    Environment = var.environment
+    App         = local.app_name
+  }
+}
+EOF
+
+# Ver o valor de um local antes de aplicar
+terraform console << 'CONSOLE'
+local.full_name
+CONSOLE</pre><button class="copy-btn" onclick="cp('c14')">Copiar</button></div>
+      </div>
+      <div class="exp">✅ O <code>terraform console</code> permite testar expressoes HCL em tempo real sem criar recursos. <code>local.full_name</code> deve retornar <code>techstock-lab</code>.</div>
+    </div>
+
+    <div class="checks">
+      <div class="checks-label">Checklist</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> lab.tfvars criado com instance_type e environment</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> <code>terraform plan -var-file="dev.tfvars"</code> mostra t2.small no plan</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> Variavel sensivel aparece como <code>(sensitive value)</code> no plan</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> <code>terraform console</code> retornou <code>local.full_name = "techstock-lab"</code></div>
+    </div>
+  </div>
+</div>
+
+<!-- TAREFA 6 -->
+<div class="task" id="t6">
+  <div class="task-hdr" onclick="toggle('t6')">
+    <div class="task-num" style="background:#7C3AED;color:#fff">6</div>
+    <div class="task-title">for_each &mdash; Criando Multiplos Recursos com Loop</div>
+    <span class="task-tag" style="background:#EDE9FE;color:#5B21B6">HCL Avancado</span>
+    <span style="font-size:11px;color:#6B7280;margin-left:8px">~15 min</span>
+  </div>
+  <div class="task-body">
+    <div class="info">ℹ️ Uma das maiores vantagens do HCL sobre o YAML do CloudFormation: loops nativos com <code>for_each</code> e <code>count</code>. Em vez de copiar e colar 5 blocos de Security Group, voce usa um loop.</div>
+
+    <div class="concept">
+      <div class="concept-title">for_each vs CloudFormation</div>
+      <div class="concept-body">
+        No CloudFormation: para criar 3 SGs voce copia o bloco 3 vezes (ou usa Macros avancadas).<br>
+        No Terraform: um bloco com <code>for_each</code> cria quantos recursos o mapa tiver.
+      </div>
+    </div>
+
+    <div class="step-box">
+      <h4>Crie multiplos SGs com for_each</h4>
+      <div class="cloudshell-box">
+        <div class="cloudshell-label">CloudShell &mdash; crie um novo arquivo para o exercicio</div>
+        <div style="position:relative"><pre id="c15">cat > sgs.tf << 'EOF'
+# Map de Security Groups: nome => porta
+variable "app_ports" {
+  type = map(number)
+  default = {
+    backend    = 3000
+    monitoring = 9090
+    frontend   = 80
+  }
+}
+
+# Um bloco cria TRES Security Groups
+resource "aws_security_group" "app_sgs" {
+  # for_each itera sobre cada entrada do map
+  for_each = var.app_ports
+
+  name        = "techstock-${each.key}-sg"
+  description = "SG para ${each.key} porta ${each.value}"
+
+  ingress {
+    from_port   = each.value  # each.value = a porta do map
+    to_port     = each.value
+    protocol    = "tcp"
+    cidr_blocks = ["10.0.0.0/16"]
+    description = "${each.key} interno"
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name      = "techstock-${each.key}-sg"
+    ManagedBy = "Terraform"
+    Port      = each.value  # each.key = nome (backend/monitoring/frontend)
+  }
+}
+
+# Output: mapa de nome → ID do SG
+output "sgs_criados" {
+  description = "IDs dos Security Groups criados pelo for_each"
+  value = {
+    for name, sg in aws_security_group.app_sgs :
+    name => sg.id
+  }
+}
+EOF
+
+terraform plan -var-file="lab.tfvars"
+# Plan deve mostrar 3 SGs para criar (+ o sg.lab ja existente = no change)
+
+terraform apply -var-file="lab.tfvars" -auto-approve</pre><button class="copy-btn" onclick="cp('c15')">Copiar</button></div>
+      </div>
+      <div class="exp">✅ <strong>Esperado:</strong> <code>Resources: 3 added</code>. Output <code>sgs_criados</code> mostra um mapa com os 3 IDs. Na Console, 3 novos SGs: techstock-backend-sg, techstock-monitoring-sg, techstock-frontend-sg.</div>
+    </div>
+
+    <div class="step-box">
+      <h4>Inspecione os recursos do for_each no state</h4>
+      <div class="cloudshell-box">
+        <div class="cloudshell-label">CloudShell</div>
+        <div style="position:relative"><pre id="c16">terraform state list
+
+# Recursos do for_each tem o formato: tipo.nome["chave"]
+# aws_security_group.app_sgs["backend"]
+# aws_security_group.app_sgs["monitoring"]
+# aws_security_group.app_sgs["frontend"]
+
+terraform state show 'aws_security_group.app_sgs["backend"]'</pre><button class="copy-btn" onclick="cp('c16')">Copiar</button></div>
+      </div>
+    </div>
+
+    <div class="checks">
+      <div class="checks-label">Checklist</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> Plan mostrou 3 SGs para criar com nomes corretos</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> Apply criou os 3 SGs com <code>Resources: 3 added</code></div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> State list mostra os recursos no formato <code>aws_security_group.app_sgs["backend"]</code></div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> SGs visiveis no Console EC2 → Security Groups</div>
+    </div>
+  </div>
+</div>
+
+<!-- TAREFA 7 -->
+<div class="task" id="t7">
+  <div class="task-hdr" onclick="toggle('t7')">
+    <div class="task-num" style="background:#C0392B;color:#fff">7</div>
+    <div class="task-title">Destroy &mdash; Limpeza Completa</div>
+    <span class="task-tag" style="background:#FEF2F2;color:#991B1B">Cleanup</span>
+    <span style="font-size:11px;color:#6B7280;margin-left:8px">~10 min</span>
+  </div>
+  <div class="task-body">
+    <div class="warn">⚠️ IMPORTANTE: sempre destrua os recursos criados durante atividades de lab para nao consumir creditos desnecessariamente. O <code>terraform destroy</code> remove TUDO que esta no state.</div>
+
+    <div class="step-box">
+      <h4>Passo 1 &mdash; Plan do destroy (veja antes de destruir)</h4>
+      <div class="cloudshell-box">
+        <div class="cloudshell-label">CloudShell</div>
+        <div style="position:relative"><pre id="c17">cd ~/techstock-tf-lab
+
+# Veja o que sera destruido ANTES de destruir
+terraform plan -destroy -var-file="lab.tfvars"
+
+# O plan mostra todos os recursos com sinal -
+# Leia com atencao para confirmar que sao os recursos do lab</pre><button class="copy-btn" onclick="cp('c17')">Copiar</button></div>
+      </div>
+    </div>
+
+    <div class="step-box">
+      <h4>Passo 2 &mdash; Destruir todos os recursos</h4>
+      <div class="cloudshell-box">
+        <div class="cloudshell-label">CloudShell</div>
+        <div style="position:relative"><pre id="c18">terraform destroy -var-file="lab.tfvars"
+# Digite "yes" quando solicitado
+
+# Aguarde a conclusao (pode levar 1-2 minutos)
+# Output esperado: Destroy complete! Resources: X destroyed.</pre><button class="copy-btn" onclick="cp('c18')">Copiar</button></div>
+      </div>
+    </div>
+
+    <div class="step-box">
+      <h4>Passo 3 &mdash; Verifique na Console AWS</h4>
+      <ol class="console-steps">
+        <li><span class="nav-path">EC2 → Instances</span> &middot; <code>techstock-tf-lab-ec2</code> deve estar em estado <strong>Terminated</strong></li>
+        <li><span class="nav-path">EC2 → Security Groups</span> &middot; Os SGs <code>techstock-tf-lab-sg</code>, <code>techstock-backend-sg</code>, <code>techstock-monitoring-sg</code> e <code>techstock-frontend-sg</code> nao devem mais existir</li>
+        <li>De volta ao CloudShell: <code>terraform state list</code> deve retornar vazio (sem recursos no state)</li>
+        <li>Limpe o diretorio do lab: <code>rm -rf ~/techstock-tf-lab</code></li>
+      </ol>
+    </div>
+
+    <div class="exp">✅ <code>Destroy complete!</code> com o numero de recursos destruidos. State file local em branco. Nenhum recurso do lab visivel na Console.</div>
+
+    <div class="checks">
+      <div class="checks-label">Checklist</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> Plan destroy mostrou todos os recursos antes de destruir</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> Destroy completou com sucesso</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> EC2 em estado Terminated na Console</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> SGs removidos da Console</div>
+      <div class="check-item" onclick="check(this)"><input type="checkbox"> <code>terraform state list</code> retorna vazio</div>
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+function toggle(id){const t=document.getElementById(id);t.classList.toggle('open');}
+function check(el){el.classList.toggle('checked');el.querySelector('input').checked=el.classList.contains('checked');updateProg();}
+function updateProg(){
+  const checks=document.querySelectorAll('.check-item.checked').length;
+  const total=document.querySelectorAll('.check-item').length;
+  const pct=total?Math.round(checks/total*100):0;
+  document.getElementById('pf').style.width=pct+'%';
+  document.getElementById('pl').textContent=pct+'% concluido ('+checks+'/'+total+')';
+}
+function cp(id){
+  const el=document.getElementById(id);
+  navigator.clipboard.writeText(el.textContent).then(()=>{
+    const btn=el.nextElementSibling;btn.textContent='OK!';
+    setTimeout(()=>btn.textContent='Copiar',1500);
+  });
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  document.getElementById('t1').classList.add('open');
+});
+</script>
+</body>
+</html>

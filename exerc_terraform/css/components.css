@@ -1,0 +1,363 @@
+/**
+ * components.css
+ * 4. Task Components - Estilos para os blocos de tarefas interativas
+ * 5. Elements - Boxes de passos, blocos de código, feedbacks
+ * 6. Interactive - Barra de progresso e checklists
+ * 7. Utilities - Classes auxiliares e de status
+ */
+
+/* --- 4. TASK COMPONENTS --- */
+
+/* Wrapper principal para cada tarefa (estilo card) */
+.task {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-main);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-lg);
+  overflow: hidden;
+  display: block;
+}
+
+/* Remove a seta padrão do summary em diferentes navegadores */
+.task-hdr::-webkit-details-marker {
+  display: none;
+}
+
+/* Cabeçalho da tarefa com o número e título */
+.task-hdr {
+  list-style: none;
+  padding: 14px var(--space-lg);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  cursor: pointer;
+  user-select: none;
+}
+
+.task-num {
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: var(--font-lg);
+  flex-shrink: 0;
+}
+
+.task-title {
+  font-weight: 700;
+  font-size: var(--font-lg);
+  flex: 1;
+}
+
+.task-tag {
+  font-size: var(--font-xs);
+  padding: 2px var(--space-sm);
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+}
+
+/* Corpo da tarefa (revelado ao expandir) */
+.task-body {
+  padding: var(--space-lg) var(--space-lg);
+  border-top: 1px solid var(--border-main);
+}
+
+/* --- 5. ELEMENTS & BOXES --- */
+
+/* Container para sub-passos dentro de uma tarefa */
+.step-box {
+  background: var(--bg-step);
+  border-radius: 8px;
+  padding: 14px;
+  margin: var(--space-sm) 0;
+}
+
+.step-box h4 {
+  color: var(--brand-secondary);
+  font-size: var(--font-sm);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--space-sm);
+}
+
+/* Lista numerada estilizada para o Console */
+.console-steps {
+  list-style: none;
+  counter-reset: cs;
+  padding: 0;
+}
+
+.console-steps li {
+  counter-increment: cs;
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-sm);
+  align-items: flex-start;
+  font-size: var(--font-base);
+  line-height: 1.7;
+}
+
+.console-steps li::before {
+  content: counter(cs);
+  min-width: 22px;
+  height: 22px;
+  border-radius: var(--radius-full);
+  background: var(--brand-deep);
+  color: var(--text-white);
+  font-size: var(--font-sm);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Blocos de Código YAML/HCL */
+pre {
+  background: var(--bg-console);
+  border: 1px solid var(--border-main);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  overflow-x: auto;
+  font-size: var(--font-sm);
+  line-height: 1.7;
+  color: var(--text-main);
+  font-family: 'Consolas', 'Monaco', monospace;
+  margin: var(--space-sm) 0;
+}
+
+/* Botão de copiar fixo no canto do bloco de código */
+.copy-btn {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: var(--border-main);
+  border: none;
+  color: var(--text-muted);
+  padding: 3px var(--space-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-xs);
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  background: var(--border-hover);
+  color: var(--text-main);
+}
+
+/* Boxes de Feedback (Sucesso, Alerta, Info, Conceito) */
+.exp {
+  background: var(--bg-success);
+  border: 1px solid var(--border-success);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-md);
+  color: var(--color-success);
+  margin: var(--space-sm) 0;
+  line-height: 1.6;
+}
+
+.warn {
+  background: var(--bg-error);
+  border: 1px solid var(--border-error);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-md);
+  color: var(--color-error);
+  margin: var(--space-sm) 0;
+  line-height: 1.6;
+}
+
+.info {
+  background: var(--bg-info);
+  border: 1px solid var(--border-info);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) var(--space-md);
+  font-size: var(--font-md);
+  color: var(--color-info);
+  margin: var(--space-sm) 0;
+  line-height: 1.6;
+}
+
+.concept {
+  background: var(--bg-concept);
+  border: 1px solid var(--brand-deep);
+  border-left: 4px solid var(--brand-primary);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm) 14px;
+  margin: var(--space-sm) 0;
+}
+
+.concept-title {
+  font-size: var(--font-sm);
+  font-weight: 700;
+  color: var(--brand-secondary);
+  margin-bottom: var(--space-xs);
+}
+
+.concept-body {
+  font-size: var(--font-md);
+  color: var(--color-concept);
+  line-height: 1.6;
+}
+
+/* --- 6. INTERACTIVE & PROGRESS --- */
+
+/* Item de checklist clicável */
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: 5px 0;
+  font-size: var(--font-base);
+  cursor: pointer;
+  line-height: 1.5;
+  transition: color var(--transition-fast);
+}
+
+.check-item input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--brand-primary);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+/* Estilo para item marcado */
+.check-item.checked {
+  color: var(--text-dim);
+  text-decoration: line-through;
+}
+
+/* Divisor para a seção de checklists */
+.checks {
+  margin-top: 14px;
+  border-top: 1px solid var(--border-main);
+  padding-top: var(--space-md);
+}
+
+.checks-label {
+  font-size: var(--font-xs);
+  font-weight: 700;
+  color: var(--checks-label);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--radius-md);
+}
+
+/* Barra de progresso global */
+.progress {
+  background: var(--bg-elevated);
+  border-radius: var(--radius-lg);
+  padding: 14px var(--space-lg);
+  margin-bottom: var(--space-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--space-lg);
+}
+
+.prog-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--border-main);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.prog-fill {
+  height: 100%;
+  background: var(--brand-primary);
+  border-radius: 4px;
+  transition: width var(--transition-fast);
+}
+
+.prog-label {
+  font-size: var(--font-sm);
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Caixa específica para simular o terminal AWS CloudShell */
+.cloudshell-box {
+  background: var(--bg-cloudshell);
+  border: 2px solid var(--cloudshell-border);
+  border-radius: 8px;
+  padding: 14px;
+  margin: var(--space-sm) 0;
+}
+
+.cloudshell-label {
+  font-size: var(--font-xs);
+  font-weight: 700;
+  color: var(--cloudshell-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--space-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--radius-md);
+}
+
+/* Pequeno ponto de "status" no label do CloudShell */
+.cloudshell-label::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background: var(--cloudshell-accent);
+}
+
+/* --- 7. UTILITIES & HIGHLIGHTS --- */
+
+.nav-path {
+  font-size: var(--font-md);
+  font-family: 'Consolas', monospace;
+  color: var(--brand-muted);
+  background: var(--brand-deep);
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+}
+
+.shell-path {
+  font-size: var(--font-md);
+  font-family: 'Consolas', monospace;
+  color: #6EE7B7;
+  background: #064E3B;
+  padding: 2px 7px;
+  border-radius: var(--radius-sm);
+}
+
+/* Bloco de simulação de Terraform Plan */
+.tf-plan {
+  background: var(--bg-console);
+  border: 1px solid var(--brand-deep);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  font-family: 'Consolas', monospace;
+  font-size: var(--font-sm);
+  margin: var(--space-sm) 0;
+  line-height: 1.8;
+}
+
+.tf-add { color: var(--color-success); }
+.tf-change { color: #FCD34D; }
+.tf-destroy { color: var(--color-error); }
+.tf-neutral { color: var(--text-muted); }
+
+/* Texto de dica com estilo de screenshot/anotação */
+.screenshot-hint {
+  background: var(--bg-elevated);
+  border: 1px dashed var(--border-hover);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  font-size: var(--font-sm);
+  color: var(--text-dim);
+  margin: var(--space-sm) 0;
+  font-style: italic;
+}

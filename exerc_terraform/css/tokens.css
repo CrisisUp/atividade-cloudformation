@@ -1,0 +1,81 @@
+/**
+ * tokens.css
+ * 1. Design Tokens (:root) - Cores, Espaçamento, Tipografia
+ */
+
+:root {
+  /* --- CORES DE FUNDO (Backgrounds) --- */
+  --bg-deep: #0A0E1A;      /* Fundo principal da página */
+  --bg-surface: #111827;   /* Fundo dos cards de tarefas */
+  --bg-elevated: #1C2333;  /* Fundo de elementos em destaque (intro, progresso) */
+  --bg-console: #060A10;   /* Fundo escuro para blocos de código */
+  --bg-cloudshell: #0A1628;/* Fundo específico para simular o CloudShell */
+  --bg-step: #0D1117;      /* Fundo para sub-seções de passos */
+
+  /* --- CORES DA MARCA (Terraform Purple Theme) --- */
+  --brand-primary: #7B42BC;   /* Roxo principal do Terraform */
+  --brand-secondary: #A855F7; /* Roxo vibrante para títulos e destaques */
+  --brand-muted: #D8B4FE;     /* Roxo suave para textos secundários */
+  --brand-deep: #4C1D95;      /* Roxo escuro para fundos de ícones/badges */
+
+  /* --- CORES DE TEXTO (Typography) --- */
+  --text-main: #E2E8F0;      /* Texto principal (claro, alta legibilidade) */
+  --text-muted: #94A3B8;     /* Texto de suporte ou parágrafos secundários */
+  --text-dim: #6B7280;       /* Texto discreto (hints, observações) */
+  --text-highlight: #F9A8D4; /* Destaque para palavras-chave dentro do código */
+  --text-white: #FFFFFF;
+  --text-black: #000000;
+  --text-obj: #CBD5E1;       /* Texto específico para a seção de objetivos */
+
+  /* --- ESTADOS E FEEDBACK (Alerts) --- */
+  --color-success: #86EFAC;
+  --bg-success: #1a2d1a;
+  --border-success: #1F5C2E;
+
+  --color-error: #FCA5A5;
+  --bg-error: #2d1a1a;
+  --border-error: #6B2020;
+
+  --color-info: #93C5FD;
+  --bg-info: #1a2233;
+  --border-info: #1E3A5F;
+
+  --color-concept: #C4B5FD;
+  --bg-concept: #1a0e2e;
+
+  /* --- COMPONENTES ESPECÍFICOS --- */
+  --cloudshell-border: #1D4ED8;
+  --cloudshell-accent: #60A5FA;
+  --checks-label: #546E7A;
+
+  /* --- BORDAS E DIVISORES --- */
+  --border-main: #2D3748;    /* Bordas padrão de containers */
+  --border-hover: #374151;   /* Borda para estados de hover */
+
+  /* --- ESCALA DE ESPAÇAMENTO (Spacing) --- */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 20px;
+  --space-2xl: 28px;
+
+  /* --- ESCALA DE TIPOGRAFIA (Font Sizes) --- */
+  --font-xs: 10px;
+  --font-sm: 11px;
+  --font-md: 11.5px;
+  --font-base: 12px;
+  --font-lg: 13px;
+  --font-xl: 16px;
+  --font-2xl: 18px;
+
+  /* --- ARREDONDAMENTO (Border Radius) --- */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-full: 50%;
+
+  /* --- CONFIGURAÇÕES DE LAYOUT --- */
+  --transition-fast: 0.3s;
+  --container-width: 900px;
+}
