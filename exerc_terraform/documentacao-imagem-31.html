@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação — Conclusão do Deploy (Imagem 31)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#10B981;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#DCFCE7;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.plan-summary {color:#2ecc71; font-weight:bold}
+.attribute {color:#8b949e}
+.value {color:#ce9178}
+.addition {color:#2ecc71}
+.sensitive {color:#f87171; font-style:italic}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(16, 185, 129, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #10B981;}
+.explanation-item h4 {color:#34D399; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#DCFCE7; color:#065F46; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">📂 Documentação — Conclusão do Deploy (Imagem 31)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 21.11.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">EXECUÇÃO: CONCLUSÃO E OUTPUTS</span>
+    
+    <p style="margin-bottom: 10px; color: #94A3B8;">Finalização do ciclo de deploy e exibição dos outputs estruturados resultantes do loop.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="plan-summary">Apply complete! Resources: 3 added, 0 changed, 0 destroyed.</span><br><br>
+        <span class="command">Outputs:</span><br><br>
+        <span class="attribute">db_password_revelado</span> = <span class="sensitive">&lt;sensitive&gt;</span><br>
+        <span class="attribute">sgs_criados</span> = {<br>
+        &nbsp;&nbsp;<span class="value">"backend"</span>    = <span class="output">"sg-0a1b2c3d4e5f6g7h8"</span><br>
+        &nbsp;&nbsp;<span class="value">"frontend"</span>   = <span class="output">"sg-0i9j8k7l6m5n4o3p2"</span><br>
+        &nbsp;&nbsp;<span class="value">"monitoring"</span> = <span class="output">"sg-0q1r2s3t4u5v6w7x8"</span><br>
+        }
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Status Final do Deploy</h4>
+        <p>A mensagem <code>Apply complete!</code> confirma que o Terraform sincronizou com sucesso o estado desejado (nosso código) com a infraestrutura real na AWS. Os <b>3 recursos adicionados</b> correspondem aos três Security Groups definidos no nosso mapa de variáveis (backend, frontend e monitoring).</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Output Mapeado e Identificação</h4>
+        <p>O output <code>sgs_criados</code> demonstra a elegância do uso de loops. Em vez de termos variáveis soltas, o Terraform nos entrega um mapa claro onde a <b>chave</b> é o nome funcional do recurso e o <b>valor</b> é o ID real gerado pela AWS. Isso elimina qualquer ambiguidade sobre qual ID pertence a qual camada da aplicação.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Segurança Mantida (Sensitive Data)</h4>
+        <p>Mesmo após o deploy bem-sucedido, o Terraform respeita a flag <code>sensitive = true</code>. O valor de <code>db_password_revelado</code> permanece oculto como <code>&lt;sensitive&gt;</code> no terminal, garantindo que segredos não sejam expostos em logs de CI/CD ou telas de operadores.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Conceito Técnico: Consolidação de Dados</h4>
+        <p>A <b>Consolidação de Dados</b> é a capacidade do Terraform de coletar atributos de múltiplos recursos criados via <code>for_each</code> e agrupá-los em uma estrutura de dados única. Isso transforma uma execução em massa em uma entrega de informações organizada e programática.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>5. Facilidade para o Desenvolvedor</h4>
+        <p>Com este output mapeado, a vida do desenvolvedor ou do engenheiro de DevOps torna-se muito mais fácil. Agora, é trivial copiar esses IDs para configurar instâncias EC2, Load Balancers ou até mesmo referenciá-los em outros projetos Terraform usando <code>remote_state</code>. A infraestrutura deixa de ser uma "caixa preta" e passa a oferecer pontos de conexão claros e bem documentados automaticamente.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

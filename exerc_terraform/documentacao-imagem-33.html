@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação — Início do Encerramento (Imagem 33)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#EF4444;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#FEE2E2;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.destroy-msg {color:#f85149; font-weight:bold}
+.destroy-minus {color:#f85149}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(239, 68, 68, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #EF4444;}
+.explanation-item h4 {color:#F87171; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#FEE2E2; color:#991B1B; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">📂 Documentação — Início do Encerramento (Imagem 33)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 21.13.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">COMANDO: TERRAFORM PLAN -DESTROY</span>
+    
+    <p style="margin-bottom: 10px; color: #94A3B8;">Geração do plano de destruição para revisar quais recursos serão removidos da infraestrutura.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">$</span> <span class="command">terraform plan -destroy -var-file="lab.tfvars"</span><br>
+        <span class="output">...</span><br>
+        <span class="destroy-minus">-</span> <span class="destroy-msg">aws_instance.lab will be destroyed</span><br>
+        <span class="output">  <span class="destroy-minus">-</span> ami                          = "ami-0440d3b780d96b29d" -> null</span><br>
+        <span class="output">  <span class="destroy-minus">-</span> instance_type                = "t2.micro" -> null</span><br>
+        <span class="output">  <span class="destroy-minus">-</span> tags                         = {</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> "Name" = "Instancia-Lab"</span><br>
+        <span class="output">    } -> null</span><br>
+        <span class="output">...</span><br>
+        <span class="output" style="color:#f85149">Plan: 0 to add, 0 to change, 5 to destroy.</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Objetivo do Comando</h4>
+        <p>O comando <code>terraform plan -destroy</code> é o primeiro passo para o encerramento seguro do laboratório. Seu objetivo principal é planejar a remoção total da infraestrutura que foi criada, garantindo que nenhum recurso fique "esquecido" gerando custos residuais na conta da AWS.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Detalhes Visuais do Desmonte</h4>
+        <p>Na saída do terminal, o Terraform utiliza o <b>símbolo de menos vermelho (-)</b> para indicar a remoção. Note a indicação <code>-> null</code> para cada atributo da instância EC2 (como AMI e tipo de instância). Isso mostra que esses valores deixarão de existir no estado gerenciado após a execução.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Mensagem de Alerta</h4>
+        <p>A frase <code>aws_instance.lab will be destroyed</code> é o aviso final de que o recurso principal do nosso laboratório será deletado. O plano consolida todas as dependências, mostrando que, ao destruir a instância, o Terraform também cuidará dos recursos associados listados no final do resumo.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Conceito Técnico: Plano de Destruição</h4>
+        <p>O <b>Plano de Destruição</b> funciona como um "seguro" contra deleções acidentais. Em vez de deletar imediatamente, o Terraform permite que você revise exatamente o que será removido. Em ambientes de produção, essa etapa é crítica para garantir que você não está destruindo algo essencial por engano.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>5. Importância do .tfvars no Destroy</h4>
+        <p>O uso do parâmetro <code>-var-file="lab.tfvars"</code> mesmo no comando de destruição é fundamental. Ele garante que o Terraform utilize as mesmas definições de variáveis (como IDs de VPC ou nomes de tags) que foram usadas na criação, assegurando que o Terraform olhe para o ambiente correto e resolva as dependências de forma consistente antes de aplicar a remoção.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

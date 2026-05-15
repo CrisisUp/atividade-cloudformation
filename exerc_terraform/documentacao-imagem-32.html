@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação — Inventário Final (Imagem 32)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#3B82F6;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#DBEAFE;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(59, 130, 246, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #3B82F6;}
+.explanation-item h4 {color:#60A5FA; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#DBEAFE; color:#1E40AF; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">📂 Documentação — Inventário Final (Imagem 32)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 21.12.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">COMANDO: TERRAFORM STATE LIST</span>
+    
+    <p style="margin-bottom: 10px; color: #94A3B8;">Visualização da lista completa de recursos que o Terraform está gerenciando ativamente no State.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">$</span> <span class="command">terraform state list</span><br>
+        <span class="output">aws_instance.maquina_web</span><br>
+        <span class="output">aws_security_group.sg_fixo</span><br>
+        <span class="output">aws_security_group.sgs_dinamicos["backend"]</span><br>
+        <span class="output">aws_security_group.sgs_dinamicos["frontend"]</span><br>
+        <span class="output">aws_security_group.sgs_dinamicos["monitoring"]</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Inventário Final Consolidado</h4>
+        <p>A listagem revela a estrutura completa da nossa infraestrutura: <b>1 Instância EC2</b> (maquina_web), <b>1 Security Group fixo</b> (sg_fixo) e <b>3 Security Groups dinâmicos</b> criados via loop. É a prova visual de que a automação transformou poucas linhas de código em múltiplos recursos reais na nuvem.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Organização via for_each</h4>
+        <p>Observe como o Terraform organiza internamente os recursos criados com loops: <code>aws_security_group.sgs_dinamicos["backend"]</code>. O uso do índice entre colchetes (o nome da chave no nosso mapa) permite que o Terraform trate cada item do loop como um recurso independente, mesmo que compartilhem o mesmo bloco de código original.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Conceito Técnico: Inventário Gerenciado</h4>
+        <p>O <code>state list</code> é a "Fonte da Verdade". Ele mostra exatamente o que o Terraform monitora. Se alguém alterar manualmente um desses recursos no console da AWS, o Terraform detectará o <b>drift</b> (desvio) na próxima execução. Da mesma forma, se executarmos um <code>destroy</code>, serão exatamente esses itens os removidos.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Sensação de Controle e Maestria</h4>
+        <p>Ver esta lista organizada após uma configuração complexa traz uma profunda sensação de controle. A automação remove o caos da criação manual "clicando em botões" e substitui por uma hierarquia lógica, previsível e fácil de auditar. Você não apenas criou recursos; você estabeleceu um sistema de governança sobre sua infraestrutura.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>5. Próximos Passos na Gestão</h4>
+        <p>Com o inventário sob controle, o próximo nível de maturidade é utilizar comandos como <code>terraform state show</code> para mergulhar nos detalhes de um recurso específico ou <code>terraform plan</code> para garantir que o estado atual ainda corresponde ao desejado no código, fechando o ciclo de vida do gerenciamento de configuração.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

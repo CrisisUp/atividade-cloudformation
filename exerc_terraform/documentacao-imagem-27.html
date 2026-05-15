@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação — Detalhamento do Plano de Loops (Imagem 27)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#6366F1;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#E0E7FF;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.plan-add {color:#2ecc71}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(99, 102, 241, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #6366F1;}
+.explanation-item h4 {color:#818CF8; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#EEF2FF; color:#4338CA; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">📂 Documentação — Detalhamento do Plano de Loops (Imagem 27)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 21.07.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE FINAL: CONCLUSÃO DO PLANO DE LOOPS</span>
+    
+    <p style="margin-bottom: 10px; color: #94A3B8;">Finalização do output do <code>terraform plan</code>, destacando a criação dos recursos 'frontend' e 'monitoring'.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="plan-add">&nbsp;&nbsp;# aws_security_group.app_sgs["frontend"] will be created</span><br>
+        <span class="output">&nbsp;&nbsp;+ resource "aws_security_group" "app_sgs" {</span><br>
+        <span class="plan-add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ description = "Security Group para a aplicação frontend"</span><br>
+        <span class="plan-add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= "sg-frontend"</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ ingress&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= [</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ {</span><br>
+        <span class="plan-add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ from_port&nbsp;&nbsp;&nbsp;= 80</span><br>
+        <span class="plan-add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ to_port&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 80</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ protocol&nbsp;&nbsp;&nbsp;&nbsp;= "tcp"</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;}</span><br>
+        <br>
+        <span class="plan-add">&nbsp;&nbsp;# aws_security_group.app_sgs["monitoring"] will be created</span><br>
+        <span class="output">&nbsp;&nbsp;+ resource "aws_security_group" "app_sgs" {</span><br>
+        <span class="plan-add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ description = "Security Group para a aplicação monitoring"</span><br>
+        <span class="plan-add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= "sg-monitoring"</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ ingress&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= [</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ {</span><br>
+        <span class="plan-add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ from_port&nbsp;&nbsp;&nbsp;= 9090</span><br>
+        <span class="plan-add">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ to_port&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= 9090</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ protocol&nbsp;&nbsp;&nbsp;&nbsp;= "tcp"</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;}</span><br>
+        <br>
+        <span class="success">Plan: 3 to add, 0 to change, 0 to destroy.</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Verificação de Regras Específicas</h4>
+        <p>O detalhamento confirma a aplicação correta das portas definidas no mapa: o <b>frontend</b> está configurado com a porta <b>80</b> (HTTP padrão), enquanto o <b>monitoring</b> recebeu a porta <b>9090</b> (comum em ferramentas como Prometheus). Cada recurso espelha exatamente a necessidade de sua função.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Consistência Arquitetural via Loops</h4>
+        <p>Este plano demonstra o conceito de <b>Consistência Arquitetural</b>. Ao utilizar loops, o Terraform garante que todos os Security Groups sigam rigorosamente o mesmo padrão de nomenclatura (<code>sg-prefixo</code>) e a mesma estrutura de segurança, alterando apenas os parâmetros variáveis. Isso evita que um SG seja criado com tags faltando ou regras de saída inconsistentes.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Redução Drástica de Erro Humano</h4>
+        <p>O uso de loops (<code>for_each</code>) elimina a necessidade de copiar e colar blocos de código inteiros. Em uma configuração manual, é comum esquecer de alterar uma porta ou um nome após o "copy-paste". Com loops, o desenvolvedor define a <b>lógica uma única vez</b> e apenas fornece os <b>dados</b>. Se a lógica estiver correta para um, estará correta para todos os 10, 50 ou 100 recursos gerados.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Escalabilidade e Manutenção Simplificada</h4>
+        <p>Adicionar um novo ambiente ou serviço agora é tão simples quanto adicionar uma nova linha ao mapa de variáveis. O risco de "esquecer algo" é minimizado, pois o Terraform abstrai a complexidade da criação individual, permitindo que o foco da equipe de infraestrutura seja o design e não a repetição de tarefas manuais suscetíveis a falhas.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação — Automação no Deploy (Imagem 28)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#6366F1;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#E0E7FF;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.plan-summary {color:#2ecc71; font-weight:bold}
+.warning {color:#f39c12; font-weight:bold}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(99, 102, 241, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #6366F1;}
+.explanation-item.risk {background: rgba(239, 68, 68, 0.05); border-left: 3px solid #EF4444;}
+.explanation-item h4 {color:#818CF8; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item.risk h4 {color:#F87171;}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#EEF2FF; color:#4338CA; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">📂 Documentação — Automação no Deploy (Imagem 28)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 21.08.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">EXECUÇÃO: DEPLOY AUTOMATIZADO</span>
+    
+    <p style="margin-bottom: 10px; color: #94A3B8;">Demonstração da aplicação de mudanças utilizando flags de automação para deploy não interativo.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@terraform ~]$</span> <span class="command">terraform apply -var-file="lab.tfvars" -auto-approve</span><br>
+        <br>
+        <span class="output">...</span><br>
+        <span class="plan-summary">Plan: 3 to add, 0 to change, 0 to destroy.</span><br>
+        <br>
+        <span class="output">aws_security_group.app_sgs["monitoring"]: Creating...</span><br>
+        <span class="output">aws_security_group.app_sgs["backend"]: Creating...</span><br>
+        <span class="output">aws_security_group.app_sgs["frontend"]: Creating...</span><br>
+        <span class="output">...</span><br>
+        <span class="plan-summary">Apply complete! Resources: 3 added, 0 changed, 0 destroyed.</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Nova Flag: -auto-approve</h4>
+        <p>A flag <code>-auto-approve</code> instrui o Terraform a aplicar as mudanças sem solicitar a confirmação manual ('yes') do usuário. Ela pula a etapa de pausa interativa, seguindo diretamente para a criação ou modificação dos recursos conforme o plano gerado.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Resumo do Plano de Execução</h4>
+        <p>O output confirma a execução do plano identificado anteriormente: <b>3 to add</b> (referente aos três novos Security Groups configurados via loops), <b>0 change</b> e <b>0 destroy</b>. O sistema prossegue automaticamente para a fase de provisionamento na AWS.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Contexto de Uso: Pipelines de CI/CD</h4>
+        <p>Este comando é fundamental em fluxos de <b>Integração e Entrega Contínua (CI/CD)</b>. Em sistemas automatizados (como GitHub Actions, GitLab CI ou Jenkins), não existe um operador humano para digitar comandos no terminal. O uso desta flag permite que o deploy ocorra de forma fluida e autônoma.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Conceito Técnico: Deploy Não Interativo</h4>
+        <p>O <b>Deploy Não Interativo</b> agiliza o ciclo de vida do desenvolvimento, permitindo atualizações de infraestrutura em segundos. Ele transforma o processo de infraestrutura em algo previsível e repetível, removendo o "gargalo" da aprovação manual em ambientes controlados.</p>
+      </div>
+
+      <div class="explanation-item risk">
+        <h4>⚠️ Alerta de Risco</h4>
+        <p>Embora poderosa, a flag <code>-auto-approve</code> deve ser usada com <b>extrema cautela</b>. Ao utilizá-la, você abre mão da última barreira de segurança contra destruições acidentais de recursos críticos. Recomenda-se fortemente que esta flag seja usada apenas se o plano (<code>terraform plan</code>) tiver sido revisado anteriormente ou em ambientes onde o risco é controlado e bem compreendido.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

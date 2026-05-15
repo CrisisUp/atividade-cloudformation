@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação — Auditoria de Log (Imagem 29)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#6366F1;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#E0E7FF;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.plan-summary {color:#2ecc71; font-weight:bold}
+.attribute {color:#8b949e}
+.value {color:#ce9178}
+.addition {color:#2ecc71}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(99, 102, 241, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #6366F1;}
+.explanation-item h4 {color:#818CF8; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#EEF2FF; color:#4338CA; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">📂 Documentação — Auditoria de Log (Imagem 29)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 21.09.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">EXECUÇÃO: DETALHAMENTO DE ATRIBUTOS</span>
+    
+    <p style="margin-bottom: 10px; color: #94A3B8;">Visualização granular dos atributos de segurança que estão sendo injetados na AWS durante a fase de criação.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="output">aws_security_group.app_sgs["frontend"]: Creating...</span><br>
+        <span class="addition">&nbsp;&nbsp;+ egress: [</span><br>
+        <span class="addition">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ {</span><br>
+        <span class="addition">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ cidr_blocks      = ["0.0.0.0/0"]</span><br>
+        <span class="addition">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ from_port        = 0</span><br>
+        <span class="addition">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ protocol         = "-1"</span><br>
+        <span class="addition">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ to_port          = 0</span><br>
+        <span class="addition">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...</span><br>
+        <span class="addition">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</span><br>
+        <span class="addition">&nbsp;&nbsp;&nbsp;&nbsp;]</span><br>
+        <span class="addition">&nbsp;&nbsp;+ ingress: [</span><br>
+        <span class="addition">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ {</span><br>
+        <span class="addition">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ cidr_blocks      = ["10.0.0.0/16"]</span><br>
+        <span class="addition">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ from_port        = 80</span><br>
+        <span class="addition">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ protocol         = "tcp"</span><br>
+        <span class="addition">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ to_port          = 80</span><br>
+        <span class="addition">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...</span><br>
+        <span class="addition">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</span><br>
+        <span class="addition">&nbsp;&nbsp;&nbsp;&nbsp;]</span><br>
+        <span class="output">aws_security_group.app_sgs["frontend"]: Still creating... [10s elapsed]</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Atributos "Por Baixo do Capô"</h4>
+        <p>Enquanto aguardamos a confirmação da AWS, o Terraform exibe os valores exatos que estão sendo enviados para a API do provedor. Isso inclui metadados, regras de rede e identificadores que definem o estado final do recurso.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Regras de Egress (Saída)</h4>
+        <p>Os logs mostram uma regra de saída liberando todo o tráfego (<code>port 0 to 0</code>, <code>protocol -1</code>), o que é o padrão para permitir que as instâncias se comuniquem com a internet ou outros serviços externos livremente.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Regras de Ingress Internas</h4>
+        <p>Observamos a regra de entrada restrita ao CIDR <code>10.0.0.0/16</code>. Isso garante que os Security Groups aceitem conexões apenas de dentro da própria VPC, reforçando a segurança da arquitetura.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Conceito Técnico: Auditoria de Log</h4>
+        <p>A <b>Auditoria de Log</b> durante o deploy garante transparência total. Ao invés de ser uma "caixa preta", o Terraform permite que o engenheiro valide se o que foi codificado está realmente sendo enviado para a nuvem, facilitando o debugging e a conformidade (compliance).</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>5. Por que acompanhar os logs?</h4>
+        <p>Acompanhar esses logs ajuda a entender o progresso real e identificar possíveis gargalos. Se uma criação demora mais do que o esperado (ex: <i>Still creating...</i>), os logs fornecem o contexto necessário para saber qual recurso está pendente e quais dependências estão sendo resolvidas.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

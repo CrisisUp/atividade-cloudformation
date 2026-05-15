@@ -225,7 +225,7 @@ const TASKS_DATA = [
     ],
     codeId: "c7",
     code: `cat > sgs.tf << 'EOF'\nvariable \"app_ports\" {\n  type = map(number)\n  default = {\n    backend    = 3000\n    monitoring = 9090\n    frontend   = 80\n  }\n}\n\nresource \"aws_security_group\" \"app_sgs\" {\n  for_each = var.app_ports\n  name     = \"techstock-\${each.key}-sg\"\n  ingress {\n    from_port   = each.value\n    to_port     = each.value\n    protocol    = \"tcp\"\n    cidr_blocks = [\"0.0.0.0/0\"]\n  }\n}\nEOF\n\nterraform apply -var-file=\"lab.tfvars\" -auto-approve`,
-    expected: "✅ Resources: 3 added. Três novos Security Groups criados de uma vez.",
+    expected: "✅ Resources: 3 added. Três novos Security Groups criados de uma vez. <a href=\"documentacao-imagem-30.html\" style=\"color: #4F46E5; text-decoration: underline;\">[Log de Criação - Imagem 30]</a> e <a href=\"documentacao-imagem-31.html\" style=\"color: #4F46E5; text-decoration: underline;\">[Conclusão e Outputs - Imagem 31]</a>",
     checklist: [
       "Arquivo sgs.tf criado com for_each",
       "Terraform apply criou 3 recursos extras",
