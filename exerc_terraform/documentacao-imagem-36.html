@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação — Destruição do Recurso de Monitoramento (Imagem 36)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#EF4444;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#FEE2E2;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.destroy-msg {color:#f85149; font-weight:bold}
+.destroy-minus {color:#f85149}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(239, 68, 68, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #EF4444;}
+.explanation-item h4 {color:#F87171; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#FEE2E2; color:#991B1B; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">📂 Documentação — Destruição do Recurso de Monitoramento (Imagem 36)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 21.16.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">COMANDO: TERRAFORM PLAN -DESTROY (FOCO: SG MONITORING)</span>
+    
+    <p style="margin-bottom: 10px; color: #94A3B8;">Visualização dos logs de destruição para o Security Group de monitoramento, completando o plano de encerramento da infraestrutura.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">$</span> <span class="command">terraform plan -destroy -var-file="lab.tfvars"</span><br>
+        <span class="output">...</span><br>
+        <span class="destroy-minus">-</span> <span class="destroy-msg">aws_security_group.app_sgs["monitoring"] will be destroyed</span><br>
+        <span class="output">  <span class="destroy-minus">-</span> description = "Security group for monitoring" -> null</span><br>
+        <span class="output">  <span class="destroy-minus">-</span> egress {</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> cidr_blocks = [ "0.0.0.0/0" ] -> null</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> from_port   = 0 -> null</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> protocol    = "-1" -> null</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> to_port      = 0 -> null</span><br>
+        <span class="output">    }</span><br>
+        <span class="output">  <span class="destroy-minus">-</span> ingress {</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> cidr_blocks = [ "0.0.0.0/0" ] -> null</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> from_port   = 9090 -> null</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> protocol    = "tcp" -> null</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> to_port      = 9090 -> null</span><br>
+        <span class="output">    }</span><br>
+        <span class="output">...</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Destruição Planejada: Security Group Monitoring</h4>
+        <p>O log confirma o planejamento da destruição do recurso <code>aws_security_group.app_sgs["monitoring"]</code>. Este grupo de segurança, responsável por permitir o tráfego de monitoramento (Prometheus/Grafana), é o último componente da camada de rede a ser mapeado para remoção no plano atual.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Atributos Mapeados para Null (Porta 9090)</h4>
+        <p>Especificamente para o monitoramento, vemos a <b>Porta 9090</b> sendo desativada. Todas as regras de <i>ingress</i> e <i>egress</i> são marcadas como <code>null</code>, sinalizando ao provedor AWS que estas configurações devem ser removidas permanentemente.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Conceito Técnico: Encerramento de Ciclo</h4>
+        <p>O "Encerramento de Ciclo" é a fase onde o Terraform garante que a infraestrutura 'temporária' ou de laboratório seja 100% removida. Isso é vital para manter o estado limpo e, especialmente em ambientes como o <b>Learner Lab</b>, garantir que créditos não sejam consumidos desnecessariamente por recursos esquecidos.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Saúde Financeira e Organizacional</h4>
+        <p>A automação da destruição é tão crucial quanto a da criação. **Financeiramente**, evita o "desperdício de nuvem" (cloud sprawl), onde recursos ativos geram custos sem utilidade. **Organizacionalmente**, promove a higiene da infraestrutura, garantindo que o ambiente reflita exatamente o que está definido no código (IaC), eliminando riscos de segurança por portas abertas em recursos órfãos.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

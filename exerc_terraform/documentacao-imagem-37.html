@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação — Resumo Final do Plano de Destruição (Imagem 37)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#EF4444;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#FEE2E2;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.destroy-msg {color:#f85149; font-weight:bold}
+.destroy-minus {color:#f85149}
+.success-msg {color:#27c93f; font-weight:bold}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(239, 68, 68, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #EF4444;}
+.explanation-item h4 {color:#F87171; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#FEE2E2; color:#991B1B; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">📂 Documentação — Resumo Final do Plano (Imagem 37)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 21.17.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">COMANDO: TERRAFORM PLAN -DESTROY (RESUMO FINAL)</span>
+    
+    <p style="margin-bottom: 10px; color: #94A3B8;">Visualização do resumo consolidado do plano de destruição e a limpeza total das saídas de dados (outputs).</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="output">  <span class="destroy-minus">-</span> ami_id       = "ami-04e5276ebb84248ed" -> null</span><br>
+        <span class="output">  <span class="destroy-minus">-</span> instance_id = "i-0a2b3c4d5e6f7g8h9" -> null</span><br>
+        <span class="output">  <span class="destroy-minus">-</span> sgs_criados = [</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> "sg-0123456789abcdef0",</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> "sg-0fedcba9876543210",</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> "sg-0a1b2c3d4e5f6g7h8",</span><br>
+        <span class="output">    ] -> null</span><br><br>
+        <span class="success-msg">Plan: 0 to add, 0 to change, 5 to destroy.</span><br><br>
+        <span class="output">─────────────────────────────────────────────────────────────────────────────</span><br><br>
+        <span class="output">Note: You didn't use the -out option to save this plan, so Terraform can't</span><br>
+        <span class="output">guarantee to take exactly these actions if you run "terraform apply" now.</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Totalizadores do Plano</h4>
+        <p>O resumo final apresenta <b>Plan: 0 to add, 0 to change, 5 to destroy</b>. Isso confirma que o Terraform identificou exatamente 5 recursos (Instância EC2 e os 4 Security Groups criados via <code>for_each</code>) que serão removidos da AWS, sem nenhuma alteração ou adição pendente.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Limpeza de Outputs (Nullification)</h4>
+        <p>A imagem destaca a remoção das variáveis de saída: <code>ami_id</code>, <code>instance_id</code> e <code>sgs_criados</code> estão sendo mapeados para <code>null</code>. Isso demonstra que o Terraform não está apenas preocupado com os recursos físicos, mas também em limpar o rastro de informações do seu arquivo de estado (state).</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Conceito Técnico: Encerramento Responsável</h4>
+        <p>O <b>Encerramento Responsável</b> reflete a precisão do Terraform em gerenciar o ciclo de vida completo. Ele garante que referências lógicas, metadados e outputs sejam invalidados simultaneamente à destruição dos recursos físicos. Não restam "pontas soltas" no ambiente gerenciado.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Ciclo de Vida IaC Completo</h4>
+        <p>Com a aplicação deste plano (<code>terraform apply</code>), a infraestrutura na AWS deixará de existir e o arquivo de estado ficará efetivamente vazio (ou resetado). Este é o momento final do ciclo de vida da infraestrutura como código: <b>Provisionamento -> Evolução -> Destruição</b>, garantindo conformidade e controle total de custos.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

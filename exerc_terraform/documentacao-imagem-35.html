@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação — Destruição do Recurso Frontend (Imagem 35)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#EF4444;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#FEE2E2;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.destroy-msg {color:#f85149; font-weight:bold}
+.destroy-minus {color:#f85149}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(239, 68, 68, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #EF4444;}
+.explanation-item h4 {color:#F87171; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#FEE2E2; color:#991B1B; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">📂 Documentação — Destruição do Recurso Frontend (Imagem 35)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 21.15.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">COMANDO: TERRAFORM PLAN -DESTROY (FOCO: SG FRONTEND)</span>
+    
+    <p style="margin-bottom: 10px; color: #94A3B8;">Análise da continuação do plano de destruição, focando especificamente no Security Group da camada de Frontend.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">$</span> <span class="command">terraform plan -destroy -var-file="lab.tfvars"</span><br>
+        <span class="output">...</span><br>
+        <span class="destroy-minus">-</span> <span class="destroy-msg">aws_security_group.app_sgs["frontend"] will be destroyed</span><br>
+        <span class="output">  <span class="destroy-minus">-</span> description = "Security group for frontend" -> null</span><br>
+        <span class="output">  <span class="destroy-minus">-</span> egress {</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> cidr_blocks = [ "0.0.0.0/0" ] -> null</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> from_port   = 0 -> null</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> protocol    = "-1" -> null</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> to_port      = 0 -> null</span><br>
+        <span class="output">    }</span><br>
+        <span class="output">  <span class="destroy-minus">-</span> ingress {</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> cidr_blocks = [ "0.0.0.0/0" ] -> null</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> from_port   = 80 -> null</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> protocol    = "tcp" -> null</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> to_port      = 80 -> null</span><br>
+        <span class="output">    }</span><br>
+        <span class="output">...</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Destruição Planejada: Security Group Frontend</h4>
+        <p>O log detalha a remoção do recurso <code>aws_security_group.app_sgs["frontend"]</code>. Este componente é vital para a conectividade externa da aplicação, e sua marcação para destruição demonstra como o Terraform identifica cada recurso dependente durante o desmonte da infraestrutura.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Atributos Mapeados para Null</h4>
+        <p>Observamos que os atributos de rede, como a <b>Porta 80</b> (ingress) e as regras de saída total (egress), estão sendo desvinculados do estado e mapeados para <code>null</code>. Isso garante que nenhuma regra órfã permaneça na conta AWS após a conclusão do comando.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Independência de Recursos em Loops</h4>
+        <p>Mesmo tendo sido criados por um único bloco <code>for_each</code>, o Terraform trata os recursos como entidades individuais. Isso significa que a destruição do SG "frontend" é processada de forma independente dos outros (como backend ou monitoring), permitindo que a API da nuvem gerencie cada remoção com precisão.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. A Importância da Clareza nos Logs</h4>
+        <p>A clareza nas mensagens do terminal é fundamental para o administrador. Saber exatamente qual parte da aplicação (frontend, backend, etc.) está sendo desativada evita erros operacionais e permite uma validação visual rápida de que o plano de destruição está seguindo a estratégia correta de encerramento do serviço.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>5. Conceito Técnico: Ciclo de Vida Individual</h4>
+        <p>A gestão individual de recursos em loops (mesmo que definidos coletivamente no código) é uma característica poderosa do Terraform. Ela garante que mudanças ou deleções em um item do mapa não afetem a integridade dos outros, mantendo a granularidade necessária para operações complexas de infraestrutura.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

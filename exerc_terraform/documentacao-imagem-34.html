@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação — Detalhamento da Limpeza (Imagem 34)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#EF4444;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#FEE2E2;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.destroy-msg {color:#f85149; font-weight:bold}
+.destroy-minus {color:#f85149}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(239, 68, 68, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #EF4444;}
+.explanation-item h4 {color:#F87171; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#FEE2E2; color:#991B1B; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">📂 Documentação — Detalhamento da Limpeza (Imagem 34)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 21.14.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">COMANDO: TERRAFORM PLAN -DESTROY (FASE GRANULAR)</span>
+    
+    <p style="margin-bottom: 10px; color: #94A3B8;">Continuação do detalhamento do plano de destruição, focando na remoção de sub-componentes e recursos dependentes.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">$</span> <span class="command">terraform plan -destroy -var-file="lab.tfvars"</span><br>
+        <span class="output">...</span><br>
+        <span class="output">  <span class="destroy-minus">-</span> cpu_options {</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> core_count       = 1 -> null</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> threads_per_core = 1 -> null</span><br>
+        <span class="output">    }</span><br>
+        <span class="output">  <span class="destroy-minus">-</span> metadata_options {</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> http_endpoint               = "enabled" -> null</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> http_tokens                 = "optional" -> null</span><br>
+        <span class="output">    }</span><br>
+        <span class="output">  <span class="destroy-minus">-</span> root_block_device {</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> delete_on_termination = true -> null</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> volume_size           = 8 -> null</span><br>
+        <span class="output">      <span class="destroy-minus">-</span> volume_type           = "gp2" -> null</span><br>
+        <span class="output">    }</span><br>
+        <span class="destroy-minus">-</span> <span class="destroy-msg">aws_security_group.sg["backend"] will be destroyed</span><br>
+        <span class="output">...</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Fase Granular da Destruição</h4>
+        <p>Nesta fase do <code>terraform plan -destroy</code>, o Terraform detalha exatamente quais sub-configurações de um recurso serão removidas. Não se trata apenas de deletar a "caixa" (a instância EC2), mas de desmontar cada engrenagem interna que foi configurada via código.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Sub-componentes na Mira</h4>
+        <p>A saída mostra a remoção de <code>cpu_options</code> e <code>metadata_options</code>. Isso garante que configurações específicas de hardware e segurança de metadados sejam limpas do estado do Terraform, refletindo que essas definições não terão mais um recurso associado na nuvem.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. O Disco Root (root_block_device)</h4>
+        <p>O plano confirma a destruição do <code>root_block_device</code>. Como a opção <code>delete_on_termination</code> está como <code>true</code>, o Terraform assegura que o volume EBS principal será removido junto com a instância, evitando que volumes órfãos fiquem "soltos" na conta gerando custos desnecessários.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Alvos em Cadeia: Security Group 'backend'</h4>
+        <p>O Terraform identifica o próximo alvo: o Security Group <b>'backend'</b>, que faz parte de um loop (<code>each.key</code>). Isso demonstra a inteligência do Terraform em rastrear recursos criados dinamicamente e marcá-los para destruição na ordem correta de dependência.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>5. Conceito Técnico: Limpeza Granular</h4>
+        <p>A <b>Limpeza Granular</b> é o que diferencia o Terraform de deleções manuais. Ele garante que todos os atributos e configurações associadas sejam removidos tanto do <b>estado (state)</b> quanto da <b>nuvem</b>. Isso evita o "lixo digital" — como Security Groups sem uso, volumes EBS esquecidos ou configurações de rede órfãs — garantindo que a conta AWS retorne exatamente ao seu estado original após o desmonte.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

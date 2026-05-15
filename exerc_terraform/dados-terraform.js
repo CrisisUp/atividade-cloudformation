@@ -252,7 +252,7 @@ const TASKS_DATA = [
         ],
       },
     ],
-    expected: "✅ Apply complete! Resources: 0 added, 0 changed, 5+ destroyed.",
+    expected: "✅ Apply complete! Resources: 0 added, 0 changed, 5+ destroyed. <a href=\"documentacao-imagem-36.html\" style=\"color: #4F46E5; text-decoration: underline;\">[Destruição de SG - Imagem 36]</a> e <a href=\"documentacao-imagem-37.html\" style=\"color: #4F46E5; text-decoration: underline;\">[Resumo Final - Imagem 37]</a>",
     warn: "⚠️ Nunca feche o lab sem garantir que o destroy foi finalizado com sucesso.",
     checklist: [
       "Terraform destroy executado",
