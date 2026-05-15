@@ -1,0 +1,63 @@
+CHECKLIST DE AVALIACAO FINAL - CLOUDFORMATION
+Aluno: Cristiano Batista Pessoa
+Status: 100% CONCLUIDO
+
+============================================================
+TAREFA 1: PRIMEIRA STACK — EC2
+============================================================
+[X] Stack criada com status CREATE_COMPLETE [PDF - Seção 1: Print 1]
+[X] Aba Events mostra a criacao do recurso LabEC2 [PDF - Seção 1: Print 2]
+[X] Aba Outputs exibe InstanceId e PrivateIP [PDF - Seção 1: Print 3]
+
+Expectativa: Validar se o aluno compreende o ciclo de vida inicial de uma stack.
+
+============================================================
+TAREFA 2: PARAMETERS E MAPPINGS
+============================================================
+[X] Stack techstock-parametrizado com Parameters [PDF - Seção 2: Print 1]
+[X] Output InstanceType correto via Mapping [PDF - Seção 2: Print 3]
+
+Expectativa: Verificar a habilidade de tornar templates dinamicos.
+
+============================================================
+TAREFA 3: CHANGESETS
+============================================================
+[X] ChangeSet criado e analisado [PDF - Seção 2: Print 4]
+
+Expectativa: Avaliar maturidade no uso de ferramentas de seguranca.
+
+============================================================
+TAREFA 4: DRIFT DETECTION
+============================================================
+[X] Drift detectado (status DRIFTED) [PDF - Seção 2: Print 5]
+[X] Detalhes mostram tag manual extra [PDF - Seção 2: Print 5]
+
+Expectativa: Confirmar entendimento sobre integridade entre codigo e nuvem.
+
+============================================================
+TAREFA 5: CROSS-STACK REF
+============================================================
+[X] Exportacao de SGId na stack de infra [PDF - Seção 2: Print 6]
+[X] Importacao via !ImportValue no App [PDF - Seção 2: Print 8]
+
+Expectativa: Validar conhecimento em arquitetura modular.
+
+============================================================
+TAREFA 6: ROLLBACK
+============================================================
+[X] Stack em ROLLBACK_COMPLETE apos falha [PDF - Seção 2: Print 9]
+[X] Diagnostico via Events [PDF - Seção 2: Print 9]
+
+Expectativa: Testar capacidade de troubleshooting.
+
+============================================================
+TAREFA 7: LIMPEZA
+============================================================
+[X] Todas as stacks deletadas [PDF - Seção 2: Prints 10 a 17]
+[X] Instancias EC2 em Terminated [PDF - Seção 2: Print 17]
+
+Expectativa: Garantir pratica de encerramento correto de recursos.
+
+============================================================
+STATUS FINAL: APROVADO - TODOS OS PONTOS VALIDADOS
+============================================================

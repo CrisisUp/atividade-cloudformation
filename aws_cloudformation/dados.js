@@ -56,7 +56,7 @@ Outputs:
   PrivateIP:
     Value: !GetAtt LabEC2.PrivateIp
     Description: IP privado da instancia`,
-    hint: "📸 O Composer deve mostrar o ícone da EC2 no canvas. Clique em <strong>Salvar</strong> e depois em <strong>Continuar no CloudFormation</strong> no topo da tela.",
+    hint: "📸 [PDF - Seção 1: Print 1] O Composer deve mostrar o ícone da EC2 no canvas. Clique em <strong>Salvar</strong> e depois em <strong>Continuar no CloudFormation</strong> no topo da tela.",
     finishSteps: {
       title: "Passo 2 — Finalizar a Pilha",
       items: [
@@ -65,7 +65,7 @@ Outputs:
       ],
     },
     expected:
-      "✅ Status da pilha: CREATE_COMPLETE. Aba Saídas (Outputs) mostra InstanceId e PrivateIP preenchidos automaticamente.",
+      "✅ [PDF - Seção 1: Prints 1, 2 e 3] Status da pilha: CREATE_COMPLETE. Aba Saídas (Outputs) mostra InstanceId e PrivateIP preenchidos automaticamente.",
     checklist: [
       "Pilha criada com status CREATE_COMPLETE",
       "Aba Eventos mostra a criação do recurso LabEC2",
@@ -167,7 +167,7 @@ Outputs:
       ],
     },
     expected:
-      "✅ Saídas mudam conforme o Environment: lab usa t3.micro, prod usa t3.medium (Mapping escolhe automaticamente).",
+      "✅ [PDF - Seção 2: Prints 1 e 3] Saídas mudam conforme o Environment: lab usa t3.micro, prod usa t3.medium (Mapping escolhe automaticamente).",
     checklist: [
       "Pilha techstock-parametrizado criada com Environment=lab",
       "Saída InstanceType mostra t3.micro (valor do Mapping para lab)",
@@ -209,7 +209,7 @@ Outputs:
         ],
       },
     ],
-    hint: "📸 A tabela do Conjunto de Alterações é a informação mais valiosa. Nunca execute um update em produção sem revisá-la primeiro.",
+    hint: "📸 [PDF - Seção 2: Print 4] A tabela do Conjunto de Alterações é a informação mais valiosa. Nunca execute um update em produção sem revisá-la primeiro.",
     finishSteps: {
       title: "Passo 3 — Executar ou cancelar",
       items: [
@@ -219,7 +219,7 @@ Outputs:
       ],
     },
     expected:
-      "✅ Conjunto de alterações executado com sucesso. Saída InstanceType agora mostra t3.small.",
+      "✅ [PDF - Seção 2: Print 4] Conjunto de alterações executado com sucesso. Saída InstanceType agora mostra t3.small.",
     checklist: [
       "Conjunto de alterações criado (não aplicado automaticamente)",
       "Colunas Ação e Substituição analisadas antes de executar",
@@ -268,7 +268,7 @@ Outputs:
       },
     ],
     expected:
-      "✅ Pilha mostra status DESVIADO. Detalhes mostram a tag manual como propriedade não esperada.",
+      "✅ [PDF - Seção 2: Print 5] Pilha mostra status DESVIADO. Detalhes mostram a tag manual como propriedade não esperada.",
     checklist: [
       "Tag manual adicionada diretamente na EC2 (fora do CF)",
       "Detecção de Desvios executada com sucesso",
@@ -354,7 +354,7 @@ Resources:
       ],
     },
     expected:
-      "✅ Pilha de App usa o SG importado. Tentativa de excluir a base falha com 'Export is in use'.",
+      "✅ [PDF - Seção 2: Prints 6, 7 e 8] Pilha de App usa o SG importado. Tentativa de excluir a base falha com 'Export is in use'.",
     checklist: [
       "Pilha techstock-infra-lab criada com Export do SGId",
       "Pilha techstock-app-lab criada usando !ImportValue",
@@ -422,10 +422,10 @@ Resources:
       },
     ],
     expected:
-      "✅ Pilha em ROLLBACK_COMPLETE após a falha. Após exclusão e correção: CREATE_COMPLETE.",
-    hint: "⚠️ Uma pilha em ROLLBACK_COMPLETE não pode ser atualizada — apenas excluída. Em 2026, use o Amazon Q para explicar erros complexos instantaneamente.",
+      "✅ [PDF - Seção 2: Print 9] Pilha em ROLLBACK_COMPLETE após a falha. Após exclusão e correção: CREATE_COMPLETE.",
+    hint: "📸 [PDF - Seção 2: Print 9] ⚠️ Uma pilha em ROLLBACK_COMPLETE não pode ser atualizada — apenas excluída. Em 2026, use o Amazon Q para explicar erros complexos instantaneamente.",
     checklist: [
-      "Pilha falhou com CREATE_FAILED no recurso com erro",
+      "Pilha falhou with CREATE_FAILED no recurso com erro",
       "Eventos mostram o motivo técnico da falha",
       "Pilha está em ROLLBACK_COMPLETE (nada ficou órfão)",
       "Pilha excluída e recriada com sucesso após correção",
@@ -454,7 +454,7 @@ Resources:
       },
     ],
     expected:
-      "✅ Todas as pilhas com status DELETE_COMPLETE. Nenhuma instância ou SG visível na conta.",
+      "✅ [PDF - Seção 2: Prints 10 a 17] Todas as pilhas com status DELETE_COMPLETE. Nenhuma instância ou SG visível na conta.",
     warn: "⚠️ IMPORTANTE: Sempre exclua as pilhas criadas ao final das atividades para garantir que seu laboratório fique limpo e sem custos residuais.",
     checklist: [
       "Pilha de App excluída primeiro (dependência resolvida)",

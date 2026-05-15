@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Checklist de Avaliação — CloudFormation</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #0A0E1A;
+            color: #E2E8F0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        header {
+            background: #FF9900;
+            color: #000;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .task {
+            background: #111827;
+            border: 1px solid #2D3748;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .task h3 {
+            color: #FF9900;
+            margin-top: 0;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+            font-size: 14px;
+        }
+
+        .check-item input {
+            accent-color: #FF9900;
+            width: 18px;
+            height: 18px;
+        }
+
+        .evidence {
+            font-size: 12px;
+            color: #94A3B8;
+            font-style: italic;
+            margin-left: 28px;
+        }
+
+        .expectativa {
+            background: #1a2d1a;
+            border: 1px solid #1F5C2E;
+            color: #86EFAC;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+
+        .validated {
+            color: #86EFAC;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>🎯 Checklist de Avaliação Final</h1>
+        <p>Projeto: Infraestrutura como Código com AWS CloudFormation</p>
+        <p>Aluno: Cristiano Batista Pessoa</p>
+    </header>
+
+    <div class="task">
+        <h3>Tarefa 1: Primeira Stack — EC2</h3>
+        <div class="check-item"><input type="checkbox" checked disabled> <span>Stack criada com status
+                CREATE_COMPLETE</span></div>
+        <div class="evidence">[PDF - Seção 1: Print 1]</div>
+        <div class="check-item"><input type="checkbox" checked disabled> <span>Aba Events mostra a criação do recurso
+                LabEC2</span></div>
+        <div class="evidence">[PDF - Seção 1: Print 2]</div>
+        <div class="check-item"><input type="checkbox" checked disabled> <span>Aba Outputs exibe InstanceId e
+                PrivateIP</span></div>
+        <div class="evidence">[PDF - Seção 1: Print 3]</div>
+        <div class="expectativa">🎯 <b>Expectativa do Avaliador:</b> Validar se o aluno compreende o ciclo de vida
+            inicial de uma stack e sabe extrair informações dos Outputs.</div>
+    </div>
+
+    <div class="task">
+        <h3>Tarefa 2: Parameters e Mappings</h3>
+        <div class="check-item"><input type="checkbox" checked disabled> <span>Stack techstock-parametrizado criada com
+                Parameters</span></div>
+        <div class="evidence">[PDF - Seção 2: Print 1]</div>
+        <div class="check-item"><input type="checkbox" checked disabled> <span>Output InstanceType reflete o valor
+                correto do Mapping</span></div>
+        <div class="evidence">[PDF - Seção 2: Print 3]</div>
+        <div class="expectativa">🎯 <b>Expectativa do Avaliador:</b> Verificar a habilidade de tornar templates
+            dinâmicos e reutilizáveis entre diferentes ambientes.</div>
+    </div>
+
+    <div class="task">
+        <h3>Tarefa 3: ChangeSets</h3>
+        <div class="check-item"><input type="checkbox" checked disabled> <span>ChangeSet criado e analisado
+                (Action/Replacement)</span></div>
+        <div class="evidence">[PDF - Seção 2: Print 4]</div>
+        <div class="expectativa">🎯 <b>Expectativa do Avaliador:</b> Avaliar a maturidade no uso de ferramentas de
+            segurança do CloudFormation para evitar deleções acidentais.</div>
+    </div>
+
+    <div class="task">
+        <h3>Tarefa 4: Drift Detection</h3>
+        <div class="check-item"><input type="checkbox" checked disabled> <span>Drift detectado com sucesso (status
+                DRIFTED)</span></div>
+        <div class="evidence">[PDF - Seção 2: Print 5]</div>
+        <div class="check-item"><input type="checkbox" checked disabled> <span>Detalhes do Drift mostram a tag manual
+                extra</span></div>
+        <div class="evidence">[PDF - Seção 2: Print 5]</div>
+        <div class="expectativa">🎯 <b>Expectativa do Avaliador:</b> Confirmar se o aluno entende a importância da
+            governança e integridade entre o código e o estado real dos recursos.</div>
+    </div>
+
+    <div class="task">
+        <h3>Tarefa 5: Cross-Stack Ref</h3>
+        <div class="check-item"><input type="checkbox" checked disabled> <span>Exportação de SGId na stack de
+                infra</span></div>
+        <div class="evidence">[PDF - Seção 2: Print 6]</div>
+        <div class="check-item"><input type="checkbox" checked disabled> <span>Importação bem-sucedida via
+                !ImportValue</span></div>
+        <div class="evidence">[PDF - Seção 2: Print 8]</div>
+        <div class="expectativa">🎯 <b>Expectativa do Avaliador:</b> Validar o conhecimento em arquitetura modular e
+            desacoplamento de infraestrutura.</div>
+    </div>
+
+    <div class="task">
+        <h3>Tarefa 6: Rollback</h3>
+        <div class="check-item"><input type="checkbox" checked disabled> <span>Stack em ROLLBACK_COMPLETE após falha
+                induzida</span></div>
+        <div class="evidence">[PDF - Seção 2: Print 9]</div>
+        <div class="check-item"><input type="checkbox" checked disabled> <span>Diagnóstico do erro via Events (Status
+                Reason)</span></div>
+        <div class="evidence">[PDF - Seção 2: Print 9]</div>
+        <div class="expectativa">🎯 <b>Expectativa do Avaliador:</b> Testar a capacidade de troubleshooting e
+            entendimento dos mecanismos de auto-recuperação da AWS.</div>
+    </div>
+
+    <div class="task">
+        <h3>Tarefa 7: Cleanup</h3>
+        <div class="check-item"><input type="checkbox" checked disabled> <span>Todas as stacks deletadas
+                (DELETE_COMPLETE)</span></div>
+        <div class="evidence">[PDF - Seção 2: Prints 10 a 17]</div>
+        <div class="check-item"><input type="checkbox" checked disabled> <span>Instâncias EC2 em estado
+                Terminated</span></div>
+        <div class="evidence">[PDF - Seção 2: Print 17]</div>
+        <div class="expectativa">🎯 <b>Expectativa do Avaliador:</b> Garantir que o aluno pratica o encerramento correto
+            de recursos para controle de custos e organização.</div>
+    </div>
+
+    <div style="text-align: center; margin-top: 30px; border-top: 1px solid #2D3748; padding-top: 20px;">
+        <p class="validated">✅ TODOS OS CHECKPOINTS VALIDADOS COM SUCESSO</p>
+    </div>
+</body>
+
+</html>
