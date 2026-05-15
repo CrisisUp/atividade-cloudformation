@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Checklist de Avaliação — Terraform Lab</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0A0E1A;
+      color: #E2E8F0;
+      font-size: 13px;
+      line-height: 1.6
+    }
+
+    header {
+      background: #7B42BC;
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff
+    }
+
+    .sub {
+      font-size: 12px;
+      color: #D8B4FE;
+      margin-top: 2px
+    }
+
+    .badge {
+      background: #000;
+      color: #A855F7;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-left: auto
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 28px
+    }
+
+    .intro {
+      background: #111827;
+      border: 1px solid #2D3748;
+      border-left: 4px solid #7B42BC;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 28px
+    }
+
+    .intro h2 {
+      color: #A855F7;
+      margin-bottom: 8px;
+      font-size: 16px
+    }
+
+    .intro p {
+      color: #94A3B8;
+      font-size: 12px;
+      line-height: 1.7
+    }
+
+    .task {
+      background: #111827;
+      border: 1px solid #2D3748;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      overflow: hidden
+    }
+
+    .task-hdr {
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none
+    }
+
+    .task-num {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      flex-shrink: 0
+    }
+
+    .task-title {
+      font-weight: 700;
+      font-size: 13px;
+      flex: 1
+    }
+
+    .task-tag {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700
+    }
+
+    .task-body {
+      display: none;
+      padding: 16px 18px;
+      border-top: 1px solid #2D3748
+    }
+
+    .task.open .task-body {
+      display: block
+    }
+
+    code {
+      font-family: 'Consolas', monospace;
+      font-size: 11.5px;
+      background: #1C2333;
+      color: #F9A8D4;
+      padding: 1px 5px;
+      border-radius: 3px
+    }
+
+    .info {
+      background: #1a2233;
+      border: 1px solid #1E3A5F;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 11.5px;
+      color: #93C5FD;
+      margin: 8px 0;
+      line-height: 1.6
+    }
+
+    .warn {
+      background: #2d1a1a;
+      border: 1px solid #6B2020;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 11.5px;
+      color: #FCA5A5;
+      margin: 8px 0;
+      line-height: 1.6
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 5px 0;
+      font-size: 12px;
+      cursor: pointer;
+      line-height: 1.5
+    }
+
+    .check-item input {
+      width: 16px;
+      height: 16px;
+      accent-color: #7B42BC;
+      flex-shrink: 0;
+      margin-top: 1px
+    }
+
+    .check-item.checked {
+      color: #6B7280;
+      text-decoration: line-through
+    }
+
+    .checks {
+      margin-top: 14px;
+      border-top: 1px solid #2D3748;
+      padding-top: 12px
+    }
+
+    .checks-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #546E7A;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 6px
+    }
+
+    .progress {
+      background: #1C2333;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px
+    }
+
+    .prog-bar {
+      flex: 1;
+      height: 8px;
+      background: #2D3748;
+      border-radius: 4px;
+      overflow: hidden
+    }
+
+    .prog-fill {
+      height: 100%;
+      background: #7B42BC;
+      border-radius: 4px;
+      transition: width .3s
+    }
+
+    .prog-label {
+      font-size: 11px;
+      color: #94A3B8;
+      white-space: nowrap
+    }
+
+    .img-ref {
+      font-size: 10px;
+      color: #6B7280;
+      margin-left: 4px
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div>
+      <div class="brand">📋 Checklist de Avaliação &mdash; Terraform</div>
+      <div class="sub">Matriz de Validação de Evidências &middot; TechStock Lab</div>
+    </div>
+    <div class="badge">Relatório Final</div>
+  </header>
+  <div class="container">
+
+    <div class="progress">
+      <div class="prog-bar">
+        <div class="prog-fill" id="pf" style="width:0%"></div>
+      </div>
+      <div class="prog-label"><span id="pl">0% concluído</span></div>
+    </div>
+
+    <div class="intro">
+      <h2>Visão Geral da Validação</h2>
+      <p>Este documento cruza os requisitos da atividade com as evidências fotográficas capturadas no relatório final.
+        Cada checkpoint é validado por um ou mais prints de tela que comprovam a execução técnica.</p>
+    </div>
+
+    <!-- TAREFA 1 -->
+    <div class="task open" id="t1">
+      <div class="task-hdr" onclick="toggle('t1')">
+        <div class="task-num" style="background:#7B42BC;color:#fff">1</div>
+        <div class="task-title">Tarefa 1: Configuração do Ambiente — Setup do CloudShell e Instalação do Terraform</div>
+        <span class="task-tag" style="background:#EDE9FE;color:#5B21B6">Validado</span>
+      </div>
+      <div class="task-body">
+        <div class="info">
+          <strong>🎯 Expectativa do Avaliador:</strong> O foco aqui é validar o "Day 0". O avaliador busca confirmar se o aluno domina a preparação do ambiente, a gestão de identidades de segurança (LabRole) e o versionamento correto das ferramentas.
+        </div>
+        <div class="checks">
+          <div class="checks-label">Checkpoints & Evidências</div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span>CloudShell aberto e respondendo <span class="img-ref">[Imagem 13-05-2026 às 20.14.png]</span></span>
+          </div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span><code>aws sts get-caller-identity</code> retornou o Account ID e LabRole <span class="img-ref">[Imagem
+                13-05-2026 às 20.14.png]</span></span>
+          </div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span><code>terraform version</code> imprime a version sem erro <span class="img-ref">[Imagem 13-05-2026 às
+                20.14.png]</span></span>
+          </div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span>Diretório <code>~/techstock-tf-lab</code> criado <span class="img-ref">[Imagem 13-05-2026 às
+                20.16.png]</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAREFA 2 -->
+    <div class="task open" id="t2">
+      <div class="task-hdr" onclick="toggle('t2')">
+        <div class="task-num" style="background:#1D4ED8;color:#fff">2</div>
+        <div class="task-title">Tarefa 2: Workflow de Infraestrutura — Ciclo de Vida Init, Plan e Apply</div>
+        <span class="task-tag" style="background:#EFF6FF;color:#1E40AF">Validado</span>
+      </div>
+      <div class="task-body">
+        <div class="info">
+          <strong>🎯 Expectativa do Avaliador:</strong> Espera-se o domínio do workflow básico (Init/Plan/Apply). O avaliador observa se o aluno prova que o código resultou em infraestrutura funcional, acessível e devidamente orquestrada.
+        </div>
+        <div class="checks">
+          <div class="checks-label">Checkpoints & Evidências</div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span><code>terraform init</code> baixou o provider hashicorp/aws <span class="img-ref">[Imagem 13-05-2026
+                às 20.29.png]</span></span>
+          </div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span><code>terraform plan</code> mostrou 2 recursos para criar (SG e EC2) com sinal + <span
+                class="img-ref">[Imagem 13-05-2026 às 20.31.png]</span></span>
+          </div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span><code>terraform apply</code> criou os recursos com sucesso <span class="img-ref">[Imagem 13-05-2026 às
+                20.32.png]</span></span>
+          </div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span>Outputs mostram instance_id e ami_id_selecionada <span class="img-ref">[Imagem 13-05-2026 às
+                20.38.png]</span></span>
+          </div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span>EC2 visível no Console com tag ManagedBy: Terraform <span class="img-ref">[Imagem 13-05-2026 às
+                20.34.png, Imagem 13-05-2026 às 20.35.png]</span></span>
+          </div>
+          <div style="font-size:11px; color:#94A3B8; margin-top:4px; padding-left:24px">A página de boas-vindas do Nginx
+            comprova que a EC2 está ativa e acessível.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAREFA 3 -->
+    <div class="task" id="t3">
+      <div class="task-hdr" onclick="toggle('t3')">
+        <div class="task-num" style="background:#16A34A;color:#fff">3</div>
+        <div class="task-title">Tarefa 3: Governança com o Plan — Análise de Mudanças In-Place vs. Replace</div>
+        <span class="task-tag" style="background:#F0FDF4;color:#14532D">Validado Parcialmente</span>
+      </div>
+      <div class="task-body">
+        <div class="info">
+          <strong>🎯 Expectativa do Avaliador:</strong> O foco é a <strong>Gestão de Risco</strong>. O avaliador observa se o aluno consegue distinguir entre mudanças seguras (In-place) e aquelas que causam destruição e downtime (Replace).
+        </div>
+        <div class="checks">
+          <div class="checks-label">Checkpoints & Evidências</div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span>Plan de tag nova mostrou <code>~ 1 to change</code> sem destroy <span class="img-ref">[Imagem
+                13-05-2026 às 20.44.png]</span></span>
+          </div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span>Plan de nome do SG mostrou <code>-/+ replace</code> e <code>forces replacement</code> <span
+                class="img-ref">[Imagem 13-05-2026 às 20.48.png]</span></span>
+          </div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span>Entende a diferença entre update in-place e replace <span class="img-ref">[Imagem 13-05-2026 às
+                20.44.png, Imagem 13-05-2026 às 20.48.png]</span></span>
+          </div>
+          <div class="check-item" onclick="check(this)">
+            <input type="checkbox">
+            <span>Nome do SG revertido: plan mostra <code>No changes</code></span>
+          </div>
+          <div class="warn">
+            <strong>⚠️ Evidência Ausente:</strong> Não há captura de tela para este checkpoint.<br>
+            <span style="color:#FCA5A5; font-size:11px; display:block; margin-top:4px;">
+              <strong>O que era esperado:</strong> Um print do terminal rodando <code>terraform plan</code> após reverter o nome do SG no código, mostrando a mensagem de sucesso "No changes. Your infrastructure matches the configuration." Isso provaria o entendimento do conceito de idempotência.
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAREFA 4 -->
+    <div class="task" id="t4">
+      <div class="task-hdr" onclick="toggle('t4')">
+        <div class="task-num" style="background:#0369A1;color:#fff">4</div>
+        <div class="task-title">Tarefa 4: Gestão de Estado e Drift — Sincronização e Detecção de Desvios</div>
+        <span class="task-tag" style="background:#E0F2FE;color:#0C4A6E">Validado</span>
+      </div>
+      <div class="task-body">
+        <div class="info">
+          <strong>🎯 Expectativa do Avaliador:</strong> Aqui avalia-se a maestria sobre o State (o cérebro do Terraform). O objetivo é provar que o aluno sabe lidar com desvios manuais (drift) e recuperar o controle de recursos órfãos via Import.
+        </div>
+        <div class="checks">
+          <div class="checks-label">Checkpoints & Evidências</div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span><code>terraform state list</code> mostra os 3 recursos gerenciados <span class="img-ref">[Imagem
+                13-05-2026 às 20.52.png]</span></span>
+          </div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span>Tag adicionada manualmente foi detectada no plan como mudança a remover <span class="img-ref">[Imagem
+                13-05-2026 às 20.31.png]</span></span>
+          </div>
+          <div style="font-size:11px; color:#94A3B8; margin-top:4px; padding-left:24px">A detecção de drift foi
+            evidenciada durante o workflow operacional.</div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span><code>terraform state rm</code> removeu o SG do state sem deletar da AWS <span class="img-ref">[Imagem
+                13-05-2026 às 20.56.png]</span></span>
+          </div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span><code>terraform import</code> re-adicionou o SG ao state <span class="img-ref">[Imagem 13-05-2026 às
+                20.59.png]</span></span>
+          </div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span>Plan voltou a mostrar <code>No changes</code> <span class="img-ref">[Imagem 13-05-2026 às
+                20.59.png]</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAREFA 5 -->
+    <div class="task" id="t5">
+      <div class="task-hdr" onclick="toggle('t5')">
+        <div class="task-num" style="background:#B45309;color:#fff">5</div>
+        <div class="task-title">Tarefa 5: Parametrização com Variáveis — Uso de .tfvars e Dados Sensíveis</div>
+        <span class="task-tag" style="background:#FEF3C7;color:#92400E">Validado</span>
+      </div>
+      <div class="task-body">
+        <div class="info">
+          <strong>🎯 Expectativa do Avaliador:</strong> O avaliador observa a capacidade de abstração e boas práticas de segurança, garantindo a separação entre lógica e dados (.tfvars) e a proteção de informações sensíveis.
+        </div>
+        <div class="checks">
+          <div class="checks-label">Checkpoints & Evidências</div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span>lab.tfvars criado com instance_type e environment <span class="img-ref">[Imagem 13-05-2026 às
+                21.01.png]</span></span>
+          </div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span><code>terraform plan -var-file="dev.tfvars"</code> mostra t2.small no plan <span
+                class="img-ref">[Imagem 13-05-2026 às 21.01.png]</span></span>
+          </div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span>Variável sensível aparece como <code>(sensitive value)</code> no plan <span class="img-ref">[Imagem
+                13-05-2026 às 21.03.png]</span></span>
+          </div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span><code>terraform console</code> retornou <code>local.full_name = "techstock-lab"</code> <span
+                class="img-ref">[Imagem 13-05-2026 às 21.04.png]</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAREFA 6 -->
+    <div class="task" id="t6">
+      <div class="task-hdr" onclick="toggle('t6')">
+        <div class="task-num" style="background:#7C3AED;color:#fff">6</div>
+        <div class="task-title">Tarefa 6: Escalabilidade com Loops — Automação de Recursos via for_each</div>
+        <span class="task-tag" style="background:#EDE9FE;color:#5B21B6">Validado Parcialmente</span>
+      </div>
+      <div class="task-body">
+        <div class="info">
+          <strong>🎯 Expectativa do Avaliador:</strong> O foco é a <strong>Eficiência e Padronização</strong>. Avalia-se se o aluno sabe usar loops para escalar a infraestrutura mantendo a consistência e evitando a repetição de código (DRY).
+        </div>
+        <div class="checks">
+          <div class="checks-label">Checkpoints & Evidências</div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span>Plan mostrou 3 SGs para criar com nomes corretos <span class="img-ref">[Imagem 13-05-2026 às
+                21.06.png, Imagem 13-05-2026 às 21.07.png]</span></span>
+          </div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span>Apply criou os 3 SGs com <code>Resources: 3 added</code> <span class="img-ref">[Imagem 13-05-2026 às
+                21.11.png]</span></span>
+          </div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span>State list mostra os recursos no formato <code>aws_security_group.app_sgs["backend"]</code> <span
+                class="img-ref">[Imagem 13-05-2026 às 21.12.png]</span></span>
+          </div>
+          <div class="check-item" onclick="check(this)">
+            <input type="checkbox">
+            <span>SGs visíveis no Console EC2 → Security Groups</span>
+          </div>
+          <div class="warn">
+            <strong>⚠️ Evidência Ausente:</strong> Não há captura de tela para este checkpoint.<br>
+            <span style="color:#FCA5A5; font-size:11px; display:block; margin-top:4px;">
+              <strong>O que era esperado:</strong> Uma captura do painel da AWS (navegador) navegando em EC2 &gt; Security Groups, mostrando os três grupos criados pelo loop (backend, frontend, monitoring). Isso validaria que a execução no terminal refletiu corretamente na interface gráfica.
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAREFA 7 -->
+    <div class="task" id="t7">
+      <div class="task-hdr" onclick="toggle('t7')">
+        <div class="task-num" style="background:#C0392B;color:#fff">7</div>
+        <div class="task-title">Tarefa 7: Encerramento e Higiene — Destruição Segura da Infraestrutura</div>
+        <span class="task-tag" style="background:#FEF2F2;color:#991B1B">Cleanup</span>
+      </div>
+      <div class="task-body">
+        <div class="info">
+          <strong>🎯 Expectativa do Avaliador:</strong> O checkpoint final avalia a <strong>Higiene Operacional e FinOps</strong>. O aluno deve provar responsabilidade financeira ao garantir que nenhum recurso ficou ativo gerando custos desnecessários.
+        </div>
+        <div class="checks">
+          <div class="checks-label">Checkpoints & Evidências</div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span>Plan destroy mostrou todos os recursos antes de destruir <span class="img-ref">[Imagem 13-05-2026 às
+                21.13.png, Imagem 13-05-2026 às 21.14.png]</span></span>
+          </div>
+          <div class="check-item checked" onclick="check(this)">
+            <input type="checkbox" checked>
+            <span>Destroy completou com sucesso <span class="img-ref">[Imagem 13-05-2026 às 21.17.png]</span></span>
+          </div>
+          <div class="check-item" onclick="check(this)">
+            <input type="checkbox">
+            <span>EC2 em estado Terminated na Console</span>
+          </div>
+          <div class="warn">
+            <strong>⚠️ Evidência Ausente:</strong> Não há captura de tela para este checkpoint.<br>
+            <span style="color:#FCA5A5; font-size:11px; display:block; margin-top:4px;">
+              <strong>O que era esperado:</strong> Uma captura do Console AWS (EC2 &gt; Instances) mostrando a instância com o status "Terminated". Isso é essencial para provar que a máquina foi efetivamente desligada e não gerará mais custos.
+            </span>
+          </div>
+          <div class="check-item" onclick="check(this)">
+            <input type="checkbox">
+            <span>SGs removidos da Console</span>
+          </div>
+          <div class="warn">
+            <strong>⚠️ Evidência Ausente:</strong> Não há captura de tela para este checkpoint.<br>
+            <span style="color:#FCA5A5; font-size:11px; display:block; margin-top:4px;">
+              <strong>O que era esperado:</strong> Uma captura do Console AWS (EC2 &gt; Security Groups) mostrando a lista limpa, sem os SGs criados no laboratório. Isso comprova a limpeza completa das regras de rede.
+            </span>
+          </div>
+          <div class="check-item" onclick="check(this)">
+            <input type="checkbox">
+            <span><code>terraform state list</code> retorna vazio</span>
+          </div>
+          <div class="warn">
+            <strong>⚠️ Evidência Ausente:</strong> Não há captura de tela para este checkpoint.<br>
+            <span style="color:#FCA5A5; font-size:11px; display:block; margin-top:4px;">
+              <strong>O que era esperado:</strong> Um print final do terminal executando <code>terraform state list</code> e não retornando nenhuma saída. Isso provaria que o arquivo de estado local "esqueceu" a infraestrutura de forma síncrona com a nuvem.
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script>
+    function toggle(id) { const t = document.getElementById(id); t.classList.toggle('open'); }
+    function check(el) { el.classList.toggle('checked'); el.querySelector('input').checked = el.classList.contains('checked'); updateProg(); }
+    function updateProg() {
+      const checks = document.querySelectorAll('.check-item.checked').length;
+      const total = document.querySelectorAll('.check-item').length;
+      const pct = total ? Math.round(checks / total * 100) : 0;
+      document.getElementById('pf').style.width = pct + '%';
+      document.getElementById('pl').textContent = pct + '% concluído (' + checks + '/' + total + ')';
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      updateProg();
+    });
+  </script>
+</body>
+
+</html>

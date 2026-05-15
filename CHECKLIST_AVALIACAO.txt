@@ -1,0 +1,168 @@
+CHECKLIST DE AVALIAÇÃO — TERRAFORM LAB
+
+--------------------------------------------------
+TAREFA 1: Configuração do Ambiente — Setup do CloudShell e Instalação do Terraform
+--------------------------------------------------
+EXPECTATIVA DO AVALIADOR:
+O foco aqui é validar o "Day 0". O avaliador busca confirmar se o aluno domina a preparação do ambiente, a gestão de identidades de segurança (LabRole) e o versionamento correto das ferramentas.
+
+Checkpoints:
+[X] CloudShell aberto e respondendo
+    Evidência: [Imagem 13-05-2026 às 20.14.png]
+
+[X] aws sts get-caller-identity retornou o Account ID e LabRole
+    Evidência: [Imagem 13-05-2026 às 20.14.png]
+
+[X] terraform version imprime a version sem erro
+    Evidência: [Imagem 13-05-2026 às 20.14.png]
+
+[X] Diretório ~/techstock-tf-lab criado
+    Evidência: [Imagem 13-05-2026 às 20.16.png]
+
+--------------------------------------------------
+TAREFA 2: Workflow de Infraestrutura — Ciclo de Vida Init, Plan e Apply
+--------------------------------------------------
+EXPECTATIVA DO AVALIADOR:
+Espera-se o domínio do workflow básico (Init/Plan/Apply). O avaliador observa se o aluno prova que o código resultou em infraestrutura funcional, acessível e devidamente orquestrada.
+
+Checkpoints:
+[X] terraform init baixou o provider hashicorp/aws
+    Evidência: [Imagem 13-05-2026 às 20.29.png]
+
+[X] terraform plan mostrou 2 recursos para criar (SG e EC2) com sinal +
+    Evidência: [Imagem 13-05-2026 às 20.31.png]
+
+[X] terraform apply criou os recursos com sucesso
+    Evidência: [Imagem 13-05-2026 às 20.32.png]
+
+[X] Outputs mostram instance_id e ami_id_selecionada
+    Evidência: [Imagem 13-05-2026 às 20.38.png]
+
+[X] EC2 visível no Console com tag ManagedBy: Terraform
+    Evidência: [Imagem 13-05-2026 às 20.34.png, Imagem 13-05-2026 às 20.35.png]
+
+--------------------------------------------------
+TAREFA 3: Governança com o Plan — Análise de Mudanças In-Place vs. Replace
+--------------------------------------------------
+EXPECTATIVA DO AVALIADOR:
+O foco é a Gestão de Risco. O avaliador observa se o aluno consegue distinguir entre mudanças seguras (In-place) e aquelas que causam destruição e downtime (Replace).
+
+Checkpoints:
+[X] Plan de tag nova mostrou ~ 1 to change sem destroy
+    Evidência: [Imagem 13-05-2026 às 20.44.png]
+
+[X] Plan de nome do SG mostrou -/+ replace e forces replacement
+    Evidência: [Imagem 13-05-2026 às 20.48.png]
+
+[X] Entende a diferença entre update in-place e replace
+    Evidência: [Imagem 13-05-2026 às 20.44.png, Imagem 13-05-2026 às 20.48.png]
+
+[ ] Nome do SG revertido: plan mostra No changes
+    ALERTA DE EVIDÊNCIA AUSENTE:
+    O que era esperado: Um print do terminal rodando terraform plan após reverter o nome do SG no código, mostrando a mensagem de sucesso "No changes. Your infrastructure matches the configuration." Isso provaria o entendimento do conceito de idempotência.
+
+--------------------------------------------------
+TAREFA 4: Gestão de Estado e Drift — Sincronização e Detecção de Desvios
+--------------------------------------------------
+EXPECTATIVA DO AVALIADOR:
+Aqui avalia-se a maestria sobre o State (o cérebro do Terraform). O objetivo é provar que o aluno sabe lidar com desvios manuais (drift) e recuperar o controle de recursos órfãos via Import.
+
+Checkpoints:
+[X] terraform state list mostra os 3 recursos gerenciados
+    Evidência: [Imagem 13-05-2026 às 20.52.png]
+
+[X] Tag adicionada manualmente foi detectada no plan como mudança a remover
+    Evidência: [Imagem 13-05-2026 às 20.31.png]
+
+[X] terraform state rm removeu o SG do state sem deletar da AWS
+    Evidência: [Imagem 13-05-2026 às 20.56.png]
+
+[X] terraform import re-adicionou o SG ao state
+    Evidência: [Imagem 13-05-2026 às 20.59.png]
+
+[X] Plan voltou a mostrar No changes
+    Evidência: [Imagem 13-05-2026 às 20.59.png]
+
+--------------------------------------------------
+TAREFA 5: Parametrização com Variáveis — Uso de .tfvars e Dados Sensíveis
+--------------------------------------------------
+EXPECTATIVA DO AVALIADOR:
+O avaliador observa a capacidade de abstração e boas práticas de segurança, garantindo a separação entre lógica e dados (.tfvars) e a proteção de informações sensíveis.
+
+Checkpoints:
+[X] lab.tfvars criado com instance_type e environment
+    Evidência: [Imagem 13-05-2026 às 21.01.png]
+
+[X] terraform plan -var-file="dev.tfvars" mostra t2.small no plan
+    Evidência: [Imagem 13-05-2026 às 21.01.png]
+
+[X] Variável sensível aparece como (sensitive value) no plan
+    Evidência: [Imagem 13-05-2026 às 21.03.png]
+
+[X] terraform console retornou local.full_name = "techstock-lab"
+    Evidência: [Imagem 13-05-2026 às 21.04.png]
+
+--------------------------------------------------
+TAREFA 6: Escalabilidade com Loops — Automação de Recursos via for_each
+--------------------------------------------------
+EXPECTATIVA DO AVALIADOR:
+O foco é a Eficiência e Padronização. Avalia-se se o aluno sabe usar loops para escalar a infraestrutura mantendo a consistência e evitando a repetição de código (DRY).
+
+Checkpoints:
+[X] Plan mostrou 3 SGs para criar com nomes corretos
+    Evidência: [Imagem 13-05-2026 às 21.06.png, Imagem 13-05-2026 às 21.07.png]
+
+[X] Apply criou os 3 SGs com Resources: 3 added
+    Evidência: [Imagem 13-05-2026 às 21.11.png]
+
+[X] State list mostra os recursos no formato aws_security_group.app_sgs["backend"]
+    Evidência: [Imagem 13-05-2026 às 21.12.png]
+
+[ ] SGs visíveis no Console EC2 → Security Groups
+    ALERTA DE EVIDÊNCIA AUSENTE:
+    O que era esperado: Uma captura do painel da AWS (navegador) navegando em EC2 > Security Groups, mostrando os três grupos criados pelo loop (backend, frontend, monitoring). Isso validaria que a execução no terminal refletiu corretamente na interface gráfica.
+
+--------------------------------------------------
+TAREFA 7: Encerramento e Higiene — Destruição Segura da Infraestrutura
+--------------------------------------------------
+EXPECTATIVA DO AVALIADOR:
+O checkpoint final avalia a Higiene Operacional e FinOps. O aluno deve provar responsabilidade financeira ao garantir que nenhum recurso ficou ativo gerando custos desnecessários.
+
+Checkpoints:
+[X] Plan destroy mostrou todos os recursos antes de destruir
+    Evidência: [Imagem 13-05-2026 às 21.13.png, Imagem 13-05-2026 às 21.14.png]
+
+[X] Destroy completou com sucesso
+    Evidência: [Imagem 13-05-2026 às 21.17.png]
+
+[ ] EC2 em estado Terminated na Console
+    ALERTA DE EVIDÊNCIA AUSENTE:
+    O que era esperado: Uma captura do Console AWS (EC2 > Instances) mostrando a instância com o status "Terminated". Isso é essencial para provar que a máquina foi efetivamente desligada e não gerará mais custos.
+
+[ ] SGs removidos da Console
+    ALERTA DE EVIDÊNCIA AUSENTE:
+    O que era esperado: Uma captura do Console AWS (EC2 > Security Groups) mostrando a lista limpa, sem os SGs criados no laboratório. Isso comprova a limpeza completa das regras de rede.
+
+[ ] terraform state list retorna vazio
+    ALERTA DE EVIDÊNCIA AUSENTE:
+    O que era esperado: Um print final do terminal executando terraform state list e não retornando nenhuma saída. Isso provaria que o arquivo de estado local "esqueceu" a infraestrutura de forma síncrona com a nuvem.
+
+--------------------------------------------------
+EVIDÊNCIAS COMPLEMENTARES E DIFERENCIAL TÉCNICO
+--------------------------------------------------
+Algumas imagens capturadas durante o laboratório não foram utilizadas como evidências diretas para os checkpoints do professor, mas servem como "Evidências de Processo" no relatório final:
+
+1. Documentação de Codificação (O "Como foi feito"):
+   - Imagens: [Imagem 13-05-2026 às 20.24.png], [Imagem 13-05-2026 às 20.26.png], [Imagem 13-05-2026 às 20.27.png], [Imagem 13-05-2026 às 21.05.png]
+   - Propósito: Provam a habilidade técnica na criação dos arquivos de configuração (.tf) via terminal, demonstrando domínio de comandos como cat e Heredocs.
+
+2. Monitoramento de Fluxo e Logs de Execução:
+   - Imagens: [Imagem 13-05-2026 às 20.34.png], [Imagem 13-05-2026 às 21.09.png], [Imagem 13-05-2026 às 21.10.png], [Imagem 13-05-2026 às 21.14.png], [Imagem 13-05-2026 às 21.15.png], [Imagem 13-05-2026 às 21.16.png]
+   - Propósito: Registram o acompanhamento em tempo real do ciclo de vida dos recursos ("Still creating...", "Still destroying..."). Demonstram a atenção do engenheiro aos detalhes da orquestração da nuvem.
+
+3. Validação de Valor e Experiência do Usuário:
+   - Imagem: [Imagem 13-05-2026 às 20.35.png]
+   - Propósito: Prova definitiva de que a infraestrutura não apenas "existe", mas está funcional, mostrando o servidor Nginx acessível via navegador.
+
+Embora estas imagens não sejam requeridas para os checkboxes básicos, elas estão presentes nos relatórios finais em HTML/Markdown para garantir a total rastreabilidade e transparência do projeto.
+

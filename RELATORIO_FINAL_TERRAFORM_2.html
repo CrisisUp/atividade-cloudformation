@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Relatório Final — Terraform AWS Lab</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #0A0E1A;
+      color: #E2E8F0;
+      font-size: 13px;
+      line-height: 1.6
+    }
+
+    header {
+      background: #7B42BC;
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
+
+    .brand {
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff
+    }
+
+    .sub {
+      font-size: 12px;
+      color: #D8B4FE;
+      margin-top: 2px
+    }
+
+    .badge {
+      background: #000;
+      color: #A855F7;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-left: auto
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 28px
+    }
+
+    .intro {
+      background: #111827;
+      border: 1px solid #2D3748;
+      border-left: 4px solid #7B42BC;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 28px
+    }
+
+    .intro h2 {
+      color: #A855F7;
+      margin-bottom: 8px;
+      font-size: 16px
+    }
+
+    .intro p {
+      color: #94A3B8;
+      font-size: 12px;
+      line-height: 1.7
+    }
+
+    .task {
+      background: #111827;
+      border: 1px solid #2D3748;
+      border-radius: 10px;
+      margin-bottom: 16px;
+      overflow: hidden
+    }
+
+    .task-hdr {
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none
+    }
+
+    .task-num {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      flex-shrink: 0
+    }
+
+    .task-title {
+      font-weight: 700;
+      font-size: 13px;
+      flex: 1
+    }
+
+    .task-tag {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 700
+    }
+
+    .task-body {
+      display: none;
+      padding: 16px 18px;
+      border-top: 1px solid #2D3748
+    }
+
+    .task.open .task-body {
+      display: block
+    }
+
+    .step-box {
+      background: #0D1117;
+      border-radius: 8px;
+      padding: 14px;
+      margin: 10px 0
+    }
+
+    .step-box h4 {
+      color: #A855F7;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #2D3748;
+      padding-bottom: 5px;
+    }
+
+    .evidence-img {
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid #2D3748;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+
+    .explanation-list {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 20px
+    }
+
+    .explanation-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 12px;
+      line-height: 1.6;
+      color: #CBD5E1
+    }
+
+    .explanation-item strong {
+      color: #A855F7;
+      min-width: 180px;
+      display: inline-block
+    }
+
+    .info {
+      background: #1a2233;
+      border: 1px solid #1E3A5F;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 11.5px;
+      color: #93C5FD;
+      margin: 8px 0;
+      line-height: 1.6
+    }
+
+    .warn {
+      background: #2d1a1a;
+      border: 1px solid #6B2020;
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 11.5px;
+      color: #FCA5A5;
+      margin: 8px 0;
+      line-height: 1.6
+    }
+
+    .concept {
+      background: #1a0e2e;
+      border: 1px solid #4C1D95;
+      border-left: 4px solid #7B42BC;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin: 8px 0
+    }
+
+    .concept-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: #A855F7;
+      margin-bottom: 4px
+    }
+
+    .concept-body {
+      font-size: 11.5px;
+      color: #C4B5FD;
+      line-height: 1.6
+    }
+
+    .progress {
+      background: #1C2333;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px
+    }
+
+    .prog-bar {
+      flex: 1;
+      height: 8px;
+      background: #2D3748;
+      border-radius: 4px;
+      overflow: hidden
+    }
+
+    .prog-fill {
+      height: 100%;
+      background: #7B42BC;
+      border-radius: 4px;
+      transition: width .3s
+    }
+
+    .prog-label {
+      font-size: 11px;
+      color: #94A3B8;
+      white-space: nowrap
+    }
+
+    .checks {
+      margin-top: 20px;
+      border-top: 1px solid #2D3748;
+      padding-top: 12px
+    }
+
+    .checks-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: #546E7A;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin-bottom: 6px
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 5px 0;
+      font-size: 12px;
+      cursor: pointer;
+      line-height: 1.5
+    }
+
+    .check-item input {
+      width: 16px;
+      height: 16px;
+      accent-color: #7B42BC;
+      flex-shrink: 0;
+      margin-top: 1px
+    }
+
+    .check-item.checked {
+      color: #6B7280;
+      text-decoration: line-through
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div>
+      <div class="brand">🟣 Relatório Final &mdash; Atividade Terraform</div>
+      <div class="sub">Registro de Evidências e Documentação Técnica</div>
+    </div>
+    <div class="badge">CONCLUÍDO</div>
+  </header>
+  <div class="container">
+
+    <div class="progress">
+      <div class="prog-bar">
+        <div class="prog-fill" id="pf" style="width:0%"></div>
+      </div>
+      <div class="prog-label"><span id="pl">0% concluído</span></div>
+    </div>
+
+    <div class="intro">
+      <h2>Visão Geral da Atividade</h2>
+      <p>Este relatório documenta a execução da atividade prática de Terraform no ambiente AWS Learner Lab. Foram
+        percorridas etapas de configuração inicial, workflow básico (Init, Plan, Apply), evolução de infraestrutura,
+        gestão de estado, uso de variáveis avançadas, loops para escalabilidade e o processo final de destruição de
+        recursos.</p>
+    </div>
+
+    <!-- TAREFA 1 -->
+    <div class="task open" id="t1">
+      <div class="task-hdr" onclick="toggle('t1')">
+        <div class="task-num" style="background:#7B42BC;color:#fff">1</div>
+        <div class="task-title">Configuração do Ambiente</div>
+        <span class="task-tag" style="background:#EDE9FE;color:#5B21B6">Setup</span>
+      </div>
+      <div class="task-body">
+
+        <div class="step-box">
+          <h4>Documentação — Instalação</h4>
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 20.14.png" class="evidence-img"
+            alt="Instalação do Terraform">
+          <div class="explanation-list">
+            <div class="explanation-item"><strong>1. Instalação de utilitários:</strong> O comando
+              <code>sudo yum install -y yum-utils</code> instala um conjunto de ferramentas que estendem as
+              funcionalidades do gerenciador de pacotes padrão (YUM).
+            </div>
+            <div class="explanation-item"><strong>2. Configuração do Repositório:</strong> Com
+              <code>sudo yum-config-manager --add-repo ...</code>, incluímos a fonte de software oficial da HashiCorp na
+              lista de confiança do Linux.
+            </div>
+            <div class="explanation-item"><strong>3. Instalação do Terraform:</strong> O comando
+              <code>sudo yum install -y terraform</code> realiza o download e a instalação física do binário.
+            </div>
+            <div class="explanation-item"><strong>4. Verificação:</strong> <code>terraform version</code> confirma que o
+              binário está funcional. Versão observada: v1.15.3.</div>
+          </div>
+        </div>
+
+        <div class="step-box">
+          <h4>Documentação — Workspace</h4>
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 20.16.png" class="evidence-img"
+            alt="Workspace do Projeto">
+          <div class="explanation-list">
+            <div class="explanation-item"><strong>1. Criação de Diretório:</strong> Uso de
+              <code>mkdir -p ~/techstock-tf-lab && cd ~/techstock-tf-lab</code> para organizar os arquivos do projeto.
+            </div>
+            <div class="explanation-item"><strong>2. Listagem de Arquivos:</strong> O diretório contém arquivos
+              fundamentais: <code>provider.tf</code>, <code>main.tf</code>, <code>variables.tf</code> e
+              <code>outputs.tf</code>.
+            </div>
+            <div class="explanation-item"><strong>3. Pasta .terraform:</strong> Criada durante a inicialização para
+              armazenar plugins dos provedores.</div>
+            <div class="explanation-item"><strong>4. Arquivo de Estado:</strong> Presença do
+              <code>terraform.tfstate</code>, o banco de dados que rastreia a infraestrutura.
+            </div>
+          </div>
+        </div>
+
+        <div class="step-box">
+          <h4>Documentação — Provedor</h4>
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 20.24.png" class="evidence-img"
+            alt="Configuração do Provedor">
+          <div class="explanation-list">
+            <div class="explanation-item"><strong>1. Técnica Heredoc:</strong> Uso de
+              <code>cat > provider.tf << 'EOF'</code> para escrever o arquivo de configuração via terminal.
+            </div>
+            <div class="explanation-item"><strong>2. Requisitos de Versão:</strong> Definição de
+              <code>required_version = ">= 1.6.0"</code> para garantir compatibilidade.
+            </div>
+            <div class="explanation-item"><strong>3. Bloco AWS:</strong> Configuração da região <code>us-east-1</code> e
+              versão do provider <code>~> 5.0</code>.</div>
+            <div class="explanation-item"><strong>4. Segurança:</strong> As credenciais não estão no código, utilizando
+              o perfil LabRole injetado pelo ambiente.</div>
+          </div>
+        </div>
+
+        <div class="step-box">
+          <h4>Documentação — Recursos e Inicialização</h4>
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 20.26.png" class="evidence-img"
+            alt="Definição de Recursos">
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 20.29.png" class="evidence-img" alt="Terraform Init">
+          <div class="explanation-list">
+            <div class="explanation-item"><strong>1. Data Sources:</strong> Localização dinâmica da AMI Amazon Linux
+              2023 mais recente.</div>
+            <div class="explanation-item"><strong>2. Security Group:</strong> Definição das regras de firewall para a
+              porta 80.</div>
+            <div class="explanation-item"><strong>3. Dependências:</strong> Referência dinâmica
+              <code>vpc_security_group_ids = [aws_security_group.lab.id]</code>.
+            </div>
+            <div class="explanation-item"><strong>4. Init:</strong> <code>terraform init</code> prepara o diretório e
+              baixa os plugins necessários.</div>
+          </div>
+        </div>
+
+        <div class="checks">
+          <div class="checks-label">Checklist de Setup</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Terraform instalado com sucesso</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Workspace estruturado com arquivos .tf
+          </div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Provider AWS configurado</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> <code>terraform init</code> concluído
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAREFA 2 -->
+    <div class="task" id="t2">
+      <div class="task-hdr" onclick="toggle('t2')">
+        <div class="task-num" style="background:#1D4ED8;color:#fff">2</div>
+        <div class="task-title">Workflow (Plan & Apply)</div>
+        <span class="task-tag" style="background:#EFF6FF;color:#1E40AF">Ciclo de Vida</span>
+      </div>
+      <div class="task-body">
+
+        <div class="step-box">
+          <h4>Documentação — Validação e Plano Inicial</h4>
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 20.31.png" class="evidence-img"
+            alt="Terraform Validate e Plan">
+          <div class="explanation-list">
+            <div class="explanation-item"><strong>1. Validação Sintática:</strong> <code>terraform validate</code>
+              confirma que o código HCL está estruturalmente correto.</div>
+            <div class="explanation-item"><strong>2. Formatação:</strong> <code>terraform fmt</code> padroniza a
+              indentação dos arquivos.</div>
+            <div class="explanation-item"><strong>3. Detecção de Desvios:</strong> No plano, o Terraform detectou que
+              uma instância foi removida manualmente da AWS e planejou sua recriação.</div>
+            <div class="explanation-item"><strong>4. Símbolo (+):</strong> Indica que novos recursos serão criados para
+              atingir o estado desejado.</div>
+          </div>
+        </div>
+
+        <div class="step-box">
+          <h4>Documentação — Execução do Apply</h4>
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 20.32.png" class="evidence-img" alt="Terraform Apply">
+          <div class="explanation-list">
+            <div class="explanation-item"><strong>1. Provisionamento:</strong> Envio das ordens para a API da AWS para
+              criar SG e EC2.</div>
+            <div class="explanation-item"><strong>2. Orquestração:</strong> Criação automática do Security Group antes
+              da instância devido à dependência de rede.</div>
+            <div class="explanation-item"><strong>3. Outputs:</strong> Impressão imediata do ID da instância e do SG
+              após a conclusão.</div>
+          </div>
+        </div>
+
+        <div class="step-box">
+          <h4>Resultados e Verificação</h4>
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 20.34.png" class="evidence-img" alt="Página Nginx">
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 20.38.png" class="evidence-img" alt="Terraform Output">
+          <div class="explanation-list">
+            <div class="explanation-item"><strong>1. User Data:</strong> Automatização da instalação do Nginx através do
+              script de inicialização.</div>
+            <div class="explanation-item"><strong>2. Conectividade:</strong> Sucesso no acesso à página "Welcome to
+              nginx!", validando as regras do SG.</div>
+            <div class="explanation-item"><strong>3. Gestão de Outputs:</strong> Uso do comando
+              <code>terraform output</code> para consultas rápidas de metadados.
+            </div>
+          </div>
+        </div>
+
+        <div class="checks">
+          <div class="checks-label">Checklist de Workflow</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> <code>terraform validate</code> retornou
+            Sucesso</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Plano de execução revisado</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> <code>terraform apply</code> concluído
+          </div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Servidor Nginx acessível via HTTP</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAREFA 3 -->
+    <div class="task" id="t3">
+      <div class="task-hdr" onclick="toggle('t3')">
+        <div class="task-num" style="background:#16A34A;color:#fff">3</div>
+        <div class="task-title">Evolução de Infraestrutura</div>
+        <span class="task-tag" style="background:#F0FDF4;color:#14532D">Mudanças</span>
+      </div>
+      <div class="task-body">
+
+        <div class="step-box">
+          <h4>Documentação — Update In-Place vs Replace</h4>
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 20.44.png" class="evidence-img" alt="Update In-Place">
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 20.48.png" class="evidence-img"
+            alt="Forces Replacement">
+          <div class="explanation-list">
+            <div class="explanation-item"><strong>1. Update In-Place (~):</strong> Adição de tags permitiu a atualização
+              sem downtime do recurso.</div>
+            <div class="explanation-item"><strong>2. Replace (-/+):</strong> A alteração do nome do Security Group
+              forçou a destruição e recriação do mesmo.</div>
+            <div class="explanation-item"><strong>3. Efeito Cascata:</strong> Como a EC2 dependia do SG, ela também foi
+              marcada para atualização/substituição.</div>
+            <div class="explanation-item"><strong>4. Gestão de Risco:</strong> O plano alertou sobre a destruição
+              iminente antes da execução do apply.</div>
+          </div>
+        </div>
+
+        <div class="step-box">
+          <h4>Aplicando Evoluções</h4>
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 20.49.png" class="evidence-img" alt="Apply Evolução">
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 20.50.png" class="evidence-img"
+            alt="Verificação de Tags">
+          <div class="explanation-list">
+            <div class="explanation-item"><strong>1. Execução:</strong> O apply atualizou o estado com a nova tag
+              <code>Owner: aluno-lab</code>.
+            </div>
+            <div class="explanation-item"><strong>2. Validação:</strong> Verificação dos metadados via CLI para
+              confirmar a aplicação da mudança.</div>
+            <div class="explanation-item"><strong>3. Integridade:</strong> O arquivo .tfstate foi sincronizado com as
+              novas definições de tags.</div>
+          </div>
+        </div>
+
+        <div class="checks">
+          <div class="checks-label">Checklist de Evolução</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Identificado símbolo de update in-place
+            (~)</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Identificado símbolo de replacement
+            (-/+)</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Tags aplicadas e verificadas</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAREFA 4 -->
+    <div class="task" id="t4">
+      <div class="task-hdr" onclick="toggle('t4')">
+        <div class="task-num" style="background:#0369A1;color:#fff">4</div>
+        <div class="task-title">Gestão de Estado (State)</div>
+        <span class="task-tag" style="background:#E0F2FE;color:#0C4A6E">Terraform State</span>
+      </div>
+      <div class="task-body">
+
+        <div class="step-box">
+          <h4>Inspeção e Anatomia do State</h4>
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 20.52.png" class="evidence-img" alt="State Show">
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 20.53.png" class="evidence-img" alt="State JSON">
+          <div class="explanation-list">
+            <div class="explanation-item"><strong>1. State Show:</strong> Tradução do JSON complexo para o formato
+              legível HCL com todos os metadados da AWS.</div>
+            <div class="explanation-item"><strong>2. Estrutura JSON:</strong> Visualização bruta do arquivo contendo
+              serial, lineage e detalhes técnicos.</div>
+            <div class="explanation-item"><strong>3. Controle de Versão:</strong> O campo 'serial' atua como controle de
+              concorrência e integridade.</div>
+            <div class="explanation-item"><strong>4. Mapeamento:</strong> Vinculação entre o nome lógico no código e o
+              ID físico real na nuvem.</div>
+          </div>
+        </div>
+
+        <div class="step-box">
+          <h4>Manipulação de Estado e Importação</h4>
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 20.56.png" class="evidence-img" alt="State RM">
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 20.59.png" class="evidence-img" alt="Terraform Import">
+          <div class="explanation-list">
+            <div class="explanation-item"><strong>1. State RM:</strong> Remoção de um recurso do estado sem deletá-lo
+              fisicamente da AWS.</div>
+            <div class="explanation-item"><strong>2. Desincronização:</strong> O plano detectou que o recurso "sumiu" e
+              tentou criá-lo novamente.</div>
+            <div class="explanation-item"><strong>3. Importação:</strong> Uso de <code>terraform import</code> para
+              re-adotar o recurso existente de volta ao controle.</div>
+            <div class="explanation-item"><strong>4. Sincronização Final:</strong> O plano retornou a "No changes" após
+              a importação bem-sucedida.</div>
+          </div>
+        </div>
+
+        <div class="checks">
+          <div class="checks-label">Checklist de State</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> <code>terraform state list</code>
+            executado</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Arquivo .tfstate inspecionado</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Recurso removido e re-importado com
+            sucesso</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAREFA 5 -->
+    <div class="task" id="t5">
+      <div class="task-hdr" onclick="toggle('t5')">
+        <div class="task-num" style="background:#B45309;color:#fff">5</div>
+        <div class="task-title">Recursos Avançados</div>
+        <span class="task-tag" style="background:#FEF3C7;color:#92400E">HCL Avançado</span>
+      </div>
+      <div class="task-body">
+
+        <div class="step-box">
+          <h4>Variáveis e Dados Sensíveis</h4>
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 21.01.png" class="evidence-img" alt="Var Files">
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 21.03.png" class="evidence-img" alt="Sensitive Data">
+          <div class="explanation-list">
+            <div class="explanation-item"><strong>1. .tfvars:</strong> Separação entre lógica de infraestrutura e dados
+              de configuração para diferentes ambientes.</div>
+            <div class="explanation-item"><strong>2. Sensitive:</strong> Marcação de variáveis como sensíveis para
+              mascarar valores em logs e no terminal.</div>
+            <div class="explanation-item"><strong>3. Variáveis de Ambiente:</strong> Uso do prefixo <code>TF_VAR_</code>
+              para injeção segura de segredos.</div>
+          </div>
+        </div>
+
+        <div class="step-box">
+          <h4>Locals e Console Interativo</h4>
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 21.04.png" class="evidence-img" alt="Locals e Console">
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 21.02.png" class="evidence-img" alt="Resumo do Plano">
+          <div class="explanation-list">
+            <div class="explanation-item"><strong>1. Locals:</strong> Implementação de constantes e lógicas de
+              concatenação para manter o código DRY.</div>
+            <div class="explanation-item"><strong>2. Console:</strong> Uso da ferramenta interativa para debugar funções
+              e interpolações em tempo real.</div>
+            <div class="explanation-item"><strong>3. Previsibilidade:</strong> O plano final validou a mudança do tipo
+              de instância de t2.micro para t2.small.</div>
+          </div>
+        </div>
+
+        <div class="checks">
+          <div class="checks-label">Checklist de Recursos Avançados</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Uso de arquivos .tfvars comprovado</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Mascaramento de dados sensíveis
+            verificado</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Funções testadas no Terraform Console
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAREFA 6 -->
+    <div class="task" id="t6">
+      <div class="task-hdr" onclick="toggle('t6')">
+        <div class="task-num" style="background:#7C3AED;color:#fff">6</div>
+        <div class="task-title">Escalabilidade (Loops)</div>
+        <span class="task-tag" style="background:#EDE9FE;color:#5B21B6">for_each</span>
+      </div>
+      <div class="task-body">
+
+        <div class="step-box">
+          <h4>Automação com for_each</h4>
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 21.05.png" class="evidence-img" alt="HCL for_each">
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 21.07.png" class="evidence-img" alt="Plan for_each">
+          <div class="explanation-list">
+            <div class="explanation-item"><strong>1. Estrutura de Map:</strong> Criação de um mapa
+              <code>app_ports</code> associando serviços a suas portas de rede.
+            </div>
+            <div class="explanation-item"><strong>2. Meta-argumento for_each:</strong> Iteração dinâmica para criar
+              múltiplos recursos Security Group em um único bloco.</div>
+            <div class="explanation-item"><strong>3. Identificadores:</strong> Uso de chaves significativas (backend,
+              frontend) em vez de índices numéricos.</div>
+          </div>
+        </div>
+
+        <div class="step-box">
+          <h4>Provisionamento em Massa</h4>
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 21.08.png" class="evidence-img" alt="Auto Approve">
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 21.11.png" class="evidence-img"
+            alt="Apply Loop Success">
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 21.12.png" class="evidence-img" alt="State List Final">
+          <div class="explanation-list">
+            <div class="explanation-item"><strong>1. Auto-Approve:</strong> Uso da flag para deploys automatizados em
+              pipelines de CI/CD.</div>
+            <div class="explanation-item"><strong>2. Inventário Final:</strong> Listagem de 5 recursos gerenciados: EC2,
+              SG fixo e 3 SGs dinâmicos.</div>
+            <div class="explanation-item"><strong>3. Consolidação:</strong> Output mapeado retornando os IDs de todos os
+              recursos criados no loop.</div>
+          </div>
+        </div>
+
+        <div class="checks">
+          <div class="checks-label">Checklist de Escalabilidade</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Loop for_each implementado</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Múltiplos recursos criados em uma única
+            execução</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> State list validado com chaves de mapa
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAREFA 7 -->
+    <div class="task" id="t7">
+      <div class="task-hdr" onclick="toggle('t7')">
+        <div class="task-num" style="background:#C0392B;color:#fff">7</div>
+        <div class="task-title">Encerramento (Destroy)</div>
+        <span class="task-tag" style="background:#FEF2F2;color:#991B1B">Cleanup</span>
+      </div>
+      <div class="task-body">
+
+        <div class="step-box">
+          <h4>Processo de Destruição</h4>
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 21.13.png" class="evidence-img" alt="Plan Destroy">
+          <img src="exerc_terraform/prints/Imagem 13-05-2026 às 21.17.png" class="evidence-img" alt="Apply Destroy">
+          <div class="explanation-list">
+            <div class="explanation-item"><strong>1. Planejamento:</strong> Uso de <code>terraform plan -destroy</code>
+              para prever a remoção total da infraestrutura.</div>
+            <div class="explanation-item"><strong>2. Símbolo (-):</strong> Todos os atributos foram mapeados para null,
+              indicando a deleção na AWS.</div>
+            <div class="explanation-item"><strong>3. Limpeza Granular:</strong> Garantia de que volumes EBS e regras de
+              rede não ficariam órfãos na conta.</div>
+            <div class="explanation-item"><strong>4. Sucesso:</strong> Mensagem
+              <code>Destroy complete! Resources: 5 destroyed</code> finalizando o lab.
+            </div>
+          </div>
+        </div>
+
+        <div class="checks">
+          <div class="checks-label">Checklist de Encerramento</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Plano de destruição revisado</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> <code>terraform destroy</code> executado
+            com sucesso</div>
+          <div class="check-item" onclick="check(this)"><input type="checkbox"> Recursos removidos da Console AWS</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script>
+    function toggle(id) { const t = document.getElementById(id); t.classList.toggle('open'); }
+    function check(el) { el.classList.toggle('checked'); el.querySelector('input').checked = el.classList.contains('checked'); updateProg(); }
+    function updateProg() {
+      const checks = document.querySelectorAll('.check-item.checked').length;
+      const total = document.querySelectorAll('.check-item').length;
+      const pct = total ? Math.round(checks / total * 100) : 0;
+      document.getElementById('pf').style.width = pct + '%';
+      document.getElementById('pl').textContent = pct + '% concluído (' + checks + '/' + total + ')';
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('t1').classList.add('open');
+      updateProg();
+    });
+  </script>
+</body>
+
+</html>
