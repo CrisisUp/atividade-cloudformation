@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação Passo a Passo — Imagem 6</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#7B42BC;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#D8B4FE;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:12px;color:#e6edf3;line-height:1.5}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.success {color:#27c93f; font-weight: bold}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(123, 66, 188, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #7B42BC;}
+.explanation-item h4 {color:#A855F7; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+.explanation-item code {background:#1C2333; color:#F9A8D4; padding:2px 4px; border-radius:3px; font-family:monospace; font-size:11px}
+
+.badge-tag {background:#EDE9FE; color:#5B21B6; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">🖥️ Documentação — Inicialização (Imagem 6)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 20.29.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 6: PREPARAÇÃO DO DIRETÓRIO</span>
+    
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform init</span><br>
+        <span class="output">Initializing the backend...</span><br>
+        <span class="output">Initializing provider plugins found in the configuration...</span><br>
+        <span class="output">- Reusing previous version of hashicorp/aws from the dependency lock file</span><br>
+        <span class="output">- Using previously-installed hashicorp/aws v5.100.0</span><br><br>
+        <span class="success">Terraform has been successfully initialized!</span><br><br>
+        <span class="output">You may now begin working with Terraform. Try running "terraform plan" to see<br>any changes that are required for your infrastructure.</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. O Comando de Inicialização</h4>
+        <p>O <code>terraform init</code> é o primeiro comando operacional que devemos executar. Sua função é preparar o diretório de trabalho para que o Terraform entenda as configurações e saiba com qual provedor de nuvem (Cloud Provider) ele irá interagir.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Gestão de Plugins (Providers)</h4>
+        <p>Durante o init, o Terraform lê o arquivo <code>provider.tf</code> e baixa automaticamente os plugins necessários. Na imagem, vemos que ele localizou e utilizou o provedor <code>hashicorp/aws v5.100.0</code>. Esses arquivos são armazenados na pasta oculta <code>.terraform/</code>.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Backend e Lock File</h4>
+        <p>O comando também inicializa o "backend" (onde o estado é guardado) e cria/atualiza o arquivo <code>.terraform.lock.hcl</code>. Este arquivo de "trava" garante que todos os membros de uma equipe usem exatamente as mesmas versões de plugins, evitando o erro clássico de "funciona na minha máquina".</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Sucesso e Próximos Passos</h4>
+        <p>A mensagem em verde <strong>"Terraform has been successfully initialized!"</strong> é o sinal verde para prosseguirmos. A partir deste momento, o binário do Terraform está conectado aos plugins da AWS e pronto para analisar nosso código e compará-lo com a realidade da nuvem.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

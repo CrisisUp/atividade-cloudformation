@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação Passo a Passo — Imagem 14</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#E11D48;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#FDA4AF;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.destroy {color:#f85149; font-weight: bold}
+.add {color:#3fb950; font-weight: bold}
+.replace {color:#d29922; font-weight: bold}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(225, 29, 72, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #E11D48;}
+.explanation-item h4 {color:#FB7185; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#FFE4E6; color:#9F1239; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">⚠️ Documentação — Forces Replacement (Imagem 14)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 20.49.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 13: IMPACTO CRÍTICO - SUBSTITUIÇÃO DE RECURSOS</span>
+    
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform plan</span><br>
+        <span class="output">... refreshing state ...</span><br><br>
+        <span class="replace"># aws_security_group.lab must be replaced</span><br>
+        <span class="replace">-/+</span> <span class="output">resource "aws_security_group" "lab" {</span><br>
+        <span class="output">&nbsp;&nbsp;~ name = "lab-old-name" -> "lab-new-name" <span class="replace"># forces replacement</span></span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;...</span><br>
+        <span class="output">}</span><br><br>
+        <span class="output"># aws_instance.lab will be updated in-place</span><br>
+        <span class="output">&nbsp;&nbsp;~ vpc_security_group_ids = [</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;- "sg-0147decfcf43db838",</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;+ (known after apply),</span><br>
+        <span class="output">&nbsp;&nbsp;]</span><br><br>
+        <span class="replace">Plan: 1 to add, 1 to change, 1 to destroy.</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Detecção de Substituição (Forces Replacement)</h4>
+        <p>Ao alterar o atributo <code>name</code> de um Security Group na AWS, a API não permite a atualização "in-place". O Terraform detecta isso e informa que o recurso <strong>must be replaced</strong> (deve ser substituído). Isso é representado pelo símbolo <strong>-/+</strong>.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Destruição e Recriação</h4>
+        <p>O símbolo <code>-/+</code> indica que o Terraform irá primeiro criar o novo recurso e depois destruir o antigo (ou vice-versa, dependendo do ciclo de vida configurado), garantindo que a nova configuração seja aplicada, mas resultando em um novo ID de recurso.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Efeito Cascata</h4>
+        <p>Como a instância EC2 (<code>aws_instance.lab</code>) depende desse Security Group, ela também sofre uma alteração. O plano mostra que o ID do SG antigo será removido e um novo ID, <strong>(known after apply)</strong>, será atribuído assim que o novo SG for criado.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Resumo do Plano e Risco de Downtime</h4>
+        <p>O resumo <strong>1 to add, 1 to change, 1 to destroy</strong> é um alerta crítico. É fundamental revisar o plano detalhadamente para evitar <strong>downtime acidental</strong>. Substituir um Security Group ou uma Instância pode interromper conexões de rede ou causar indisponibilidade temporária do serviço enquanto os novos recursos são provisionados e configurados.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

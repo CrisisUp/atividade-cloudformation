@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação — Leitura Direta do Estado (Imagem 18)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#3B82F6;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#DBEAFE;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.json-key {color:#7ee0ff}
+.json-string {color:#a5d6ff}
+.json-number {color:#ffad66}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(59, 130, 246, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #3B82F6;}
+.explanation-item h4 {color:#60A5FA; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#DBEAFE; color:#1E40AF; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">🔍 Documentação — Leitura Direta do Estado (Imagem 18)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 20.54.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 17: LEITURA RAW DO .TFSTATE</span>
+    
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">cat terraform.tfstate | python3 -m json.tool | head -60</span><br>
+        <span class="output">{</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"version"</span>: <span class="json-number">4</span>,</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"terraform_version"</span>: <span class="json-string">"1.15.3"</span>,</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"serial"</span>: <span class="json-number">7</span>,</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"lineage"</span>: <span class="json-string">"a1b2c3d4-e5f6-7g8h-9i0j-k1l2m3n4o5p6"</span>,</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"outputs"</span>: {</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"instance_public_ip"</span>: {</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"value"</span>: <span class="json-string">"54.123.45.67"</span>,</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"type"</span>: <span class="json-string">"string"</span></span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;},</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"resources"</span>: [</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"mode"</span>: <span class="json-string">"managed"</span>,</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"type"</span>: <span class="json-string">"aws_instance"</span>,</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="json-key">"name"</span>: <span class="json-string">"lab"</span>,</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...</span><br>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. O Arquivo de Estado em seu Formato Bruto</h4>
+        <p>Embora comandos como <code>terraform state show</code> sejam mais legíveis, o <code>terraform.tfstate</code> é, na verdade, um arquivo JSON simples. Usar <code>cat</code> com o formatador do Python permite auditar exatamente o que o Terraform está armazenando sobre sua infraestrutura.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Metadados e Versões</h4>
+        <p>O campo <code>version</code> indica o formato do esquema do estado, enquanto <code>terraform_version</code> (1.15.3 nesta captura) registra qual versão do binário gravou este arquivo. Isso previne que versões mais antigas do Terraform tentem ler estados gravados por versões mais novas, o que poderia causar corrupção.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Entendendo o 'Serial'</h4>
+        <p>O campo <code>serial</code> é um contador incremental (atualmente em 7). Cada vez que o Terraform realiza uma alteração e salva o novo estado, esse número aumenta. Ele funciona como um controle de versão simplificado para garantir a integridade do estado durante operações concorrentes.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. O Conceito de 'Lineage'</h4>
+        <p>O <code>lineage</code> é um identificador único (UUID) gerado no nascimento do projeto. Ele nunca muda. Se você tentar aplicar um plano de um projeto A em um arquivo de estado que possui um <code>lineage</code> de um projeto B, o Terraform bloqueará a operação para evitar desastres em infraestruturas erradas.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>5. Segurança: Nunca Edite Manualmente</h4>
+        <p>Embora seja um JSON editável, o arquivo de estado é a "fonte da verdade" do Terraform. Qualquer erro de sintaxe ou inconsistência lógica introduzida manualmente pode tornar o gerenciamento da infraestrutura impossível, exigindo recuperações complexas de backup.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

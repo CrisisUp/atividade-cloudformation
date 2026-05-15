@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação Passo a Passo — Imagem 3</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#7B42BC;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#D8B4FE;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:12px;color:#e6edf3;line-height:1.5}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.code-in-term {color:#F1F5F9}
+.comment-in-term {color:#8b949e; font-style: italic}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(123, 66, 188, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #7B42BC;}
+.explanation-item h4 {color:#A855F7; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+.explanation-item code {background:#1C2333; color:#F9A8D4; padding:2px 4px; border-radius:3px; font-family:monospace; font-size:11px}
+
+.badge-tag {background:#EDE9FE; color:#5B21B6; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">🖥️ Documentação — Provedor (Imagem 3)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 20.24.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 3: CONFIGURAÇÃO DO PROVEDOR AWS</span>
+    
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="comment-in-term"># Cria o provider.tf</span><br>
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">cat > provider.tf << 'EOF'</span><br>
+        <span class="code-in-term">terraform {</span><br>
+        <span class="code-in-term">&nbsp;&nbsp;required_version = ">= 1.6.0"</span><br>
+        <span class="code-in-term">&nbsp;&nbsp;required_providers {</span><br>
+        <span class="code-in-term">&nbsp;&nbsp;&nbsp;&nbsp;aws = {</span><br>
+        <span class="code-in-term">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;source  = "hashicorp/aws"</span><br>
+        <span class="code-in-term">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;version = "~> 5.0"</span><br>
+        <span class="code-in-term">&nbsp;&nbsp;&nbsp;&nbsp;}</span><br>
+        <span class="code-in-term">&nbsp;&nbsp;}</span><br>
+        <span class="code-in-term">}</span><br><br>
+        <span class="code-in-term">provider "aws" {</span><br>
+        <span class="code-in-term">&nbsp;&nbsp;region = "us-east-1"</span><br>
+        <span class="code-in-term">&nbsp;&nbsp;<span class="comment-in-term"># Credenciais vem automaticamente do CloudShell (LabRole)</span></span><br>
+        <span class="code-in-term">&nbsp;&nbsp;<span class="comment-in-term"># NUNCA coloque access_key e secret_key no codigo!</span></span><br>
+        <span class="code-in-term">}</span><br>
+        <span class="code-in-term">EOF</span><br>
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Escrita de Arquivo via Terminal</h4>
+        <p>O comando <code>cat > provider.tf << 'EOF'</code> é uma técnica chamada <strong>Heredoc</strong>. Ela permite escrever múltiplas linhas de texto diretamente em um arquivo sem abrir um editor como o Nano ou Vim. Tudo o que for digitado até a palavra <code>EOF</code> será salvo no arquivo.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Requisitos de Versão</h4>
+        <p>O bloco <code>terraform { required_version = ">= 1.6.0" }</code> define uma trava de segurança. Isso garante que o código só será executado em versões modernas do Terraform, evitando incompatibilidades com recursos novos do HCL.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Definição do Provedor AWS</h4>
+        <p>Em <code>required_providers</code>, especificamos o plugin da AWS. O <code>source = "hashicorp/aws"</code> aponta para o repositório oficial, e <code>version = "~> 5.0"</code> permite que o Terraform use qualquer versão 5.x, mas não mude para a 6.0 automaticamente, o que poderia quebrar o código.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Boas Práticas de Segurança</h4>
+        <p>No bloco <code>provider "aws"</code>, definimos a região <code>us-east-1</code>. Note o comentário importante: as credenciais não estão no código. No ambiente de laboratório, o Terraform usa o perfil <strong>LabRole</strong> injetado automaticamente pelo CloudShell, seguindo a melhor prática de nunca expor chaves de acesso no código.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

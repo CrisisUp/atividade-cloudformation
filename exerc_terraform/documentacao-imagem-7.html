@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação Passo a Passo — Imagem 7</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#7B42BC;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#D8B4FE;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:12px;color:#e6edf3;line-height:1.5}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.success {color:#27c93f; font-weight: bold}
+.info-msg {color:#58a6ff; font-weight: bold}
+.warning {color:#e3b341; font-weight: bold}
+.destroy {color:#ff5f56; font-weight: bold}
+.create {color:#27c93f; font-weight: bold}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(123, 66, 188, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #7B42BC;}
+.explanation-item h4 {color:#A855F7; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+.explanation-item code {background:#1C2333; color:#F9A8D4; padding:2px 4px; border-radius:3px; font-family:monospace; font-size:11px}
+
+.badge-tag {background:#EDE9FE; color:#5B21B6; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">🖥️ Documentação — Validação e Plano Inicial (Imagem 7)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 20.31.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 7: VALIDAÇÃO E PLANEJAMENTO</span>
+    
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform validate</span><br>
+        <span class="success">Success!</span> <span class="output">The configuration is valid.</span><br><br>
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform fmt</span><br>
+        <span class="output">main.tf</span><br><br>
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform plan</span><br>
+        <span class="output">data.aws_ami.al2023: Reading...</span><br>
+        <span class="output">aws_security_group.lab: Refreshing state... [id=sg-0147decfcf43db838]</span><br>
+        <span class="output">data.aws_ami.al2023: Read complete after 1s [id=ami-0236886b69bdc43a8]</span><br>
+        <span class="output">aws_instance.lab: Refreshing state... [id=i-0903708d3ffe9ad14]</span><br><br>
+        <span class="info-msg">Note: Objects have changed outside of Terraform</span><br><br>
+        <span class="output">Terraform detected the following changes made outside of Terraform since the last "terraform apply" which may have affected this plan:</span><br><br>
+        <span class="output">  # aws_instance.lab has been deleted</span><br>
+        <span class="destroy">  - resource "aws_instance" "lab" {</span><br>
+        <span class="destroy">      - id   = "i-0903708d3ffe9ad14" -> null</span><br>
+        <span class="destroy">      - tags = { ... }</span><br>
+        <span class="destroy">    }</span><br><br>
+        <span class="output">Terraform will perform the following actions:</span><br>
+        <span class="output">  # aws_instance.lab will be created</span><br>
+        <span class="create">  + resource "aws_instance" "lab" { ... }</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Validação Sintática</h4>
+        <p>O comando <code>terraform validate</code> verifica se há erros de sintaxe nos arquivos <code>.tf</code>. Ele checa blocos ausentes, nomes de variáveis inválidos e erros de tipo de dados. O <strong>Success!</strong> indica que o código HCL está estruturalmente correto e pronto para uso.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Padronização de Código (FMT)</h4>
+        <p>O comando <code>terraform fmt</code> escaneia todos os arquivos do diretório e formata a indentação e o espaçamento para o padrão canônico da HashiCorp. Na imagem, ele retornou <code>main.tf</code>, indicando que este arquivo foi modificado para corrigir o alinhamento de espaços.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. O Comando Plan e Detecção de Desvios (Drift)</h4>
+        <p>O <code>terraform plan</code> é o comando mais crítico do dia a dia. Primeiro, ele realiza a fase de <strong>Refreshing state</strong> (lendo o estado real na AWS). Na imagem, ele detectou uma anomalia: <strong>"Objects have changed outside of Terraform"</strong>.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Interpretação do Plano</h4>
+        <p>O Terraform percebeu que uma instância antiga (<code>i-0903708d3ffe9ad14</code>) registrada no estado local foi deletada da AWS manualmente (fora do Terraform). Como resultado, o plano se ajustou automaticamente para <strong>recriar</strong> a instância (símbolo <code>+</code>) para garantir que a realidade corresponda ao código.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

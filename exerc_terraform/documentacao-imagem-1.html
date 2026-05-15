@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação Passo a Passo — Imagem 1</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#7B42BC;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#D8B4FE;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:12px;color:#e6edf3;line-height:1.5}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(123, 66, 188, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #7B42BC;}
+.explanation-item h4 {color:#A855F7; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+.explanation-item code {background:#1C2333; color:#F9A8D4; padding:2px 4px; border-radius:3px; font-family:monospace; font-size:11px}
+
+.badge-tag {background:#EDE9FE; color:#5B21B6; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">🖥️ Documentação — Instalação (Imagem 1)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 20.14.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 1: PREPARAÇÃO DO AMBIENTE</span>
+    
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 ~]$</span> <span class="command">sudo yum install -y yum-utils</span><br>
+        <span class="output">Complete!</span><br>
+        <span class="prompt">[ec2-user@ip-172-31-25-103 ~]$</span> <span class="command">sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo</span><br>
+        <span class="output">Adding repo from: https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo</span><br>
+        <span class="prompt">[ec2-user@ip-172-31-25-103 ~]$</span> <span class="command">sudo yum install -y terraform</span><br>
+        <span class="output">Complete!</span><br>
+        <span class="prompt">[ec2-user@ip-172-31-25-103 ~]$</span> <span class="command">terraform version</span><br>
+        <span class="output">Terraform v1.15.3<br>on linux_amd64</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Instalação de utilitários do sistema</h4>
+        <p>O comando <code>sudo yum install -y yum-utils</code> instala um conjunto de ferramentas que estendem as funcionalidades do gerenciador de pacotes padrão (YUM). O <code>yum-utils</code> é necessário para que possamos usar o comando <code>yum-config-manager</code> no próximo passo.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Configuração do Repositório Oficial</h4>
+        <p>Com <code>sudo yum-config-manager --add-repo ...</code>, estamos dizendo ao Linux para "confiar" e incluir a fonte de software oficial da <strong>HashiCorp</strong> na sua lista de busca. Isso garante que o Terraform baixado seja autêntico e atualizado diretamente pelo fabricante.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Instalação do Terraform</h4>
+        <p>O comando <code>sudo yum install -y terraform</code> realiza o download e a instalação física do Terraform. A flag <code>-y</code> (yes) é usada para aceitar automaticamente todos os termos e o uso de espaço em disco, agilizando o processo.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Verificação de Sucesso</h4>
+        <p>Por fim, <code>terraform version</code> é executado para confirmar que o binário está no "PATH" do sistema e funcional. Na imagem, observamos a confirmação da versão <strong>v1.15.3</strong>, que é a versão estável utilizada para este projeto.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

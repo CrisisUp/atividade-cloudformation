@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação Técnica Detalhada - Terraform</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --container-bg: #161b22;
+            --text-color: #c9d1d9;
+            --heading-color: #58a6ff;
+            --code-bg: #010409;
+            --border-color: #30363d;
+            --accent-color: #238636;
+            --secondary-accent: #8b949e;
+            --highlight: #f0883e;
+            --comment: #8b949e;
+            --keyword: #ff7b72;
+            --string: #a5d6ff;
+            --variable: #ffa657;
+            --function: #d2a8ff;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--container-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        header h1 {
+            color: var(--heading-color);
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        header p {
+            color: var(--secondary-accent);
+            margin-top: 0.5rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        section {
+            background-color: var(--container-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .section-header {
+            background-color: rgba(48, 54, 61, 0.3);
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .section-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: var(--heading-color);
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-top: 1px solid var(--border-color);
+        }
+
+        @media (max-width: 900px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            .explanation {
+                border-top: 1px solid var(--border-color);
+                border-left: none !important;
+            }
+        }
+
+        .code-block {
+            background-color: var(--code-bg);
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 13px;
+            white-space: pre;
+        }
+
+        .explanation {
+            padding: 1.5rem;
+            border-left: 1px solid var(--border-color);
+            font-size: 14px;
+        }
+
+        .explanation h3 {
+            margin-top: 0;
+            color: var(--highlight);
+            font-size: 1.1rem;
+        }
+
+        .line-explanation {
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px border-color transparent;
+        }
+
+        .line-num {
+            display: inline-block;
+            width: 25px;
+            color: var(--comment);
+            text-align: right;
+            margin-right: 10px;
+            user-select: none;
+        }
+
+        .keyword { color: var(--keyword); }
+        .string { color: var(--string); }
+        .comment { color: var(--comment); }
+        .variable { color: var(--variable); }
+        .function { color: var(--function); }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            color: var(--heading-color);
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            background-color: var(--accent-color);
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem;
+            color: var(--secondary-accent);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Documentação Técnica Terraform</h1>
+    <p>Guia detalhado de infraestrutura como código (IaC) para o projeto TechStock</p>
+</header>
+
+<div class="container">
+
+    <!-- INSTALAÇÃO -->
+    <section>
+        <div class="section-header">
+            <span class="badge">Setup</span>
+            <h2>1. Instalação do Terraform</h2>
+        </div>
+        <div class="grid-container">
+            <div class="code-block">
+<span class="line-num">1</span>sudo yum install -y yum-utils
+<span class="line-num">2</span>sudo yum-config-manager --add-repo \
+<span class="line-num">3</span>  https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
+<span class="line-num">4</span>sudo yum install -y terraform
+<span class="line-num">5</span>terraform version</div>
+            <div class="explanation">
+                <h3>Comandos de Instalação (Amazon Linux)</h3>
+                <div class="line-explanation"><strong>Linha 1:</strong> Instala o pacote <code>yum-utils</code>, que fornece ferramentas para gerenciar repositórios e pacotes adicionais.</div>
+                <div class="line-explanation"><strong>Linhas 2-3:</strong> Adiciona o repositório oficial da HashiCorp ao gerenciador de pacotes YUM. Isso garante que estamos baixando a versão oficial e assinada.</div>
+                <div class="line-explanation"><strong>Linha 4:</strong> Instala efetivamente o binário do Terraform no sistema de forma não interativa (<code>-y</code>).</div>
+                <div class="line-explanation"><strong>Linha 5:</strong> Verifica se a instalação foi bem-sucedida imprimindo a versão do Terraform instalada.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROVIDER -->
+    <section>
+        <div class="section-header">
+            <span class="badge">Configuração</span>
+            <h2>2. provider.tf</h2>
+        </div>
+        <div class="grid-container">
+            <div class="code-block">
+<span class="line-num">1</span><span class="keyword">terraform</span> {
+<span class="line-num">2</span>  <span class="variable">required_version</span> = <span class="string">">= 1.6.0"</span>
+<span class="line-num">3</span>  <span class="keyword">required_providers</span> {
+<span class="line-num">4</span>    <span class="variable">aws</span> = {
+<span class="line-num">5</span>      <span class="variable">source</span>  = <span class="string">"hashicorp/aws"</span>
+<span class="line-num">6</span>      <span class="variable">version</span> = <span class="string">"~> 5.0"</span>
+<span class="line-num">7</span>    }
+<span class="line-num">8</span>  }
+<span class="line-num">9</span>}
+<span class="line-num">10</span>
+<span class="line-num">11</span><span class="keyword">provider</span> <span class="string">"aws"</span> {
+<span class="line-num">12</span>  <span class="variable">region</span> = <span class="string">"us-east-1"</span>
+<span class="line-num">13</span>}</div>
+            <div class="explanation">
+                <h3>Bloco de Configuração do Terraform</h3>
+                <div class="line-explanation"><strong>Linha 1:</strong> O bloco <code>terraform</code> contém as configurações globais do Terraform para o projeto.</div>
+                <div class="line-explanation"><strong>Linha 2:</strong> Define a versão mínima do binário do Terraform exigida para executar este código (evita incompatibilidades).</div>
+                <div class="line-explanation"><strong>Linhas 3-8:</strong> O bloco <code>required_providers</code> especifica quais plugins (providers) são necessários. Definimos o provider <code>aws</code> da HashiCorp com a versão <code>~> 5.0</code> (permitindo apenas atualizações de patch e minor dentro da v5).</div>
+                <div class="line-explanation"><strong>Linhas 11-13:</strong> O bloco <code>provider "aws"</code> configura o plugin da AWS. Definimos a região <code>us-east-1</code>. No CloudShell, as credenciais são injetadas automaticamente via LabRole.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN.TF - DATA & SG -->
+    <section>
+        <div class="section-header">
+            <span class="badge">Recursos</span>
+            <h2>3. main.tf (Data Sources & Security Group)</h2>
+        </div>
+        <div class="grid-container">
+            <div class="code-block">
+<span class="line-num">1</span><span class="keyword">data</span> <span class="string">"aws_ami" "al2023"</span> {
+<span class="line-num">2</span>  <span class="variable">most_recent</span> = <span class="keyword">true</span>
+<span class="line-num">3</span>  <span class="variable">owners</span>      = [<span class="string">"amazon"</span>]
+<span class="line-num">4</span>  <span class="keyword">filter</span> {
+<span class="line-num">5</span>    <span class="variable">name</span>   = <span class="string">"name"</span>
+<span class="line-num">6</span>    <span class="variable">values</span> = [<span class="string">"al2023-ami-2023*-x86_64"</span>]
+<span class="line-num">7</span>  }
+<span class="line-num">8</span>}
+<span class="line-num">9</span>
+<span class="line-num">10</span><span class="keyword">resource</span> <span class="string">"aws_security_group" "lab"</span> {
+<span class="line-num">11</span>  <span class="variable">name</span>        = <span class="string">"techstock-tf-lab-sg"</span>
+<span class="line-num">12</span>  <span class="variable">description</span> = <span class="string">"SG para o lab de Terraform"</span>
+<span class="line-num">13</span>
+<span class="line-num">14</span>  <span class="keyword">ingress</span> {
+<span class="line-num">15</span>    <span class="variable">from_port</span>   = <span class="keyword">80</span>
+<span class="line-num">16</span>    <span class="variable">to_port</span>     = <span class="keyword">80</span>
+<span class="line-num">17</span>    <span class="variable">protocol</span>    = <span class="string">"tcp"</span>
+<span class="line-num">18</span>    <span class="variable">cidr_blocks</span> = [<span class="string">"0.0.0.0/0"</span>]
+<span class="line-num">19</span>  }
+<span class="line-num">20</span>
+<span class="line-num">21</span>  <span class="keyword">egress</span> {
+<span class="line-num">22</span>    <span class="variable">from_port</span>   = <span class="keyword">0</span>
+<span class="line-num">23</span>    <span class="variable">to_port</span>     = <span class="keyword">0</span>
+<span class="line-num">24</span>    <span class="variable">protocol</span>    = <span class="string">"-1"</span>
+<span class="line-num">25</span>    <span class="variable">cidr_blocks</span> = [<span class="string">"0.0.0.0/0"</span>]
+<span class="line-num">26</span>  }
+<span class="line-num">27</span>}</div>
+            <div class="explanation">
+                <h3>Infraestrutura Base</h3>
+                <div class="line-explanation"><strong>Linhas 1-8:</strong> O <code>data source</code> busca informações da AWS sem criar nada. Aqui, localizamos a AMI do Amazon Linux 2023 mais recente, filtrando por nome e proprietário (Amazon).</div>
+                <div class="line-explanation"><strong>Linha 10:</strong> Define o recurso de Security Group chamado "lab" internamente no Terraform.</div>
+                <div class="line-explanation"><strong>Linhas 14-19:</strong> Bloco de entrada (<code>ingress</code>). Permite tráfego na porta 80 (HTTP) vindo de qualquer endereço IP (<code>0.0.0.0/0</code>).</div>
+                <div class="line-explanation"><strong>Linhas 21-26:</strong> Bloco de saída (<code>egress</code>). Permite todo o tráfego de saída (protocolo <code>-1</code>) para qualquer destino.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN.TF - EC2 -->
+    <section>
+        <div class="section-header">
+            <span class="badge">Compute</span>
+            <h2>4. main.tf (EC2 Instance)</h2>
+        </div>
+        <div class="grid-container">
+            <div class="code-block">
+<span class="line-num">1</span><span class="keyword">resource</span> <span class="string">"aws_instance" "lab"</span> {
+<span class="line-num">2</span>  <span class="variable">ami</span>           = <span class="keyword">data</span>.<span class="variable">aws_ami</span>.<span class="variable">al2023</span>.<span class="variable">id</span>
+<span class="line-num">3</span>  <span class="variable">instance_type</span> = <span class="keyword">var</span>.<span class="variable">instance_type</span>
+<span class="line-num">4</span>
+<span class="line-num">5</span>  <span class="variable">vpc_security_group_ids</span> = [<span class="keyword">aws_security_group</span>.<span class="variable">lab</span>.<span class="variable">id</span>]
+<span class="line-num">6</span>  <span class="variable">iam_instance_profile</span>   = <span class="string">"LabInstanceProfile"</span>
+<span class="line-num">7</span>
+<span class="line-num">8</span>  <span class="variable">tags</span> = {
+<span class="line-num">9</span>    <span class="variable">Name</span>        = <span class="string">"techstock-tf-lab-ec2"</span>
+<span class="line-num">10</span>    <span class="variable">Environment</span> = <span class="keyword">var</span>.<span class="variable">environment</span>
+<span class="line-num">11</span>  }
+<span class="line-num">12</span>}</div>
+            <div class="explanation">
+                <h3>Instância EC2 com Referências Dinâmicas</h3>
+                <div class="line-explanation"><strong>Linha 1:</strong> Declara uma instância EC2.</div>
+                <div class="line-explanation"><strong>Linha 2:</strong> Referência dinâmica ao ID da AMI encontrado pelo <code>data source</code> anterior. Se a AMI mudar na AWS, o Terraform detectará.</div>
+                <div class="line-explanation"><strong>Linha 3:</strong> Usa o valor de uma variável definida no arquivo <code>variables.tf</code>.</div>
+                <div class="line-explanation"><strong>Linha 5:</strong> Referência cruzada. O Terraform obtém o ID do Security Group criado anteriormente, estabelecendo uma dependência implícita (cria o SG antes da EC2).</div>
+                <div class="line-explanation"><strong>Linha 6:</strong> Atribui o perfil IAM necessário no ambiente Learner Lab.</div>
+                <div class="line-explanation"><strong>Linhas 8-11:</strong> Aplica tags organizacionais, interpolando a variável <code>environment</code>.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VARIABLES -->
+    <section>
+        <div class="section-header">
+            <span class="badge">Variáveis</span>
+            <h2>5. variables.tf</h2>
+        </div>
+        <div class="grid-container">
+            <div class="code-block">
+<span class="line-num">1</span><span class="keyword">variable</span> <span class="string">"instance_type"</span> {
+<span class="line-num">2</span>  <span class="variable">type</span>        = <span class="keyword">string</span>
+<span class="line-num">3</span>  <span class="variable">default</span>     = <span class="string">"t2.micro"</span>
+<span class="line-num">4</span>  <span class="variable">description</span> = <span class="string">"Tipo da instancia EC2"</span>
+<span class="line-num">5</span>  <span class="keyword">validation</span> {
+<span class="line-num">6</span>    <span class="variable">condition</span>     = <span class="function">contains</span>([<span class="string">"t2.micro"</span>, <span class="string">"t2.small"</span>], <span class="keyword">var</span>.<span class="variable">instance_type</span>)
+<span class="line-num">7</span>    <span class="variable">error_message</span> = <span class="string">"Use t2.micro ou t2.small no Learner Lab."</span>
+<span class="line-num">8</span>  }
+<span class="line-num">9</span>}
+<span class="line-num">10</span>
+<span class="line-num">11</span><span class="keyword">variable</span> <span class="string">"environment"</span> {
+<span class="line-num">12</span>  <span class="variable">type</span>    = <span class="keyword">string</span>
+<span class="line-num">13</span>  <span class="variable">default</span> = <span class="string">"lab"</span>
+<span class="line-num">14</span>}</div>
+            <div class="explanation">
+                <h3>Declaração e Validação</h3>
+                <div class="line-explanation"><strong>Linhas 1-4:</strong> Define a variável <code>instance_type</code> como string com um valor padrão.</div>
+                <div class="line-explanation"><strong>Linhas 5-8:</strong> Bloco de validação customizada. A função <code>contains</code> verifica se o valor fornecido está na lista permitida. Se falhar, exibe a <code>error_message</code>.</div>
+                <div class="line-explanation"><strong>Linhas 11-14:</strong> Variável simples para definir o nome do ambiente, facilitando a reutilização do código para Dev, Lab ou Prod.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- OUTPUTS -->
+    <section>
+        <div class="section-header">
+            <span class="badge">Outputs</span>
+            <h2>6. outputs.tf</h2>
+        </div>
+        <div class="grid-container">
+            <div class="code-block">
+<span class="line-num">1</span><span class="keyword">output</span> <span class="string">"instance_id"</span> {
+<span class="line-num">2</span>  <span class="variable">value</span> = <span class="keyword">aws_instance</span>.<span class="variable">lab</span>.<span class="variable">id</span>
+<span class="line-num">3</span>}
+<span class="line-num">4</span>
+<span class="line-num">5</span><span class="keyword">output</span> <span class="string">"public_ip"</span> {
+<span class="line-num">6</span>  <span class="variable">value</span> = <span class="keyword">aws_instance</span>.<span class="variable">lab</span>.<span class="variable">public_ip</span>
+<span class="line-num">7</span>}</div>
+            <div class="explanation">
+                <h3>Valores de Saída</h3>
+                <div class="line-explanation"><strong>Linhas 1-3:</strong> Exporta o ID da instância criada. Útil para scripts de automação ou para consulta rápida no terminal após o <code>apply</code>.</div>
+                <div class="line-explanation"><strong>Linhas 5-7:</strong> Mostra o IP público da instância, permitindo o acesso via SSH ou navegador sem precisar ir ao console AWS.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOOPS FOR_EACH -->
+    <section>
+        <div class="section-header">
+            <span class="badge">Avançado</span>
+            <h2>7. sgs.tf (Uso de for_each)</h2>
+        </div>
+        <div class="grid-container">
+            <div class="code-block">
+<span class="line-num">1</span><span class="keyword">variable</span> <span class="string">"app_ports"</span> {
+<span class="line-num">2</span>  <span class="variable">type</span> = <span class="function">map</span>(<span class="keyword">number</span>)
+<span class="line-num">3</span>  <span class="variable">default</span> = {
+<span class="line-num">4</span>    <span class="variable">backend</span>    = <span class="keyword">3000</span>
+<span class="line-num">5</span>    <span class="variable">monitoring</span> = <span class="keyword">9090</span>
+<span class="line-num">6</span>  }
+<span class="line-num">7</span>}
+<span class="line-num">8</span>
+<span class="line-num">9</span><span class="keyword">resource</span> <span class="string">"aws_security_group" "app_sgs"</span> {
+<span class="line-num">10</span>  <span class="keyword">for_each</span> = <span class="keyword">var</span>.<span class="variable">app_ports</span>
+<span class="line-num">11</span>
+<span class="line-num">12</span>  <span class="variable">name</span> = <span class="string">"techstock-${<span class="keyword">each</span>.<span class="variable">key</span>}-sg"</span>
+<span class="line-num">13</span>
+<span class="line-num">14</span>  <span class="keyword">ingress</span> {
+<span class="line-num">15</span>    <span class="variable">from_port</span> = <span class="keyword">each</span>.<span class="variable">value</span>
+<span class="line-num">16</span>    <span class="variable">to_port</span>   = <span class="keyword">each</span>.<span class="variable">value</span>
+<span class="line-num">17</span>    <span class="variable">protocol</span>  = <span class="string">"tcp"</span>
+<span class="line-num">18</span>    <span class="variable">cidr_blocks</span> = [<span class="string">"0.0.0.0/0"</span>]
+<span class="line-num">19</span>  }
+<span class="line-num">20</span>}</div>
+            <div class="explanation">
+                <h3>Iteração com Maps</h3>
+                <div class="line-explanation"><strong>Linhas 1-7:</strong> Define um mapa onde a chave é o nome do serviço e o valor é a porta.</div>
+                <div class="line-explanation"><strong>Linha 10:</strong> O <code>for_each</code> diz ao Terraform para criar um recurso para cada item no mapa <code>app_ports</code>.</div>
+                <div class="line-explanation"><strong>Linha 12:</strong> <code>each.key</code> refere-se à chave do mapa (ex: "backend"). Usamos interpolação de string para gerar nomes únicos.</div>
+                <div class="line-explanation"><strong>Linhas 15-16:</strong> <code>each.value</code> refere-se ao valor do mapa (ex: 3000). Isso permite configurar portas diferentes para cada SG em um único bloco de código.</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SENSITIVE & LOCALS -->
+    <section>
+        <div class="section-header">
+            <span class="badge">Avançado</span>
+            <h2>8. Variáveis Sensíveis e Locals</h2>
+        </div>
+        <div class="grid-container">
+            <div class="code-block">
+<span class="line-num">1</span><span class="keyword">variable</span> <span class="string">"db_password"</span> {
+<span class="line-num">2</span>  <span class="variable">type</span>      = <span class="keyword">string</span>
+<span class="line-num">3</span>  <span class="variable">sensitive</span> = <span class="keyword">true</span>
+<span class="line-num">4</span>}
+<span class="line-num">5</span>
+<span class="line-num">6</span><span class="keyword">locals</span> {
+<span class="line-num">7</span>  <span class="variable">app_name</span>  = <span class="string">"techstock"</span>
+<span class="line-num">8</span>  <span class="variable">full_name</span> = <span class="string">"${<span class="keyword">local</span>.<span class="variable">app_name</span>}-${<span class="keyword">var</span>.<span class="variable">environment</span>}"</span>
+<span class="line-num">9</span>}</div>
+            <div class="explanation">
+                <h3>Segurança e Reutilização</h3>
+                <div class="line-explanation"><strong>Linha 3:</strong> <code>sensitive = true</code> impede que o valor da variável seja exibido no terminal (stdout) durante o <code>plan</code> ou <code>apply</code>. Essencial para senhas e tokens.</div>
+                <div class="line-explanation"><strong>Linhas 6-9:</strong> O bloco <code>locals</code> define variáveis internas calculadas.</div>
+                <div class="line-explanation"><strong>Linha 8:</strong> Demonstra interpolação de string combinando um valor local (<code>app_name</code>) com uma variável de entrada (<code>environment</code>) para criar um nome composto reutilizável.</div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<footer>
+    &copy; 2024 TechStock Infrastructure Lab - Terraform Documentation
+</footer>
+
+</body>
+</html>

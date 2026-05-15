@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação — Automação e Escalabilidade com Loops (Imagem 25)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#6366F1;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#E0E7FF;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.success {color:#2ecc71; font-weight:bold}
+.warning {color:#EAB308}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(99, 102, 241, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #6366F1;}
+.explanation-item h4 {color:#818CF8; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#EEF2FF; color:#4338CA; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">📂 Documentação — Automação e Escalabilidade com Loops (Imagem 25)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 21.05.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 24: ESCALABILIDADE COM FOR_EACH E MAPAS</span>
+    
+    <p style="margin-bottom: 10px; color: #94A3B8;">Passo 1: Definindo uma estrutura de dados flexível e criando múltiplos recursos com <code>for_each</code>.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">cat << EOF > sgs.tf</span><br>
+        <br>
+        <span class="output">variable "app_ports" {</span><br>
+        <span class="output">&nbsp;&nbsp;type = map(number)</span><br>
+        <span class="output">&nbsp;&nbsp;default = {</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;"frontend" = 80</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;"backend"&nbsp;&nbsp;= 8080</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;"database" = 5432</span><br>
+        <span class="output">&nbsp;&nbsp;}</span><br>
+        <span class="output">}</span><br>
+        <br>
+        <span class="output">resource "aws_security_group" "app_sg" {</span><br>
+        <span class="output">&nbsp;&nbsp;for_each = var.app_ports</span><br>
+        <br>
+        <span class="output">&nbsp;&nbsp;name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= "sg-${each.key}"</span><br>
+        <span class="output">&nbsp;&nbsp;description = "Security Group para a aplicação ${each.key}"</span><br>
+        <br>
+        <span class="output">&nbsp;&nbsp;ingress {</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;from_port&nbsp;&nbsp;= each.value</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;to_port&nbsp;&nbsp;&nbsp;&nbsp;= each.value</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;protocol&nbsp;&nbsp;&nbsp;= "tcp"</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;cidr_blocks = ["0.0.0.0/0"]</span><br>
+        <span class="output">&nbsp;&nbsp;}</span><br>
+        <span class="output">}</span><br>
+        <span class="output">EOF</span>
+      </div>
+    </div>
+
+    <p style="margin: 20px 0 10px 0; color: #94A3B8;">Passo 2: Implementando um Output avançado para listar os IDs criados.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">cat << EOF >> outputs.tf</span><br>
+        <br>
+        <span class="output">output "sg_ids" {</span><br>
+        <span class="output">&nbsp;&nbsp;value = { for k, v in aws_security_group.app_sg : k => v.id }</span><br>
+        <span class="output">}</span><br>
+        <span class="output">EOF</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Estrutura de Dados: map(number)</h4>
+        <p>Utilizamos um mapa (<code>map</code>) chamado <code>app_ports</code> onde as chaves são os nomes das aplicações e os valores são as respectivas portas. Essa estrutura é ideal para alimentar loops, pois associa um identificador único a um valor de configuração.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. O Meta-argumento for_each</h4>
+        <p>O <code>for_each</code> instrui o Terraform a iterar sobre cada par chave/valor do mapa. Ao contrário do <code>count</code> (que usa índices numéricos), o <code>for_each</code> cria recursos identificados pela chave do mapa, o que torna a remoção ou adição de itens muito mais segura e previsível.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Atributos Dinâmicos: each.key e each.value</h4>
+        <p>Dentro do bloco de recurso, acessamos os dados da iteração atual usando o objeto <code>each</code>. <code>each.key</code> retorna o nome (ex: "frontend") e <code>each.value</code> retorna a porta (ex: 80). Isso permite personalizar o nome, a descrição e as regras de firewall de forma totalmente dinâmica.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Loop 'for' em Outputs</h4>
+        <p>A sintaxe <code>{ for k, v in ... : k => v.id }</code> é uma "comprehension" do Terraform. Ela percorre todos os recursos criados pelo <code>for_each</code> e gera um novo mapa como saída, facilitando a visualização de qual ID pertence a qual aplicação.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>5. Por que usar loops?</h4>
+        <p>O uso do <code>for_each</code> torna o código muito mais <b>limpo e escalável</b>. Em vez de copiar e colar blocos de <code>aws_security_group</code> para cada nova aplicação (violando o princípio DRY), o usuário precisa apenas adicionar uma nova linha ao mapa de variáveis. O Terraform cuidará automaticamente de criar, atualizar ou remover os recursos correspondentes.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

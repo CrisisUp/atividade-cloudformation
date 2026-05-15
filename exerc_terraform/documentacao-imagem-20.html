@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação — Análise do Plano Pós-Remoção (Imagem 20)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#3B82F6;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#DBEAFE;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.diff-plus {color:#2ea043}
+.diff-minus {color:#f85149}
+.diff-tilde {color:#d29922}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(59, 130, 246, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #3B82F6;}
+.explanation-item h4 {color:#60A5FA; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.alert-item {margin-bottom:15px; background: rgba(239, 68, 68, 0.1); padding: 12px; border-radius: 8px; border-left: 3px solid #EF4444;}
+.alert-item h4 {color:#F87171; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+
+.badge-tag {background:#DBEAFE; color:#1E40AF; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">🧐 Documentação — Análise do Plano Pós-Remoção (Imagem 20)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 21.01.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 19: TERRAFORM PLAN (PÓS STATE RM)</span>
+    
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform plan</span><br>
+        <span class="output">Terraform used the selected providers to generate the following execution plan.</span><br>
+        <br>
+        <span class="diff-plus">+ resource "aws_security_group" "lab" {</span><br>
+        <span class="diff-plus">&nbsp;&nbsp;&nbsp;&nbsp;+ arn&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= (known after apply)</span><br>
+        <span class="diff-plus">&nbsp;&nbsp;&nbsp;&nbsp;+ description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= "Permitir SSH e HTTP"</span><br>
+        <span class="diff-plus">&nbsp;&nbsp;&nbsp;&nbsp;+ id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= (known after apply)</span><br>
+        <span class="diff-plus">&nbsp;&nbsp;&nbsp;&nbsp;+ name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= "sg_lab"</span><br>
+        <span class="diff-plus">&nbsp;&nbsp;&nbsp;&nbsp;+ vpc_id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= "vpc-0abc123456789def"</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;...</span><br>
+        <span class="output">}</span><br>
+        <br>
+        <span class="diff-tilde">~ resource "aws_instance" "lab" {</span><br>
+        <span class="diff-tilde">&nbsp;&nbsp;&nbsp;&nbsp;~ vpc_security_group_ids = [</span><br>
+        <span class="diff-minus">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- "sg-0952678f90abcdef1",</span><br>
+        <span class="diff-plus">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ (known after apply),</span><br>
+        <span class="diff-tilde">&nbsp;&nbsp;&nbsp;&nbsp;]</span><br>
+        <span class="output">}</span><br>
+        <br>
+        <span class="output">Changes to Outputs:</span><br>
+        <span class="diff-tilde">&nbsp;&nbsp;~ sg_id = "sg-0952678f90abcdef1" -> (known after apply)</span><br>
+        <br>
+        <span class="output"><b>Plan: 1 to add, 1 to change, 0 to destroy.</b></span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Atributos Marcados com Adição (+)</h4>
+        <p>Como o Terraform removeu o <code>aws_security_group.lab</code> do seu estado, todos os atributos definidos no código aparecem com o sinal de <b>+</b>. Para o Terraform, este é um recurso completamente novo que precisa ser criado.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Mudança nos Outputs</h4>
+        <p>O output <code>sg_id</code>, que antes exibia o ID real do Security Group, agora está marcado como <b>(known after apply)</b>. Isso ocorre porque o Terraform planeja criar um novo SG e só saberá o seu ID após a execução do comando na AWS.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. O Resumo do Plano</h4>
+        <p>O resumo <b>"1 to add, 1 to change"</b> confirma a intenção: adicionar o Security Group (que o Terraform acha que não existe) e alterar a instância EC2 para apontar para este novo recurso.</p>
+      </div>
+
+      <div class="alert-item">
+        <h4>⚠️ Alerta de Conflito: O "Ponto Cego"</h4>
+        <p>Se o usuário executasse <code>terraform apply</code> agora, haveria um erro grave. Como o Security Group com o nome "sg_lab" ainda existe fisicamente na AWS (foi apenas removido do estado), a AWS retornaria um erro de <b>'ResourceAlreadyExists'</b>. O Terraform está em um estado de confusão: o código pede o recurso, o estado diz que ele não existe, mas a realidade da nuvem prova o contrário.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. A Necessidade do Comando 'Import'</h4>
+        <p>Este cenário de descompasso entre o estado e a realidade é o que motiva o uso do comando <code>terraform import</code>. Veremos a seguir como dizer ao Terraform: "Ei, aquele recurso que você quer criar já existe na AWS com este ID específico, passe a gerenciá-lo novamente".</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

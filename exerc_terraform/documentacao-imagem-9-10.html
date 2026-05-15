@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação Passo a Passo — Imagem 9 e 10</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#7B42BC;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#D8B4FE;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.success {color:#27c93f; font-weight: bold}
+.highlight {color:#f0883e; font-weight: bold}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(123, 66, 188, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #7B42BC;}
+.explanation-item h4 {color:#A855F7; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+.explanation-item code {background:#1C2333; color:#F9A8D4; padding:2px 4px; border-radius:3px; font-family:monospace; font-size:11px}
+
+.badge-tag {background:#EDE9FE; color:#5B21B6; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">🖥️ Documentação — Execução Final (Imagens 9 e 10)</div>
+    <div class="sub">Análise detalhada das capturas: 20.34 e 20.35</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 9: PROVISIONAMENTO E RESULTADOS</span>
+    
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform apply</span><br>
+        <span class="output">... (plano detalhado repetido) ...</span><br><br>
+        <span class="highlight">Do you want to perform these actions?</span><br>
+        <span class="output">  Terraform will perform the actions described above.</span><br>
+        <span class="output">  Only 'yes' will be accepted to approve.</span><br><br>
+        <span class="output">&nbsp;&nbsp;Enter a value:</span> <span class="success">yes</span><br><br>
+        <span class="output">aws_instance.lab: Creating...</span><br>
+        <span class="output">aws_instance.lab: Still creating... [10s elapsed]</span><br>
+        <span class="output">aws_instance.lab: Still creating... [20s elapsed]</span><br>
+        <span class="output">aws_instance.lab: Creation complete after 22s [id=i-0445542e60c5bd1c3]</span><br><br>
+        <span class="success">Apply complete! Resources: 1 added, 0 changed, 0 destroyed.</span><br><br>
+        <span class="highlight">Outputs:</span><br>
+        <span class="output">ami_id_selecionada = "ami-0236886b69bdc43a8"</span><br>
+        <span class="output">instance_id = "i-0445542e60c5bd1c3"</span><br>
+        <span class="output">instance_type_usado = "t2.micro"</span><br>
+        <span class="output">sg_id = "sg-0147decfcf43db838"</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Confirmação de Segurança</h4>
+        <p>O comando <code>terraform apply</code> não executa as mudanças imediatamente. Ele apresenta o plano uma última vez e solicita a confirmação manual do usuário. Somente após digitar exatamente <code>yes</code> é que o Terraform inicia as chamadas de API para a AWS.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Provisionamento em Tempo Real</h4>
+        <p>Durante a execução, o Terraform fornece um log de progresso. Na imagem, observamos que a criação da instância EC2 levou exatamente <strong>22 segundos</strong>. Esse tempo inclui a alocação do hardware e o início do processo de boot na infraestrutura da AWS.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Sincronização do Estado</h4>
+        <p>A mensagem <strong>"Apply complete!"</strong> confirma que a infraestrutura real agora condiz 100% com o código. Nesse momento, o arquivo <code>terraform.tfstate</code> foi atualizado com o novo ID da instância (<code>i-0445542e60c5bd1c3</code>).</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Visualização dos Resultados (Outputs)</h4>
+        <p>Como definimos o arquivo <code>outputs.tf</code> anteriormente, o Terraform finaliza exibindo os valores solicitados. Agora temos o ID real da máquina e do Security Group disponíveis no terminal para uso em scripts ou simples conferência.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

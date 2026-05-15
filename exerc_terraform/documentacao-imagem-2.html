@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação Passo a Passo — Imagem 2</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#7B42BC;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#D8B4FE;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:12px;color:#e6edf3;line-height:1.5}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(123, 66, 188, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #7B42BC;}
+.explanation-item h4 {color:#A855F7; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+.explanation-item code {background:#1C2333; color:#F9A8D4; padding:2px 4px; border-radius:3px; font-family:monospace; font-size:11px}
+
+.badge-tag {background:#EDE9FE; color:#5B21B6; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">🖥️ Documentação — Workspace (Imagem 2)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 20.16.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 2: ORGANIZAÇÃO DO PROJETO</span>
+    
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 ~]$</span> <span class="command">mkdir -p ~/techstock-tf-lab && cd ~/techstock-tf-lab</span><br>
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">ls -la</span><br>
+        <span class="output">total 32</span><br>
+        <span class="output">drwxr-xr-x. 3 ec2-user ec2-user  148 May 13 13:50 .</span><br>
+        <span class="output">drwx------. 5 ec2-user ec2-user  139 May 13 13:54 ..</span><br>
+        <span class="output">drwxr-xr-x. 3 ec2-user ec2-user   23 May 13 13:47 .terraform</span><br>
+        <span class="output">-rw-r--r--. 1 ec2-user ec2-user 1407 May 13 13:47 .terraform.lock.hcl</span><br>
+        <span class="output">-rw-r--r--. 1 ec2-user ec2-user 1412 May 13 13:47 main.tf</span><br>
+        <span class="output">-rw-r--r--. 1 ec2-user ec2-user  478 May 13 13:46 outputs.tf</span><br>
+        <span class="output">-rw-r--r--. 1 ec2-user ec2-user  304 May 13 13:45 provider.tf</span><br>
+        <span class="output">-rw-r--r--. 1 ec2-user ec2-user 10857 May 13 13:50 terraform.tfstate</span><br>
+        <span class="output">-rw-r--r--. 1 ec2-user ec2-user  383 May 13 13:46 variables.tf</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Criação e Navegação de Diretório</h4>
+        <p>O comando <code>mkdir -p ~/techstock-tf-lab && cd ~/techstock-tf-lab</code> realiza duas ações em sequência: primeiro cria a pasta do projeto (caso ela não exista) e imediatamente entra nela. O uso do <code>~</code> garante que a pasta seja criada na "Home" do usuário.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Listagem Detalhada</h4>
+        <p>O comando <code>ls -la</code> lista todos os arquivos, incluindo os ocultos (que começam com ponto). Na imagem, observamos que o diretório já contém a estrutura básica de um projeto Terraform, indicando que os arquivos foram criados anteriormente ou o ambiente foi restaurado.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Anatomia dos Arquivos (.tf)</h4>
+        <p>Observamos arquivos fundamentais: <code>provider.tf</code> (configuração da AWS), <code>main.tf</code> (recursos), <code>variables.tf</code> (parâmetros) e <code>outputs.tf</code> (resultados). Também notamos a pasta <code>.terraform</code>, que guarda os plugins baixados pelo comando init.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. O Arquivo de Estado (State)</h4>
+        <p>A presença do arquivo <code>terraform.tfstate</code> é crucial. Ele é o "banco de dados" do Terraform que rastreia tudo o que foi criado na nuvem, permitindo que o Terraform saiba o que precisa ser atualizado ou deletado no futuro.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

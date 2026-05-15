@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação Passo a Passo — Imagem 13</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#7B42BC;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#D8B4FE;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.success {color:#27c93f; font-weight: bold}
+.change {color:#e3b341; font-weight: bold}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(123, 66, 188, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #7B42BC;}
+.explanation-item h4 {color:#A855F7; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#EDE9FE; color:#5B21B6; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">🖥️ Documentação — Aplicação da Mudança (Imagem 13)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 20.48.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 12: EXECUÇÃO DA ATUALIZAÇÃO</span>
+    
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform apply</span><br>
+        <span class="output">... refreshing state ...</span><br>
+        <span class="output">Plan: 0 to add, 1 to change, 0 to destroy.</span><br><br>
+        <span class="output">Enter a value:</span> <span class="success">yes</span><br><br>
+        <span class="output">aws_security_group.lab: <span class="change">Modifying...</span> [id=sg-0147decfcf43db838]</span><br>
+        <span class="output">aws_security_group.lab: <span class="success">Modifications complete after 0s</span></span><br><br>
+        <span class="success">Apply complete! Resources: 0 added, 1 changed, 0 destroyed.</span><br><br>
+        <span class="output">sg_id = "sg-0147decfcf43db838"</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Aplicando o Update In-Place</h4>
+        <p>Após validarmos o plano no passo anterior, executamos o <code>terraform apply</code>. Note que o Terraform reafirma o plano antes de agir: <strong>1 to change</strong>. Ao digitarmos <code>yes</code>, a mudança de tag é enviada para a API da AWS.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Velocidade da Modificação</h4>
+        <p>Como se tratava apenas de uma tag (metadado), o terminal exibe <strong>"Modifications complete after 0s"</strong>. Isso demonstra a eficiência do Terraform em gerenciar apenas o que foi alterado, sem precisar reavaliar toda a infraestrutura física.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Resumo da Transação</h4>
+        <p>O contador de recursos mostra <strong>1 changed</strong>. É importante notar que <strong>0 added</strong> e <strong>0 destroyed</strong>, confirmando que a nossa infraestrutura original (o Security Group e a EC2 associada a ele) permanece intacta e funcional.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Persistência do ID</h4>
+        <p>O <code>sg_id</code> exibido no output é idêntico ao anterior (<code>sg-0147...</code>). Isso prova que o recurso é o mesmo e que o Terraform apenas "carimbou" a nova informação nele, mantendo a integridade dos relacionamentos entre recursos.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Passo a Passo — Jornada Terraform</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#1D4ED8;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#93C5FD;margin-top:2px}
+.badge{background:#000;color:#60A5FA;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;margin-left:auto}
+.container{max-width:1000px;margin:0 auto;padding:28px}
+.intro{background:#111827;border:1px solid #2D3748;border-left:4px solid #1D4ED8;border-radius:10px;padding:20px;margin-bottom:28px}
+.intro h2{color:#60A5FA;margin-bottom:8px;font-size:16px}
+.intro p{color:#94A3B8;font-size:12px;line-height:1.7}
+
+.step-card {background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:24px;overflow:hidden}
+.step-header {padding:14px 18px;background:rgba(45, 55, 72, 0.2);border-bottom:1px solid #2D3748;display:flex;align-items:center;gap:12px}
+.step-time {font-size:11px;color:#718096;font-family:monospace}
+.step-title {font-weight:700;font-size:14px;color:#F1F5F9}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:16px;overflow:hidden}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:12px;font-family:'Consolas','Monaco',monospace;font-size:12px;color:#e6edf3;overflow-x:auto}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+
+.explanation-box {padding:0 18px 18px 18px}
+.explanation-box h4 {color:#60A5FA;font-size:12px;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px}
+.explanation-text {font-size:12.5px;color:#94A3B8;line-height:1.7}
+.explanation-text strong {color:#E2E8F0}
+
+.highlight-box {background:rgba(29, 78, 216, 0.1);border:1px solid #1D4ED8;border-radius:6px;padding:12px;margin-top:12px}
+.highlight-title {font-size:11px;font-weight:bold;color:#60A5FA;margin-bottom:4px}
+
+code {background:#1C2333;color:#F9A8D4;padding:1px 4px;border-radius:3px;font-family:monospace}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">🖥️ Documentação de Console — Terraform</div>
+    <div class="sub">Walkthrough Cronológico baseado em capturas de tela</div>
+  </div>
+  <div class="badge">38 Etapas</div>
+</header>
+
+<div class="container">
+
+<div class="intro">
+  <h2>Relatório de Execução</h2>
+  <p>Esta página documenta cada comando digitado no terminal Linux durante o laboratório. O objetivo é explicar a <strong>intenção</strong> técnica por trás de cada interação e o <strong>resultado</strong> observado no terminal.</p>
+</div>
+
+<!-- ETAPA 1 -->
+<div class="step-card">
+  <div class="step-header">
+    <span class="step-time">20:14</span>
+    <span class="step-title">Instalação e Verificação do Binário</span>
+  </div>
+  <div class="terminal-window">
+    <div class="terminal-header"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+    <div class="terminal-body">
+      <span class="prompt">[ec2-user@ip-172-31-25-103 ~]$</span> <span class="command">sudo yum install -y yum-utils</span><br>
+      <span class="prompt">[ec2-user@ip-172-31-25-103 ~]$</span> <span class="command">sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo</span><br>
+      <span class="prompt">[ec2-user@ip-172-31-25-103 ~]$</span> <span class="command">sudo yum install -y terraform</span><br>
+      <span class="prompt">[ec2-user@ip-172-31-25-103 ~]$</span> <span class="command">terraform version</span><br>
+      Terraform v1.15.3<br>
+      on linux_amd64
+    </div>
+  </div>
+  <div class="explanation-box">
+    <h4>O que aconteceu:</h4>
+    <p class="explanation-text">
+      Iniciamos com a configuração do repositório oficial da <strong>HashiCorp</strong>. O comando <code>yum-config-manager</code> é essencial para que o sistema saiba onde buscar o pacote oficial do Terraform. A verificação da versão confirma que estamos utilizando a <strong>v1.15.3</strong>, garantindo que as funcionalidades mais recentes de HCL estejam disponíveis.
+    </p>
+  </div>
+</div>
+
+<!-- ETAPA 2 -->
+<div class="step-card">
+  <div class="step-header">
+    <span class="step-time">20:16</span>
+    <span class="step-title">Criação do Espaço de Trabalho</span>
+  </div>
+  <div class="terminal-window">
+    <div class="terminal-header"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+    <div class="terminal-body">
+      <span class="prompt">[ec2-user@ip-172-31-25-103 ~]$</span> <span class="command">mkdir -p ~/techstock-tf-lab && cd ~/techstock-tf-lab</span><br>
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">ls -la</span>
+    </div>
+  </div>
+  <div class="explanation-box">
+    <h4>O que aconteceu:</h4>
+    <p class="explanation-text">
+      Isolamos o projeto em um diretório dedicado. O uso da flag <code>-p</code> no <code>mkdir</code> garante que o comando não falhe caso o diretório já exista. O <code>ls -la</code> inicial serve para confirmar que o diretório está vazio e pronto para receber os arquivos <code>.tf</code>.
+    </p>
+  </div>
+</div>
+
+<!-- ETAPA 3 -->
+<div class="step-card">
+  <div class="step-header">
+    <span class="step-time">20:24 - 20:27</span>
+    <span class="step-title">Escrita dos Arquivos de Configuração (HCL)</span>
+  </div>
+  <div class="terminal-window">
+    <div class="terminal-header"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+    <div class="terminal-body">
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">cat > provider.tf << 'EOF' ...</span><br>
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">cat > main.tf << 'EOF' ...</span><br>
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">cat > variables.tf << 'EOF' ...</span><br>
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">cat > outputs.tf << 'EOF' ...</span>
+    </div>
+  </div>
+  <div class="explanation-box">
+    <h4>O que aconteceu:</h4>
+    <p class="explanation-text">
+      Utilizamos o comando <code>cat</code> com o redirecionador <code><< 'EOF'</code> (Here Document) para criar os arquivos sem precisar de um editor interativo. Isso é ideal para scripts de automação.
+      <br><br>
+      • <strong>provider.tf:</strong> Define o provedor AWS na região us-east-1.<br>
+      • <strong>main.tf:</strong> Define a infraestrutura (AMI, Security Group e EC2).<br>
+      • <strong>variables.tf:</strong> Parametriza o ambiente (instance_type, environment).<br>
+      • <strong>outputs.tf:</strong> Expõe IDs e IPs após a criação.
+    </p>
+  </div>
+</div>
+
+<!-- ETAPA 4 -->
+<div class="step-card">
+  <div class="step-header">
+    <span class="step-time">20:29 - 20:31</span>
+    <span class="step-title">Inicialização e Validação</span>
+  </div>
+  <div class="terminal-window">
+    <div class="terminal-header"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+    <div class="terminal-body">
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform init</span><br>
+      Initializing the backend...<br>
+      Initializing provider plugins...<br>
+      Terraform has been successfully initialized!<br><br>
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform validate</span><br>
+      Success! The configuration is valid.
+    </div>
+  </div>
+  <div class="explanation-box">
+    <h4>O que aconteceu:</h4>
+    <p class="explanation-text">
+      O <code>terraform init</code> é o comando que prepara o diretório baixando o provider AWS (plugin). Sem ele, nenhum outro comando funciona. O <code>terraform validate</code> garante que não cometemos erros de sintaxe nos blocos HCL antes de tentar qualquer ação na nuvem.
+    </p>
+  </div>
+</div>
+
+<!-- ETAPA 5 -->
+<div class="step-card">
+  <div class="step-header">
+    <span class="step-time">20:31 - 20:35</span>
+    <span class="step-title">Planejamento e Execução do Deploy</span>
+  </div>
+  <div class="terminal-window">
+    <div class="terminal-header"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+    <div class="terminal-body">
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform plan</span><br>
+      Plan: 2 to add, 0 to change, 0 to destroy.<br><br>
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform apply</span><br>
+      Do you want to perform these actions?<br>
+      Enter a value: <strong>yes</strong><br>
+      Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+    </div>
+  </div>
+  <div class="explanation-box">
+    <h4>O que aconteceu:</h4>
+    <p class="explanation-text">
+      O <code>plan</code> gerou a lista de ações: criar o Security Group e a Instância EC2. No <code>apply</code>, confirmamos com <strong>yes</strong> e o Terraform levou cerca de 22 segundos para provisionar os recursos reais na AWS. Os <strong>outputs</strong> exibidos no final (instance_id e sg_id) são os dados reais retornados pela API da AWS.
+    </p>
+  </div>
+</div>
+
+<!-- ETAPA 6 -->
+<div class="step-card">
+  <div class="step-header">
+    <span class="step-time">20:44 - 20:50</span>
+    <span class="step-title">Atualização e Gerenciamento de Drift</span>
+  </div>
+  <div class="terminal-window">
+    <div class="terminal-header"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+    <div class="terminal-body">
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">nano main.tf</span><br>
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform plan</span><br>
+      ~ resource "aws_instance" "lab" {<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;~ tags = { + "Owner" = "aluno-lab" }<br>
+      }
+    </div>
+  </div>
+  <div class="explanation-box">
+    <h4>O que aconteceu:</h4>
+    <p class="explanation-text">
+      Fizemos uma alteração "In-Place" (no mesmo lugar). Adicionamos uma tag de proprietário. O Terraform identificou que <strong>não precisa destruir a instância</strong> para aplicar essa mudança, apenas atualizar os metadados. Vimos o símbolo <code>~</code> indicando modificação.
+    </p>
+  </div>
+</div>
+
+<!-- ETAPA 7 -->
+<div class="step-card">
+  <div class="step-header">
+    <span class="step-time">20:52 - 20:54</span>
+    <span class="step-title">Inspeção do Estado (State)</span>
+  </div>
+  <div class="terminal-window">
+    <div class="terminal-header"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+    <div class="terminal-body">
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform state list</span><br>
+      aws_instance.lab<br>
+      aws_security_group.lab<br><br>
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform state show aws_instance.lab</span>
+    </div>
+  </div>
+  <div class="explanation-box">
+    <h4>O que aconteceu:</h4>
+    <p class="explanation-text">
+      Navegamos pelo cérebro do Terraform: o <code>terraform.tfstate</code>. O comando <code>state list</code> confirma quais recursos o código está rastreando. O <code>state show</code> exibe detalhes técnicos que não escrevemos no código, mas que a AWS atribuiu, como o <strong>Private IP</strong> e o <strong>ARN</strong>.
+    </p>
+  </div>
+</div>
+
+<!-- ETAPA 8 -->
+<div class="step-card">
+  <div class="step-header">
+    <span class="step-time">20:56 - 20:59</span>
+    <span class="step-title">Manipulação Avançada: State RM e Import</span>
+  </div>
+  <div class="terminal-window">
+    <div class="terminal-header"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+    <div class="terminal-body">
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform state rm aws_security_group.lab</span><br>
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform plan</span><br>
+      (Indica que criará um novo SG)<br><br>
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform import aws_security_group.lab sg-0147decfcf43db838</span>
+    </div>
+  </div>
+  <div class="explanation-box">
+    <h4>O que aconteceu:</h4>
+    <p class="explanation-text">
+      Realizamos uma "cirurgia" no estado. Primeiro, removemos o SG do controle do Terraform com <code>state rm</code>. Quando rodamos o <code>plan</code>, o Terraform pensou que o SG não existia e quis criar outro. Para resolver, usamos o <code>import</code> para re-adotar o recurso existente sem duplicá-lo.
+    </p>
+  </div>
+</div>
+
+<!-- ETAPA 9 -->
+<div class="step-card">
+  <div class="step-header">
+    <span class="step-time">21:01 - 21:04</span>
+    <span class="step-title">Variáveis, Locals e Console Interativo</span>
+  </div>
+  <div class="terminal-window">
+    <div class="terminal-header"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+    <div class="terminal-body">
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform plan -var-file="dev.tfvars"</span><br>
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform console</span><br>
+      > local.full_name<br>
+      "techstock-lab"
+    </div>
+  </div>
+  <div class="explanation-box">
+    <h4>O que aconteceu:</h4>
+    <p class="explanation-text">
+      Testamos a flexibilidade do código. Usamos <code>-var-file</code> para mudar o ambiente sem tocar no código principal. O <code>terraform console</code> foi usado para testar expressões HCL em tempo real, validando o bloco <code>locals</code> que calcula nomes de recursos dinamicamente.
+      <br><br>
+      <a href="documentacao-imagem-24.html" style="color: #60A5FA; text-decoration: underline; font-size: 11px;">[Ver Análise Detalhada - Imagem 24]</a>
+    </p>
+  </div>
+</div>
+
+<!-- ETAPA 10 -->
+<div class="step-card">
+  <div class="step-header">
+    <span class="step-time">21:05 - 21:11</span>
+    <span class="step-title">Loops com for_each e Automação</span>
+  </div>
+  <div class="terminal-window">
+    <div class="terminal-header"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+    <div class="terminal-body">
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform apply -var-file="lab.tfvars" -auto-approve</span><br>
+      aws_security_group.app_sgs["backend"]: Creating...<br>
+      aws_security_group.app_sgs["monitoring"]: Creating...<br>
+      aws_security_group.app_sgs["frontend"]: Creating...
+    </div>
+  </div>
+  <div class="explanation-box">
+    <h4>O que aconteceu:</h4>
+    <p class="explanation-text">
+      Escalamos a infraestrutura. Com um único bloco <code>for_each</code>, criamos <strong>três</strong> Security Groups simultaneamente. A flag <code>-auto-approve</code> foi usada para ignorar a pergunta "yes", tornando o deploy 100% automatizado.
+    </p>
+  </div>
+</div>
+
+<!-- ETAPA 11 -->
+<div class="step-card">
+  <div class="step-header">
+    <span class="step-time">21:13 - 21:17</span>
+    <span class="step-title">Cleanup: O Ciclo de Destruição</span>
+  </div>
+  <div class="terminal-window">
+    <div class="terminal-header"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+    <div class="terminal-body">
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform plan -destroy -var-file="lab.tfvars"</span><br>
+      Plan: 0 to add, 0 to change, 5 to destroy.<br><br>
+      <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform destroy -var-file="lab.tfvars"</span><br>
+      Destroy complete! Resources: 5 destroyed.
+    </div>
+  </div>
+  <div class="explanation-box">
+    <h4>O que aconteceu:</h4>
+    <p class="explanation-text">
+      Encerramos o laboratório. O <code>plan -destroy</code> serve como uma verificação de segurança para garantir que não vamos apagar nada acidentalmente. O <code>destroy</code> final removeu todos os 5 recursos (1 EC2 + 4 SGs), deixando a conta AWS limpa e sem custos pendentes.
+    </p>
+  </div>
+</div>
+
+</div>
+
+<footer>
+    <p>Guia Passo a Passo Finalizado — Terraform TechStock Lab 2026</p>
+</footer>
+
+<script>
+// Script opcional para animação de scroll ou interatividade
+</script>
+</body>
+</html>

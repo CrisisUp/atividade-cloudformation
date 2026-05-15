@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação — Remoção Manual do Estado (Imagem 19)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#3B82F6;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#DBEAFE;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.diff-plus {color:#2ea043}
+.diff-tilde {color:#d29922}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(59, 130, 246, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #3B82F6;}
+.explanation-item h4 {color:#60A5FA; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#DBEAFE; color:#1E40AF; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">🧹 Documentação — Remoção Manual do Estado (Imagem 19)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 20.56.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 18: TERRAFORM STATE RM</span>
+    
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform state rm aws_security_group.lab</span><br>
+        <span class="output">Removed aws_security_group.lab</span><br>
+        <span class="output">Successfully removed 1 resource instance(s).</span><br>
+        <br>
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform plan</span><br>
+        <span class="output">...</span><br>
+        <span class="diff-plus">+ resource "aws_security_group" "lab" {</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;# (recurso será criado do zero porque não está no estado)</span><br>
+        <span class="output">}</span><br>
+        <br>
+        <span class="diff-tilde">~ resource "aws_instance" "lab" {</span><br>
+        <span class="diff-tilde">&nbsp;&nbsp;&nbsp;&nbsp;~ vpc_security_group_ids = [</span><br>
+        <span class="diff-tilde">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- "sg-0123456789abcdef0",</span><br>
+        <span class="diff-plus">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ (known after apply),</span><br>
+        <span class="diff-tilde">&nbsp;&nbsp;&nbsp;&nbsp;]</span><br>
+        <span class="output">}</span><br>
+        <br>
+        <span class="output">Plan: 1 to add, 1 to change, 0 to destroy.</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. O Comando 'terraform state rm'</h4>
+        <p>Este comando é usado para remover um recurso do arquivo de estado (<code>.tfstate</code>) sem afetar o recurso real na infraestrutura da nuvem. O Terraform simplesmente "esquece" que aquele recurso existe e que ele o gerenciava.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Remoção do Estado vs. Deleção na Nuvem</h4>
+        <p>Diferente do <code>terraform destroy</code>, que envia uma ordem para a AWS deletar o recurso, o <code>state rm</code> apenas limpa o registro local. O Security Group continua existindo e funcionando na AWS, mas o Terraform não o "enxerga" mais como parte da sua gestão atual.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Consequência no 'terraform plan'</h4>
+        <p>Como o código (<code>.tf</code>) ainda contém a definição do Security Group, mas o estado diz que ele não existe, o Terraform assume que ele precisa ser criado. Por isso, o plano exibe um sinal de <b>mais (+)</b> para o recurso <code>aws_security_group.lab</code>.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Efeito cascata na Instância</h4>
+        <p>A instância EC2 (<code>aws_instance.lab</code>) depende do Security Group. Como o SG original foi removido do estado e um novo será criado, o Terraform marca a instância para atualização (<b>~</b>). Ela precisará ser alterada para se conectar ao ID do novo SG que será gerado após o apply.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>5. Por que fazer isso?</h4>
+        <p>Remover do estado é útil quando você deseja que um recurso deixe de ser gerenciado pelo Terraform (para ser gerenciado manualmente ou por outro projeto), ou quando você pretende "reimportar" o recurso para corrigir inconsistências graves no arquivo de estado.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

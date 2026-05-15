@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação — Arquivos de Variáveis (.tfvars) (Imagem 22)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#6366F1;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#E0E7FF;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.success {color:#2ecc71; font-weight:bold}
+.warning {color:#EAB308}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(99, 102, 241, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #6366F1;}
+.explanation-item h4 {color:#818CF8; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#EEF2FF; color:#4338CA; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">📂 Documentação — Arquivos de Variáveis (.tfvars) (Imagem 22)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 21.01.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 21: GERENCIANDO AMBIENTES COM .TFVARS</span>
+    
+    <p style="margin-bottom: 10px; color: #94A3B8;">Passo 1: Criando arquivos de definição de variáveis para diferentes ambientes.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">cat << EOF > lab.tfvars</span><br>
+        <span class="output">instance_type = "t2.micro"</span><br>
+        <span class="output">environment   = "lab"</span><br>
+        <span class="output">EOF</span><br>
+        <br>
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">cat << EOF > dev.tfvars</span><br>
+        <span class="output">instance_type = "t2.small"</span><br>
+        <span class="output">environment   = "dev"</span><br>
+        <span class="output">EOF</span>
+      </div>
+    </div>
+
+    <p style="margin: 20px 0 10px 0; color: #94A3B8;">Passo 2: Executando o Plano de Execução apontando para o arquivo de desenvolvimento.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform plan -var-file="dev.tfvars"</span><br>
+        <span class="output">aws_instance.lab: Refreshing state... [id=i-0123456789abcdef0]</span><br>
+        <br>
+        <span class="output">Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:</span><br>
+        <span class="warning">&nbsp;&nbsp;~ update in-place</span><br>
+        <br>
+        <span class="output">Terraform will perform the following actions:</span><br>
+        <br>
+        <span class="output">&nbsp;&nbsp;# aws_instance.lab will be updated in-place</span><br>
+        <span class="warning">&nbsp;&nbsp;~</span> <span class="output">resource "aws_instance" "lab" {</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= "i-0123456789abcdef0"</span><br>
+        <span class="warning">&nbsp;&nbsp;~</span> <span class="output">instance_type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= "t2.micro" -> "t2.small"</span><br>
+        <span class="warning">&nbsp;&nbsp;~</span> <span class="output">tags&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= {</span><br>
+        <span class="warning">&nbsp;&nbsp;~</span> <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;"Environment" = "lab" -> "dev"</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# (remaining tags unchanged)</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;}</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;# (remaining attributes unchanged)</span><br>
+        <span class="output">&nbsp;&nbsp;}</span><br>
+        <br>
+        <span class="success">Plan: 0 to add, 1 to change, 0 to destroy.</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Conceito Técnico: Arquivos .tfvars</h4>
+        <p>Os arquivos <code>.tfvars</code> permitem a <b>separação entre a lógica (código main.tf) e os dados (configurações específicas)</b>. No exemplo, usamos o mesmo arquivo de definição de infraestrutura para provisionar recursos com capacidades diferentes apenas trocando o arquivo de entrada.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. A Flag -var-file</h4>
+        <p>Ao utilizar <code>-var-file="dev.tfvars"</code>, instruímos o Terraform a ignorar os valores padrão (default) definidos nas variáveis e injetar os valores contidos no arquivo específico. Isso é fundamental para manter um fluxo de CI/CD limpo e organizado.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Detecção de Mudanças e Idempotência</h4>
+        <p>O Terraform identificou com precisão que a instância <code>i-0123456789abcdef0</code> precisava sofrer um <b>update in-place</b> para mudar de <code>t2.micro</code> para <code>t2.small</code> e atualizar a tag de <code>Environment</code>. Isso demonstra como o Terraform gerencia o ciclo de vida do recurso baseado nos novos parâmetros fornecidos.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Vantagem Estratégica</h4>
+        <p>Utilizar arquivos de variáveis evita o erro humano e a complexidade de passar dezenas de parâmetros manualmente via linha de comando (ex: <code>-var="inst=..." -var="env=..."</code>). Além disso, permite versionar as configurações de cada ambiente (Lab, Dev, Prod) de forma isolada e segura.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

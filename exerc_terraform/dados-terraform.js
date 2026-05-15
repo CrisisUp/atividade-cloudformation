@@ -198,6 +198,7 @@ const TASKS_DATA = [
     codeExtraId: "c6",
     codeExtra: `export TF_VAR_db_password=\"SenhaForte@2026!\"\nterraform plan -var-file=\"lab.tfvars\"`,
     expected: "✅ Variável sensível aparece como <code>(sensitive value)</code> no plan.",
+    hint: "📸 <strong>Dica:</strong> Use o <code>terraform console</code> para testar expressões HCL sem rodar o plan. <a href=\"documentacao-imagem-24.html\" style=\"color: #4F46E5; text-decoration: underline;\">[Ver Documentação Detalhada - Imagem 24]</a>",
     checklist: [
       "Arquivo lab.tfvars criado com sucesso",
       "Variável de ambiente TF_VAR configurada",

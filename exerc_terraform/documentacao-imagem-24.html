@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação — Blocos Locals e Console Interativo (Imagem 24)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#6366F1;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#E0E7FF;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.success {color:#2ecc71; font-weight:bold}
+.warning {color:#EAB308}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(99, 102, 241, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #6366F1;}
+.explanation-item h4 {color:#818CF8; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#EEF2FF; color:#4338CA; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">📂 Documentação — Blocos Locals e Console Interativo (Imagem 24)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 21.04.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 23: ABSTRAÇÃO E DEBBUGGING COM LOCALS</span>
+    
+    <p style="margin-bottom: 10px; color: #94A3B8;">Passo 1: Adicionando bloco <code>locals</code> ao <code>main.tf</code> para centralizar nomes dinâmicos.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">cat << EOF >> main.tf</span><br>
+        <br>
+        <span class="output">locals {</span><br>
+        <span class="output">&nbsp;&nbsp;app_name&nbsp;&nbsp;= "techstock"</span><br>
+        <span class="output">&nbsp;&nbsp;full_name = "${local.app_name}-${var.environment}"</span><br>
+        <span class="output">}</span><br>
+        <span class="output">EOF</span>
+      </div>
+    </div>
+
+    <p style="margin: 20px 0 10px 0; color: #94A3B8;">Passo 2: Abrindo o console interativo do Terraform para testar a lógica.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform console</span><br>
+        <span class="prompt">></span> <span class="command">local.full_name</span><br>
+        <span class="output">"techstock-lab"</span><br>
+        <span class="prompt">></span> <span class="command">exit</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. O que são Locals?</h4>
+        <p>Os blocos <code>locals</code> (Valores Locais) funcionam como variáveis internas ou constantes. Eles servem para realizar cálculos, manipulações de strings ou processamentos que não precisam ser informados pelo usuário via <code>variables.tf</code>, mantendo o código <b>DRY (Don't Repeat Yourself)</b>.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Interpolação de Strings</h4>
+        <p>A sintaxe <code>"${local.app_name}-${var.environment}"</code> demonstra o poder do HCL. Estamos combinando um valor local com uma variável de entrada para gerar um nome padronizado que será usado em tags Name de diversos recursos (EC2, VPC, S3).</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Utilidade do terraform console</h4>
+        <p>O <code>terraform console</code> é uma ferramenta indispensável para <b>debugar lógicas complexas</b>. Ele permite que o engenheiro teste funções (como <code>upper()</code>, <code>join()</code>, <code>lookup()</code>) e valide referências a recursos e variáveis em tempo real, sem a necessidade de rodar um <code>terraform plan</code> completo, o que economiza tempo valioso no desenvolvimento.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Diferença entre Variables e Locals</h4>
+        <p>Enquanto <b>Variables</b> são os "inputs" (parâmetros configuráveis pelo usuário), <b>Locals</b> são as "variáveis de processamento" (lógica interna). Se você precisa concatenar o nome do projeto com o ambiente em vários lugares, use um Local para fazer isso uma única vez e referenciá-lo onde necessário.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

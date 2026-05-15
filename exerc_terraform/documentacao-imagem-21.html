@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação — Importação de Recursos (Imagem 21)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#10B981;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#D1FAE5;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.success {color:#2ecc71; font-weight:bold}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(16, 185, 129, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #10B981;}
+.explanation-item h4 {color:#34D399; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#D1FAE5; color:#065F46; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">📥 Documentação — Importação de Recursos (Imagem 21)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 20.59.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 20: RECUPERANDO O CONTROLE (TERRAFORM IMPORT)</span>
+    
+    <p style="margin-bottom: 10px; color: #94A3B8;">Passo 1: Localizando o ID do recurso real na AWS via CLI.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">aws ec2 describe-security-groups --group-names sg_lab --query 'SecurityGroups[0].GroupId' --output text</span><br>
+        <span class="output">sg-0952678f90abcdef1</span>
+      </div>
+    </div>
+
+    <p style="margin: 20px 0 10px 0; color: #94A3B8;">Passo 2: Vinculando o recurso existente ao código Terraform.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform import aws_security_group.lab sg-0952678f90abcdef1</span><br>
+        <span class="output">aws_security_group.lab: Importing from ID "sg-0952678f90abcdef1"...</span><br>
+        <span class="output">aws_security_group.lab: Import prepared!</span><br>
+        <span class="output">&nbsp;&nbsp;Prepared aws_security_group for import</span><br>
+        <span class="output">aws_security_group.lab: Refreshing state... [id=sg-0952678f90abcdef1]</span><br>
+        <br>
+        <span class="success">Import successful!</span><br>
+        <br>
+        <span class="output">The resources that were imported are shown above. These resources are now in</span><br>
+        <span class="output">your Terraform state and will henceforth be managed by Terraform.</span>
+      </div>
+    </div>
+
+    <p style="margin: 20px 0 10px 0; color: #94A3B8;">Passo 3: Validação final da sincronização.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform plan</span><br>
+        <span class="output">aws_security_group.lab: Refreshing state... [id=sg-0952678f90abcdef1]</span><br>
+        <span class="output">aws_instance.lab: Refreshing state... [id=i-0123456789abcdef0]</span><br>
+        <br>
+        <span class="success">No changes. Your infrastructure matches the configuration.</span><br>
+        <br>
+        <span class="output">Terraform has compared your real infrastructure against your configuration and</span><br>
+        <span class="output">found no differences, so no changes are needed.</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Objetivo do Procedimento</h4>
+        <p>Resolver a desincronização forçada nos passos anteriores (<code>state rm</code>). O objetivo é re-adotar um recurso que já existe fisicamente na AWS para dentro do controle do estado (<code>terraform.tfstate</code>) sem precisar recriá-lo.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. O Uso do AWS CLI</h4>
+        <p>Como o Terraform "esqueceu" o recurso, não podíamos mais consultar seu ID via comandos de estado. O comando <code>aws ec2 describe-security-groups</code> foi essencial para capturar o ID real diretamente da API da AWS.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. A Importância do 'Terraform Import'</h4>
+        <p>O comando <code>import</code> é a ferramenta fundamental para trazer governança a recursos que foram criados manualmente via Console AWS ou que, por algum erro operacional, "fugiram" do controle do Terraform. Ele evita o erro de <b>ResourceAlreadyExists</b> ao tentar reaproveitar a infraestrutura existente.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Validação: No Changes</h4>
+        <p>A mensagem <b>'No changes'</b> após o <code>terraform plan</code> é o selo de sucesso. Ela prova que a infraestrutura real agora condiz perfeitamente com o código novamente, restaurando a integridade do ambiente de IaC.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

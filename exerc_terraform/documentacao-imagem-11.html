@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação Passo a Passo — Imagem 11</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#7B42BC;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#D8B4FE;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.console-window {background:#1a202c;border:1px solid #2D3748;border-radius:8px;margin:15px 0;padding:20px;border-left:5px solid #60A5FA}
+.console-header {display:flex;align-items:center;gap:10px;margin-bottom:15px}
+.console-icon {font-size:20px}
+.console-title {font-weight:bold;color:#60A5FA;font-size:14px}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(123, 66, 188, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #7B42BC;}
+.explanation-item h4 {color:#A855F7; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#DBEAFE; color:#1E40AF; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">🖥️ Documentação — Validação Visual (Imagem 11)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 20.38.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 10: VERIFICAÇÃO NO CONSOLE AWS</span>
+    
+    <div class="console-window">
+      <div class="console-header">
+        <span class="console-icon">☁️</span>
+        <span class="console-title">AWS Management Console > EC2 > Instances</span>
+      </div>
+      <p style="color:#94A3B8; font-size:12px">Visualizando a infraestrutura provisionada pelo Terraform.</p>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Status do Recurso</h4>
+        <p>A imagem confirma que a instância <strong>techstock-tf-lab-ec2</strong> (ID: <code>i-0445542e60c5bd1c3</code>) está com o estado <strong>Running</strong> (Em execução). Isso prova que o comando <code>terraform apply</code> foi executado com sucesso e a AWS aceitou todas as configurações enviadas.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Identidade e Tags</h4>
+        <p>Observamos que o nome da instância e as tags foram aplicadas corretamente conforme definido no código HCL. A tag <code>ManagedBy: Terraform</code> está visível, o que é uma excelente prática para identificar quais recursos são automáticos e quais foram criados manualmente.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Conectividade</h4>
+        <p>O console exibe o <strong>Endereço IPv4 Público</strong> (<code>52.90.50.198</code>) e o DNS público. Estes são os dados que o Terraform capturou e exibiu nos <code>outputs</code> da etapa anterior. Agora, a máquina está acessível via rede.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Segurança e Perfil</h4>
+        <p>Também validamos que o <strong>Security Group</strong> correto foi anexado e que a instância está usando a <strong>IAM Role</strong> (<code>LabRole</code>) exigida pelo ambiente acadêmico, garantindo que ela tenha as permissões necessárias para operar no laboratório.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

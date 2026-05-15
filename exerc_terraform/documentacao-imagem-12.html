@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação Passo a Passo — Imagem 12</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#7B42BC;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#D8B4FE;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.change {color:#e3b341; font-weight: bold}
+.add {color:#27c93f; font-weight: bold}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(123, 66, 188, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #7B42BC;}
+.explanation-item h4 {color:#A855F7; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+.explanation-item code {background:#1C2333; color:#F9A8D4; padding:2px 4px; border-radius:3px; font-family:monospace; font-size:11px}
+
+.badge-tag {background:#EDE9FE; color:#5B21B6; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">🖥️ Documentação — Modificação e Plano (Imagem 12)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 20.44.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 11: CICLO DE ATUALIZAÇÃO</span>
+    
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">nano main.tf</span><br>
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform plan</span><br>
+        <span class="output">... refreshing state ...</span><br><br>
+        <span class="output"># aws_security_group.lab will be <span class="change">updated in-place</span></span><br>
+        <span class="change">~ resource "aws_security_group" "lab" {</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;id&nbsp;&nbsp;&nbsp;= "sg-0147decfcf43db838"</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;name = "techstock-tf-lab-sg"</span><br>
+        <span class="change">&nbsp;&nbsp;~ tags = {</span><br>
+        <span class="add">&nbsp;&nbsp;&nbsp;&nbsp;+ "Owner" = "aluno-lab"</span><br>
+        <span class="output">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# (3 unchanged attributes hidden)</span><br>
+        <span class="change">&nbsp;&nbsp;&nbsp;&nbsp;}</span><br>
+        <span class="output">}</span><br><br>
+        <span class="output">Plan: 0 to add, <span class="change">1 to change</span>, 0 to destroy.</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Edição de Código</h4>
+        <p>Utilizamos o editor <strong>Nano</strong> diretamente no terminal para abrir o arquivo <code>main.tf</code> e adicionar uma nova tag ao recurso de Security Group. Esta é a forma comum de evoluir a infraestrutura: alterar o código e deixar o Terraform calcular a diferença.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. O Conceito de Update In-Place</h4>
+        <p>O símbolo de til (<code>~</code>) em amarelo indica uma mudança do tipo <strong>"updated in-place"</strong>. Isso é uma excelente notícia em DevOps: significa que o Terraform consegue aplicar a alteração sem deletar e recriar o recurso, evitando qualquer queda (downtime) no serviço.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Adição de Metadados</h4>
+        <p>O sinal de mais (<code>+</code>) em verde dentro do bloco de tags mostra exatamente o que está sendo adicionado: a chave <code>Owner</code> com o valor <code>aluno-lab</code>. As outras 3 tags que já existiam permanecem inalteradas (hidden).</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Segurança Operacional</h4>
+        <p>Ao rodar o <code>plan</code> antes do <code>apply</code>, confirmamos que apenas <strong>1 mudança</strong> será feita e <strong>0 recursos serão destruídos</strong>. Esse passo é fundamental para garantir que uma simples edição de tag não cause a destruição acidental de um banco de dados ou servidor.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação Passo a Passo — Imagem 5</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#7B42BC;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#D8B4FE;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.code-in-term {color:#F1F5F9}
+.comment-in-term {color:#8b949e; font-style: italic}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(123, 66, 188, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #7B42BC;}
+.explanation-item h4 {color:#A855F7; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+.explanation-item code {background:#1C2333; color:#F9A8D4; padding:2px 4px; border-radius:3px; font-family:monospace; font-size:11px}
+
+.badge-tag {background:#EDE9FE; color:#5B21B6; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">🖥️ Documentação — Variáveis e Saídas (Imagem 5)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 20.27.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 5: PARAMETRIZAÇÃO E VISIBILIDADE</span>
+    
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">cat > variables.tf << 'EOF'</span><br>
+        <span class="code-in-term">variable "instance_type" {</span><br>
+        <span class="code-in-term">&nbsp;&nbsp;type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= string</span><br>
+        <span class="code-in-term">&nbsp;&nbsp;default&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= "t2.micro"</span><br>
+        <span class="code-in-term">&nbsp;&nbsp;description = "Tipo da instancia EC2"</span><br>
+        <span class="code-in-term">&nbsp;&nbsp;validation {</span><br>
+        <span class="code-in-term">&nbsp;&nbsp;&nbsp;&nbsp;condition&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= contains(["t2.micro", "t2.small"], var.instance_type)</span><br>
+        <span class="code-in-term">&nbsp;&nbsp;&nbsp;&nbsp;error_message = "Use t2.micro ou t2.small no Learner Lab."</span><br>
+        <span class="code-in-term">&nbsp;&nbsp;}</span><br>
+        <span class="code-in-term">}</span><br>
+        <span class="code-in-term">EOF</span><br><br>
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">cat > outputs.tf << 'EOF'</span><br>
+        <span class="code-in-term">output "instance_id" { ... }</span><br>
+        <span class="code-in-term">output "sg_id" { ... }</span><br>
+        <span class="code-in-term">EOF</span><br><br>
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">ls -la</span><br>
+        <span class="output">Arquivos criados: main.tf outputs.tf provider.tf variables.tf</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. Parametrização Dinâmica (Variables)</h4>
+        <p>A criação do arquivo <code>variables.tf</code> permite que o código seja reutilizável. Em vez de fixar o tipo da instância no <code>main.tf</code>, usamos a variável <code>instance_type</code>. Isso facilita a mudança do tamanho da máquina sem precisar editar o código principal da infraestrutura.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Validação e Governança</h4>
+        <p>O bloco <code>validation</code> é uma regra de ouro para labs. Ele garante que o usuário só possa escolher entre <code>t2.micro</code> ou <code>t2.small</code>. Se alguém tentar usar uma máquina cara (como uma <code>t3.large</code>), o Terraform interromperá a execução com a mensagem de erro personalizada definida no código.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Exposição de Dados (Outputs)</h4>
+        <p>O arquivo <code>outputs.tf</code> define quais informações queremos ver no terminal após o deploy. Sem isso, teríamos que ir ao Console da AWS para descobrir o ID da instância ou do Security Group. É uma forma de "exportar" os resultados do nosso trabalho.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Confirmação da Estrutura</h4>
+        <p>O comando <code>ls -la</code> finaliza esta fase confirmando que os quatro arquivos fundamentais de um projeto Terraform profissional estão presentes no diretório. Agora, o ambiente está pronto para ser inicializado.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>

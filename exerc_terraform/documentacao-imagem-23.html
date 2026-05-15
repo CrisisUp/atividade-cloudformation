@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Documentação — Tratamento de Dados Sensíveis (Imagem 23)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0A0E1A;color:#E2E8F0;font-size:13px;line-height:1.6}
+header{background:#6366F1;padding:16px 28px;display:flex;align-items:center;gap:12px}
+.brand{font-size:18px;font-weight:800;color:#fff}
+.sub{font-size:12px;color:#E0E7FF;margin-top:2px}
+.container{max-width:900px;margin:0 auto;padding:28px}
+
+.task{background:#111827;border:1px solid #2D3748;border-radius:10px;margin-bottom:16px;overflow:hidden}
+.task-body{padding:16px 18px;display:block}
+
+.terminal-window {background:#010409;border:1px solid #30363d;border-radius:6px;margin:10px 0;overflow:hidden;box-shadow: 0 4px 20px rgba(0,0,0,0.5)}
+.terminal-header {background:#161b22;padding:8px 12px;display:flex;gap:6px;align-items:center;border-bottom:1px solid #30363d}
+.dot {width:10px;height:10px;border-radius:50%}
+.dot.red {background:#ff5f56}.dot.yellow {background:#ffbd2e}.dot.green {background:#27c93f}
+.terminal-body {padding:14px;font-family:'Consolas','Monaco',monospace;font-size:11px;color:#e6edf3;line-height:1.4}
+.prompt {color:#2ecc71;font-weight:bold}
+.command {color:#58a6ff}
+.output {color:#94A3B8}
+.success {color:#2ecc71; font-weight:bold}
+.warning {color:#EAB308}
+
+.explanation-section {margin-top:20px; border-top: 1px solid #2D3748; padding-top: 15px;}
+.explanation-item {margin-bottom:15px; background: rgba(99, 102, 241, 0.05); padding: 12px; border-radius: 8px; border-left: 3px solid #6366F1;}
+.explanation-item h4 {color:#818CF8; font-size:12px; margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px}
+.explanation-item p {color:#CBD5E1; font-size:12.5px}
+
+.badge-tag {background:#EEF2FF; color:#4338CA; font-size:10px; padding:2px 8px; border-radius:4px; font-weight:700; margin-bottom:10px; display:inline-block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="brand">📂 Documentação — Tratamento de Dados Sensíveis (Imagem 23)</div>
+    <div class="sub">Análise detalhada da captura: Imagem 13-05-2026 às 21.03.png</div>
+  </div>
+</header>
+<div class="container">
+
+<div class="task">
+  <div class="task-body">
+    <span class="badge-tag">FASE 22: SEGURANÇA E PROTEÇÃO DE SEGREDOS</span>
+    
+    <p style="margin-bottom: 10px; color: #94A3B8;">Passo 1: Definindo uma variável sensível no <code>variables.tf</code>.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">cat << EOF >> variables.tf</span><br>
+        <br>
+        <span class="output">variable "db_password" {</span><br>
+        <span class="output">&nbsp;&nbsp;description = "Senha do banco de dados"</span><br>
+        <span class="output">&nbsp;&nbsp;type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= string</span><br>
+        <span class="output">&nbsp;&nbsp;<b>sensitive&nbsp;&nbsp;&nbsp;= true</b></span><br>
+        <span class="output">}</span><br>
+        <span class="output">EOF</span>
+      </div>
+    </div>
+
+    <p style="margin: 20px 0 10px 0; color: #94A3B8;">Passo 2: Criando um output sensível no <code>outputs.tf</code> para validar a proteção.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">cat << EOF >> outputs.tf</span><br>
+        <br>
+        <span class="output">output "db_password_revelado" {</span><br>
+        <span class="output">&nbsp;&nbsp;value&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;= var.db_password</span><br>
+        <span class="output">&nbsp;&nbsp;<b>sensitive = true</b></span><br>
+        <span class="output">}</span><br>
+        <span class="output">EOF</span>
+      </div>
+    </div>
+
+    <p style="margin: 20px 0 10px 0; color: #94A3B8;">Passo 3: Injetando o valor via variável de ambiente e executando o plano.</p>
+    <div class="terminal-window">
+      <div class="terminal-header">
+        <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+        <span style="color:#8b949e; font-size:11px; margin-left:10px">ec2-user@amazon-linux-2023</span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">export TF_VAR_db_password="MinhaSenhaSuperSecreta123"</span><br>
+        <span class="prompt">[ec2-user@ip-172-31-25-103 techstock-tf-lab]$</span> <span class="command">terraform plan</span><br>
+        <br>
+        <span class="output">...</span><br>
+        <span class="output">Terraform will perform the following actions:</span><br>
+        <br>
+        <span class="success">Changes to Outputs:</span><br>
+        <span class="success">&nbsp;&nbsp;+</span> <span class="output">db_password_revelado = <b>(sensitive value)</b></span><br>
+        <br>
+        <span class="success">Plan: 0 to add, 0 to change, 0 to destroy.</span>
+      </div>
+    </div>
+
+    <div class="explanation-section">
+      <div class="explanation-item">
+        <h4>1. O Atributo sensitive = true</h4>
+        <p>Ao marcar uma variável ou output como <code>sensitive = true</code>, o Terraform instrui seus logs e interfaces de saída (CLI) a <b>mascarar o valor real</b>. Isso evita que senhas, tokens ou chaves privadas sejam expostos acidentalmente na tela ou em sistemas de log de CI/CD (como GitHub Actions ou Jenkins).</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>2. Injeção de Valor via Variáveis de Ambiente</h4>
+        <p>O uso do prefixo <code>TF_VAR_</code> seguido do nome da variável (<code>TF_VAR_db_password</code>) é uma das formas mais seguras de passar dados sensíveis. Isso evita que o valor fique registrado no histórico do shell (se passado via <code>-var</code>) ou em arquivos de texto plano no repositório.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>3. Proteção no Plan e Apply</h4>
+        <p>No resultado do <code>terraform plan</code>, observe que o valor não é exibido, aparecendo apenas como <b>(sensitive value)</b>. O Terraform propaga essa característica: se um recurso usa uma variável sensível, qualquer atributo derivado dela que seja exibido também será mascarado automaticamente.</p>
+      </div>
+
+      <div class="explanation-item">
+        <h4>4. Conceito Técnico: Proteção de Segredos</h4>
+        <p>A segurança em infraestrutura como código (IaC) exige que <b>nunca commitamos segredos no Git</b>. O Terraform protege o usuário na camada de visualização, mas é importante lembrar que o valor real ainda reside no arquivo <code>terraform.tfstate</code>. Por isso, a proteção do estado (usando backends remotos seguros como S3 com criptografia) é o complemento indispensável a esta funcionalidade.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+</body>
+</html>
